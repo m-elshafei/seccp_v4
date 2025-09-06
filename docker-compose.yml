@@ -1,0 +1,22 @@
+services:
+  seccp_new-backend:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: general/php-8.3
+    container_name: seccp_new-backend
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8090:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    networks:
+      - seccp_new-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  seccp_new-network:
+    driver: bridge
