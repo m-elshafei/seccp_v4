@@ -16,6 +16,14 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+yarn.lock
+.yarn
+.yarnrc
+.yarn-integrity
+mix-manifest.json
+public/mix-manifest.json
+/public/build
+webpack.mix.js.map
 /vuexy-shell-scripts
 supervisord.log
 supervisord.pid
