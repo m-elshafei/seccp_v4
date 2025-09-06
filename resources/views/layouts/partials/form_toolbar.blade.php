@@ -1,1 +1,0 @@
-<x-form-toolbar :screenname="$screen_name" :actionname="$action_name"></x-form-toolbar>
