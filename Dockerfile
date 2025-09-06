@@ -12,7 +12,13 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libpng-dev \
     supervisor \
-    default-mysql-client
+    default-mysql-client \
+    curl gnupg \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs npm \
+    && ln -s /usr/bin/nodejs /usr/bin/node \
+    && corepack enable \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
