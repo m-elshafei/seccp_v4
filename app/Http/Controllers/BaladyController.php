@@ -11,7 +11,7 @@ use App\DataTables\BaladyDataTable;
 use App\Http\Requests\CreateBaladyRequest;
 use App\Http\Requests\UpdateBaladyRequest;
 use App\Http\Controllers\AppBaseController;
-
+use App\Repositories\BaladyRepository;
 class BaladyController extends AppBaseController
 {
     /**
@@ -20,6 +20,14 @@ class BaladyController extends AppBaseController
      * @param BaladyDataTable $baladyDataTable
      * @return Response
      */
+
+    public $baladyRepository;
+
+    public function __construct(BaladyRepository $baladyRepo)
+    {
+        $this->baladyRepository = $baladyRepo;
+    }
+
     public function index(BaladyDataTable $baladyDataTable)
     {
         return $baladyDataTable->render('baladies.index');
@@ -32,7 +40,8 @@ class BaladyController extends AppBaseController
      */
     public function create()
     {
-        $cities = City::pluck('name', 'id');
+        $cities = $this->baladyRepository->getCities();
+
         return view('baladies.create',compact('cities'));
     }
 
@@ -48,7 +57,7 @@ class BaladyController extends AppBaseController
         $input = $request->all();
 
         /** @var Balady $balady */
-        $balady = Balady::create($input);
+        $balady = $this->baladyRepository->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/baladies.singular')]));
 
@@ -65,7 +74,7 @@ class BaladyController extends AppBaseController
     public function show($id)
     {
         /** @var Balady $balady */
-        $balady = Balady::find($id);
+        $balady = $this->baladyRepository->find($id);
 
         if (empty($balady)) {
             Flash::error(__('models/baladies.singular').' '.__('messages.not_found'));
@@ -86,7 +95,7 @@ class BaladyController extends AppBaseController
     public function edit($id)
     {
         /** @var Balady $balady */
-        $balady = Balady::find($id);
+        $balady = $this->baladyRepository->find($id);
 
         if (empty($balady)) {
             Flash::error(__('messages.not_found', ['model' => __('models/baladies.singular')]));
@@ -94,7 +103,7 @@ class BaladyController extends AppBaseController
             return redirect(route('baladies.index'));
         }
 
-        $cities = City::pluck('name', 'id');
+        $cities = $this->baladyRepository->getCities();
 
         return view('baladies.edit')
                     ->with('balady', $balady)
@@ -113,7 +122,7 @@ class BaladyController extends AppBaseController
     public function update($id, UpdateBaladyRequest $request)
     {
         /** @var Balady $balady */
-        $balady = Balady::find($id);
+        $balady = $this->baladyRepository->find($id);
 
         if (empty($balady)) {
             Flash::error(__('messages.not_found', ['model' => __('models/baladies.singular')]));
@@ -121,8 +130,7 @@ class BaladyController extends AppBaseController
             return redirect(route('baladies.index'));
         }
 
-        $balady->fill($request->all());
-        $balady->save();
+        $balady = $this->baladyRepository->update($balady, $request->all());
 
         Flash::success(__('messages.updated', ['model' => __('models/baladies.singular')]));
 
@@ -141,7 +149,7 @@ class BaladyController extends AppBaseController
     public function destroy($id)
     {
         /** @var Balady $balady */
-        $balady = Balady::find($id);
+        $balady = $this->baladyRepository->find($id);
 
         if (empty($balady)) {
             Flash::error(__('messages.not_found', ['model' => __('models/baladies.singular')]));
@@ -149,7 +157,7 @@ class BaladyController extends AppBaseController
             return redirect(route('baladies.index'));
         }
 
-        $balady->delete();
+        $this->baladyRepository->delete($balady);
 
         Flash::success(__('messages.deleted', ['model' => __('models/baladies.singular')]));
 

@@ -8,49 +8,62 @@
   ],
   "license": "MIT",
   "require": {
-    "php": "^8.2",
+    "php": "^8.0",
     "alkoumi/laravel-hijri-date": "^1.0",
+    "arcanedev/log-viewer": "^10.0",
     "archtechx/enums": "^0.3.2",
     "carlos-meneses/laravel-mpdf": "^2.1",
     "doctrine/dbal": "^3.0",
     "guzzlehttp/guzzle": "^7.0.1",
+    "infyomlabs/adminlte-templates": "^6.0",
+    "infyomlabs/generator-builder": "^1.0",
+    "infyomlabs/laravel-generator": "^6.0",
     "irazasyed/telegram-bot-sdk": "^3.14",
     "kalnoy/nestedset": "^6.0",
-    "laracasts/flash": "^3.2",
-    "laravel/framework": "^12.0",
-    "laravel/tinker": "^2.9",
-    "laravel/ui": "^4.5",
+    "laravel/framework": "^10.0",
+    "laravel/telescope": "^5.7",
+    "laravel/tinker": "^2.5",
+    "laravel/ui": "^4.2",
+    "laravelcollective/html": "^6.2",
     "league/flysystem-aws-s3-v3": "^3.15",
     "maatwebsite/excel": "^3.1",
     "mpdf/mpdf": "^8.1",
     "orangehill/iseed": "^3.0",
     "php-coord/php-coord": "^5.2",
-    "psr/simple-cache": "^1.0",
-    "spatie/laravel-activitylog": "^4.7",
+    "psr/simple-cache": "2.0",
+    "spatie/laravel-activitylog": "^4.3",
     "spatie/laravel-html": "^3.12",
-    "spatie/laravel-permission": "^6.0",
-    "yajra/laravel-datatables": "^12.0",
-    "yajra/laravel-datatables-oracle": "^12.0"
+    "spatie/laravel-permission": "^5.4",
+    "tamer-dev/laravel-env-cli": "^1.2",
+    "yajra/laravel-datatables": "^10.0",
+    "yajra/laravel-datatables-oracle": "^10.0"
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.8",
-    "fakerphp/faker": "^1.23",
-    "laravel/sail": "^1.26",
-    "laravel/telescope": "^5.8",
-    "mockery/mockery": "^1.6",
-    "nunomaduro/collision": "^8.0",
-    "phpunit/phpunit": "^11.0",
-    "spatie/laravel-ignition": "^2.4"
+    "fakerphp/faker": "^1.9.1",
+    "laravel/sail": "^1.0.1",
+    "mockery/mockery": "^1.4.2",
+    "nunomaduro/collision": "^7.0",
+    "phpunit/phpunit": "^10.0",
+    "spatie/laravel-ignition": "^2.0"
   },
   "extra": {
     "laravel": {
-      "dont-discover": []
+      "dont-discover": [
+        "laravel/telescope"
+
+      ]
     }
   },
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "dont-discover": []
+    }
   },
   "autoload": {
     "psr-4": {
@@ -67,7 +80,7 @@
       "Tests\\": "tests/"
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true,
   "scripts": {
     "post-autoload-dump": [

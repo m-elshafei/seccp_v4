@@ -1,16 +1,18 @@
 <?php
 
 use App\Helpers\Helper;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\AssayFormController;
 use App\Http\Controllers\AssayItemController;
-use App\Http\Controllers\StaterkitController;
-use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AssayServiceController;
+use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\StaterkitController;
+use App\Http\Controllers\TestController;
 use App\Jobs\TestJob;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -37,44 +39,7 @@ Route::group([
 ], function () {
 
 
-    Route::get('fixWorkOrdersPermits', function() {
-        $data = \App\Models\WorkOrdersPermit::whereIn('status',['4','5','6','7','10'])->whereNull('restablish_convert_date')->orderBy('id','desc')->get();
-        foreach ($data as $row){
-            if ($row->workOrders() && $row->workOrders()->first()){
-                $WorkOrderTransactionsHistory =  \App\Models\WorkOrderTransactionsHistory::where('new_department',4)->where('work_order_id',$row->workOrders()->first()->id)->first();
-                if ($WorkOrderTransactionsHistory){
-                    $row->restablish_convert_date =$WorkOrderTransactionsHistory->created_at;
-                    $result = $row->save();
-                }
-            }
-
-        }
-
-        $data = \App\Models\WorkOrdersPermit::whereIn('status',['4','5','6','7'])->whereNull('restablish_convert_date')->orderBy('id','asc')->get();
-        foreach ($data as $row){
-            if ($row->landLayers() && $row->landLayers()->first()){
-
-                if ($row->landLayers()->orderBy('id','asc')->first()){
-                    $row->restablish_convert_date =$row->landLayers()->orderBy('id','asc')->first()->created_at;
-                    $result = $row->save();
-                }
-            }
-        }
-
-        $workOrdersPermits = \App\Models\WorkOrdersPermit::all();
-
-        foreach ($workOrdersPermits as $permit) {
-
-            $extension = \App\Models\WorkOrdersPermitsExtension::where('work_orders_permit_id',$permit->id)->get();
-            $extensionAmount = $extension->sum('amount');
-            $permit->total_amount = $permit->total_extend_amount + $permit->total_fines_amount + $permit->issued_amount + $permit->clearance_sdad_amount;
-            $permit->total_extend_amount = $extensionAmount;
-            $permit->save();
-        }
-
-
-        dd("Done");
-    });
+    Route::get('fixWorkOrdersPermits', [TestController::class, 'fixWorkOrdersPermits'])->name("fixWorkOrdersPermits");
 
     // Route::post('login', [AuthController::class, 'login']);
     // Route::post('register', [AuthController::class, 'register']);
@@ -152,24 +117,11 @@ Route::group([
 
 
     Route::prefix("post")->group(function () {
-        Route::get('one', function (){
-            return view('post.post_file');
-        });
-        Route::get('many', function (){
-            return view('post.post_files');
-        });
-        Route::get('view/{id}', function ($id){
-            $post = \App\Models\Post::with("attachments")->findOrFail($id);
-            return view('post.view_file_list',['post'=>$post]);
-        })->name("post_view");
+        Route::get('one', [TestController::class, 'one'])->name("post_one");
+        Route::get('many', [TestController::class, 'many'])->name("post_many");
+        Route::get('view/{id}', [TestController::class, 'view'])->name("post_view");
 
-        Route::post('test', function (\Illuminate\Http\Request $request){
-            $post = \App\Models\Post::create([
-                'title' => $request->get("title"),
-                'body' => $request->get("body"),
-            ]);
-            return redirect()->route("post_view",['id'=>$post->id]);
-        })->name("post_store");
+
     });
 
     /* Route Forms */

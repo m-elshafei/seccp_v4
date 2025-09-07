@@ -11,6 +11,7 @@ use App\DataTables\DistrictDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CreateDistrictRequest;
 use App\Http\Requests\UpdateDistrictRequest;
+use App\Repositories\DistrictRepository;
 
 class DistrictController extends AppBaseController
 {
@@ -20,6 +21,14 @@ class DistrictController extends AppBaseController
      * @param DistrictDataTable $districtDataTable
      * @return Response
      */
+
+    public $districtRepository;
+
+    public function __construct(DistrictRepository $districtRepository)
+    {
+        $this->districtRepository = $districtRepository;
+    }
+
     public function index(DistrictDataTable $districtDataTable)
     {
         return $districtDataTable->render('districts.index');
@@ -32,7 +41,8 @@ class DistrictController extends AppBaseController
      */
     public function create()
     {
-        $cities = City::pluck('name', 'id');
+
+        $cities = $this->districtRepository->getCities();
 
         return view('districts.create', compact('cities'));
     }
@@ -49,7 +59,7 @@ class DistrictController extends AppBaseController
         $input = $request->all();
 
         /** @var District $district */
-        $district = District::create($input);
+        $district = $this->districtRepository->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/districts.singular')]));
 
@@ -66,7 +76,7 @@ class DistrictController extends AppBaseController
     public function show($id)
     {
         /** @var District $district */
-        $district = District::find($id);
+        $district = $this->districtRepository->find($id);
 
         if (empty($district)) {
             Flash::error(__('models/districts.singular').' '.__('messages.not_found'));
@@ -86,10 +96,9 @@ class DistrictController extends AppBaseController
      */
     public function edit($id)
     {
-        $cities = City::pluck('name', 'id');
-
+        $cities = $this->districtRepository->getCities();
         /** @var District $district */
-        $district = District::find($id);
+        $district = $this->districtRepository->find($id);
 
         if (empty($district)) {
             Flash::error(__('messages.not_found', ['model' => __('models/districts.singular')]));
@@ -111,7 +120,7 @@ class DistrictController extends AppBaseController
     public function update($id, UpdateDistrictRequest $request)
     {
         /** @var District $district */
-        $district = District::find($id);
+        $district = $this->districtRepository->find($id);
 
         if (empty($district)) {
             Flash::error(__('messages.not_found', ['model' => __('models/districts.singular')]));
@@ -119,8 +128,8 @@ class DistrictController extends AppBaseController
             return redirect(route('districts.index'));
         }
 
-        $district->fill($request->all());
-        $district->save();
+
+        $district = $this->districtRepository->update($district, $request->all());
 
         Flash::success(__('messages.updated', ['model' => __('models/districts.singular')]));
 
@@ -139,7 +148,7 @@ class DistrictController extends AppBaseController
     public function destroy($id)
     {
         /** @var District $district */
-        $district = District::find($id);
+        $district = $this->districtRepository->find($id);
 
         if (empty($district)) {
             Flash::error(__('messages.not_found', ['model' => __('models/districts.singular')]));
@@ -147,7 +156,7 @@ class DistrictController extends AppBaseController
             return redirect(route('districts.index'));
         }
 
-        $district->delete();
+        $this->districtRepository->delete($district);
 
         Flash::success(__('messages.deleted', ['model' => __('models/districts.singular')]));
 

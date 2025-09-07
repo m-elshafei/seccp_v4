@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 class AppBaseModel extends Model
 {
     public function scopeFilter($q,$sessionFilterName=""){
-        dd("Use App\Utils\QueryFilterUtil::applyEloquentFilter");
         if ($sessionFilterName && session($sessionFilterName)){
             $filterArray = session($sessionFilterName);
             // dd($filterArray);
