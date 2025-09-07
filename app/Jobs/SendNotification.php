@@ -18,6 +18,7 @@ class SendNotification implements ShouldQueue
 
     protected $workOrdersPermit;
     protected $notificationService; // Add a property for the new service
+    private const REMAINING_DAYS_THRESHOLD = 15;
 
     /**
      * Create a new job instance.
@@ -39,26 +40,42 @@ class SendNotification implements ShouldQueue
     public function handle(): void
     {
         $workOrdersPermit = $this->workOrdersPermit;
-        $dt1 = Carbon::now();
-        $dt2 = Carbon::createFromFormat('Y-m-d', $workOrdersPermit->issue_date);
-        $diff = $dt2->diffInDays($dt1);
+
+        if ($this->hasFifteenDaysRemaining($workOrdersPermit)) {
+            $this->sendWorkOrderNotification($workOrdersPermit);
+        }
+    }
+
+
+    private function hasFifteenDaysRemaining($workOrdersPermit): bool
+    {
+        $currentDate = Carbon::now();
+        $issueDate = Carbon::createFromFormat('Y-m-d', $workOrdersPermit->issue_date);
+        $daysDifference = $issueDate->diffInDays($currentDate);
+
+        return ($workOrdersPermit->period - $daysDifference) <= self::REMAINING_DAYS_THRESHOLD;
+    }
+
+
+    private function sendWorkOrderNotification($workOrdersPermit): void
+    {
         $workOrder = WorkOrder::where('work_order_number', $workOrdersPermit->work_order_number)->first();
 
-        if (($workOrdersPermit->period - $diff) == 15) {
-            if ($workOrder) {
-                $title = 'قارب تصريح على الانتهاء';
-                $message = "متبقي على انهاء التصريح رقم " . $workOrdersPermit->permit_number . " اقل من 15 يوم";
-
-                $this->notificationService->send(
-                    $title,
-                    $message,
-                    $workOrder->current_department_id,
-                    'Department',
-                    '/workOrdersManagement/workOrdersPermits/' . $workOrdersPermit->id,
-                    'bg-light-success',
-                    'check'
-                );
-            }
+        if (!$workOrder) {
+            return;
         }
+
+        $title = 'قارب تصريح على الانتهاء';
+        $message = "متبقي على انهاء التصريح رقم " . $workOrdersPermit->permit_number . " اقل من 15 يوم";
+
+        $this->notificationService->send(
+            $title,
+            $message,
+            $workOrder->current_department_id,
+            'Department',
+            '/workOrdersManagement/workOrdersPermits/' . $workOrdersPermit->id,
+            'bg-light-success',
+            'check'
+        );
     }
 }
