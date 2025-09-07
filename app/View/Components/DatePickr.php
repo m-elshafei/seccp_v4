@@ -30,6 +30,11 @@ class DatePickr extends Component
      */
     public function render()
     {
-        return view('components.date-pickr');
+        return view('components.date-pickr', [
+            'name' => $this->name,
+            'labelTitle' => $this->labelTitle,
+            'dateValue' => $this->dateValue,
+            'placeholder' => $this->placeholder
+        ]);
     }
 }
