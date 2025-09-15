@@ -241,14 +241,6 @@ class WorkOrderController extends AppBaseController
         $this->workOrderService->createStopNote($statusKey,$workOrder);
         $this->workOrderService->updateElectricalOperationStatus($statusKey,$workOrder);
         // $this->workOrderService->sendNotificationBasedOnStatus($statusKey,$workOrder,$input);
-        $message = 'تم تحويل التصريح رقم ' . $workOrder->work_order_number . ' الي اعاده الوضع';
-
-        // //Helper::SendTelegramNotifications($message, $workOrder->current_department_id);
-        $workOrderNumber = $workOrder->work_order_number ?? $workOrder->mission_number;
-        // dd($workOrderNumber,$workOrder->current_department_id);
-
-        Helper::SendTelegramNotifications($statusKey,$workOrder->work_order_number,$workOrder->current_department_id);
-
 
         if($input){
             $workOrder->fill($input);

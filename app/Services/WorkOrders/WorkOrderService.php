@@ -3,6 +3,9 @@
 namespace App\Services\WorkOrders;
 
 use Carbon\Carbon;
+use App\Repositories\UserRepository;
+use App\Services\NotificationService;
+use App\Services\NotificationSender;
 use App\Helpers\Helper;
 use App\Models\District;
 use App\Models\Employee;
@@ -39,7 +42,8 @@ use App\Models\WorkOrder;
 use App\Services\WorkOrders\ElectricTowerWorkOrderService;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use App\Models\Contractor;
-
+use App\DataObjects\NotificationData;
+use App\Enums\StatusMessages;
 
 class WorkOrderService extends BaseWorkOrderService
 {
@@ -49,12 +53,18 @@ class WorkOrderService extends BaseWorkOrderService
     private $drillingWorkOrderService;
     private $electricTowerWorkOrderService;
     private $workOrderNotesService;
+    private $userRepository;
+    private $notificationService;
+    private $notificationSender;
 
     function __construct(
                             DrillingWorkOrderService $drillingWorkOrderService ,
                             ElectricWorkOrderService $electricWorkOrderService,
                             ElectricTowerWorkOrderService $electricTowerWorkOrderService,
-                            WorkOrderNotesService $workOrderNotesService
+                            WorkOrderNotesService $workOrderNotesService,
+                            UserRepository $userRepository,
+                            NotificationSender $notificationSender,
+                            NotificationService $notificationService
                         )
     {
         $routeArr = explode(".", Route::currentRouteName());
@@ -65,7 +75,9 @@ class WorkOrderService extends BaseWorkOrderService
         $this->drillingWorkOrderService = $drillingWorkOrderService;
         $this->electricTowerWorkOrderService = $electricTowerWorkOrderService;
         $this->workOrderNotesService=$workOrderNotesService;
-
+        $this->userRepository = $userRepository;
+        $this->notificationSender = $notificationSender;
+        $this->notificationService = $notificationService;
     }
 
     public function getWorkOrderDataTable()
@@ -296,7 +308,8 @@ class WorkOrderService extends BaseWorkOrderService
         }else if ($statusKey=="inProgressStillProgram"){
             $input['status']=WorkOrderStatusEnum::WorkingInProgressStillProgram->value;
         }
-        Helper::SendTelegramNotifications($statusKey,$workOrder->work_order_number,$workOrder->current_department_id);
+
+
         return $input;
     }
 
@@ -429,8 +442,6 @@ class WorkOrderService extends BaseWorkOrderService
             $work_order_number = "<a href=\"" . url('http://localhost:8089/workOrdersManagement/workOrders/' . $workOrder->id) . "\">" . $workOrder->work_order_number . "</a>";
 
 
-
-                        Helper::SendTelegramNotifications($statusKey,$work_order_number,$input['current_department_id']);
 
             return true;
         } catch (\Exception $e) {

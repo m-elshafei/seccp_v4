@@ -179,6 +179,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
         Spatie\Html\HtmlServiceProvider::class,
+        App\Providers\NotificationServiceProvider::class,
 
         App\Providers\GoogleDriveServiceProvider::class,
     ],
@@ -241,6 +242,7 @@ return [
 
         'PDF' => Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::class,
         'UserPermissions' => App\Helpers\UserPermissions::class,
+        'NotificationService' => App\Services\NotificationService::class,
 
     ],
 

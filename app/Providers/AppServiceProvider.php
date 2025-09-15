@@ -15,7 +15,8 @@ use App\Observers\WorkOrdersPermitsFineObserver;
 use App\Observers\WorkOrdersPermitsExtensionObserver;
 use App\Services\NotificationService;
 use App\Jobs\SendNotification;
-
+use App\Contracts\UserRepositoryInterface;
+use App\Repositories\UserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(NotificationService::class)
             );
         });
+
     }
 
     /**
@@ -47,9 +49,9 @@ class AppServiceProvider extends ServiceProvider
     {
 
 
-$this->app->bindMethod([ProcessPodcast::class, 'handle'], function (ProcessPodcast $job, Application $app) {
-    return $job->handle($app->make(AudioProcessor::class));
-});
+    $this->app->bindMethod([SendNotification::class, 'handle'], function (SendNotification $job, Application $app) {
+        return $job->handle($app->make(NotificationService::class));
+    });
         WorkOrdersPermitsExtension::observe(WorkOrdersPermitsExtensionObserver::class);
         WorkOrdersPermitsFine::observe(WorkOrdersPermitsFineObserver::class);
         WorkOrdersPermit::observe(WorkOrdersPermitObserver::class);

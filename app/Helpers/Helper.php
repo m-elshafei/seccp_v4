@@ -197,59 +197,6 @@ class Helper
         // self::SendTelegramNotifications('databaseDump',$file,8);
     }
 
-    public static function SendTelegramNotifications($statusKey,$workOrder,$ids = null,$remainingDays = null)
-    {
-        try{
-
-            $statusMessage = self::getStatusMessage($statusKey,$workOrder,$remainingDays);
-            if (is_int($ids)) {
-                $ids = [$ids];
-         }
-         if (is_array($ids) && !empty($ids)) {
-             $users = Employee::whereIn('department_id', $ids)->pluck('name');
-             $userNames = $users->implode(' - ');
-             Telegram::bot('notification_bot')->sendMessage([
-                 'chat_id' => env('TELEGRAM_CHAT_ID'),
-                 'text' => $statusMessage . " - " . $userNames,
-                 'parse_mode' => 'HTML'
-                ]);
-         }else {
-             Telegram::bot('notification_bot')->sendMessage([
-                 'chat_id' => env('TELEGRAM_CHAT_ID'),
-                 'text' => $statusMessage,
-                 'parse_mode' => 'HTML'
-                ]);
-            }
-        }catch(\Exception $e){}
-    }
-
-    public static function getStatusMessage($statusKey,$id,$remainingDays=null)
-    {
-        $status = [
-            'convertDepartment' => 'تم تحويل '.$id.' الي قسم الإعادة والتسليم',
-            'restablishWorkInProgress' => 'تم تحويل '.$id.' الي جاري العمل',
-           'restablishWorkFinished' => 'تم تحويل '.$id.' الي انتهاء العمل',
-            'drillInProgress' => 'تم تحويل '.$id.' الي جاري تنفيذ اعمال الحفر',
-            'drillFinished' => 'تم تحويل '.$id.' الي انتهاء اعمال الحفر',
-            'updateStatusToStart' => 'تم تحويل '.$id.' الي الاداره التابعة له',
-            'temporaryStopped' => 'تم تحويل '.$id.' الي متوقف مؤقتأ',
-            'permanentStopped' => 'تم تحويل '.$id.' الي متوقف دائمأ',
-            'reOpenDrillingWorkOrder' => 'تم تحويل '.$id.' الي اعاده تنفيذ اعمال الحفر',
-            'electricityInProgress' => 'تم تحويل '.$id.' الي جاري تنفيذ اعمال الهوائي',
-            'electricalOperationsFinished' => 'تم تحويل '.$id.' الي الانتهاء من اعمال الهوائي',
-            'electricalConvertDepartment' => 'تم تحويل '.$id.' الي قسم المستخلصات',
-            'toGeneral' => 'تم تحويل '.$id.' الي قسم اعاده الوضع',
-            'inProgressStillProgram' => 'تم تحويل '.$id.' الي متبقي البرنامج',
-            'databaseDump' => ' تم انشاء نسخه بيانات احتياطيه جديده باسم '. $id,
-            'initialDelivery' => 'تم تحويل '.$id.' الي تم التسليم',
-            'databaseDeleted' => ' تم حذف نسخه بيانات سابقه باسم '.$id,
-            'permitExpiration' => "متبقي على انتهاء التصريح رقم " . $id . ' - ' . $remainingDays . " يوم "
-
-
-
-        ];
-        return $status[$statusKey] ?? "Status not found: " . $statusKey;
-    }
 
     public static function dateFormat($value , $format='Y-m-d')
     {
