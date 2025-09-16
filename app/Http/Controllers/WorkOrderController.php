@@ -33,14 +33,18 @@ use App\Http\Requests\CreateWorkOrderRequest;
 use App\Http\Requests\UpdateWorkOrderRequest;
 use App\Services\WorkOrders\WorkOrderService;
 use App\Http\Requests\CreateAttachmentRequest;
+use App\Services\NotificationService;
 
 class WorkOrderController extends AppBaseController
 {
 
     private $workOrderService;
+    private $notificationService;
 
-    function __construct(WorkOrderService $workOrderService) {
+
+    function __construct(WorkOrderService $workOrderService,NotificationService $notificationService) {
         $this->workOrderService = $workOrderService;
+        $this->notificationService = $notificationService;
     }
     /**
      * Display a listing of the WorkOrder.
@@ -241,6 +245,13 @@ class WorkOrderController extends AppBaseController
         $this->workOrderService->createStopNote($statusKey,$workOrder);
         $this->workOrderService->updateElectricalOperationStatus($statusKey,$workOrder);
         // $this->workOrderService->sendNotificationBasedOnStatus($statusKey,$workOrder,$input);
+        $departmentIds = null;
+        if (isset($input['current_department_id'])) {
+            $departmentIds = $input['current_department_id'];
+        }
+
+        // NotificationService::sendTelegramNotification($statusKey, $workOrder, $departmentIds);
+        $this->notificationService->sendTelegramNotification($statusKey, $workOrder, $departmentIds);
 
         if($input){
             $workOrder->fill($input);
