@@ -38,13 +38,16 @@ use App\Http\Requests\CreateAttachmentRequest;
 use App\Http\Requests\CreateEmergencyMissionRequest;
 use App\Http\Requests\UpdateEmergencyMissionRequest;
 use App\Http\Requests\CreateEmergencyWorkOrderRequest;
+use App\Services\NotificationService;
 
 class EmergencyMissionController extends AppBaseController
 {
     private $workOrderService;
+    private $notificationService;
 
-    function __construct(WorkOrderService $workOrderService) {
+    function __construct(WorkOrderService $workOrderService,NotificationService $notificationService) {
         $this->workOrderService = $workOrderService;
+        $this->notificationService = $notificationService;
     }
     /**
      * Display a listing of the EmergencyMission.
@@ -70,11 +73,9 @@ class EmergencyMissionController extends AppBaseController
         if($branchData){
             $city_id = $branchData->city_id;
         }else{
-            // $city_id= 1;
             return redirect(route('login'));
         }
 
-        // $workTypes = WorkType::all()->map->only('id', 'full_name')->pluck('full_name', 'id')->prepend("اختر","");
         $districts = District::where("city_id",$city_id)->pluck('name', 'id')->prepend("اختر","");
         $missionTypes = MissionType::pluck('name', 'id')->prepend("اختر","");
         $missionReceivedEmployees =Employee::where("job_id",JobNameEnum::Observer)->pluck('name', 'id')->prepend("اختر","");
@@ -94,10 +95,7 @@ class EmergencyMissionController extends AppBaseController
      */
     public function store(CreateEmergencyMissionRequest $request)
     {
-        // $input = $request->all();
 
-        // /** @var EmergencyMission $emergencyMission */
-        // $emergencyMission = EmergencyMission::create($input);
         if( in_array(session('current_department_id'),[3,5])){
             $request->request->add(['current_department_id' => session('current_department_id')]); //add request
             $request->request->add(['owner_department_id' => session('current_department_id')]); //add request
@@ -105,19 +103,14 @@ class EmergencyMissionController extends AppBaseController
             $request->request->add(['current_department_id' => 5]); //add request
             $request->request->add(['owner_department_id' => 5]);
         }
-        // dd($request->all());
         $request->request->add(['is_emergency_mission' => 1]); //add request
-        // $request->request->add(['owner_department_id' => 5]); //add request
         $request->request->add(['status' => 2]); //add request
-        // $request->request->add(['electricity_company_employee_id ' => 2]); //add request
         DB::beginTransaction();
-        // dd($request->all());
         $emergencyMission = $this->workOrderService->createWorkOrder($request);
         $emergencyMissionDetail = $this->workOrderService->creatEmergencyMissionDetail($request, $emergencyMission);
         DB::commit();
         Flash::success(__('messages.saved', ['model' => __('models/emergencyMissions.singular')]));
 
-        // return redirect(route('emergencyMissions.index'));
         return Helper::redirectAfterSaving($emergencyMission->id,$request,'emergencyMissions');
     }
 
@@ -157,7 +150,6 @@ class EmergencyMissionController extends AppBaseController
         if($branchData){
             $city_id = $branchData->city_id;
         }else{
-            // $city_id= 1;
             return redirect(route('login'));
         }
         /** @var EmergencyMission $emergencyMission */
@@ -170,7 +162,6 @@ class EmergencyMissionController extends AppBaseController
         }
         $workTypes = WorkType::all()->map->only('id', 'full_name')->pluck('full_name', 'id')->prepend("اختر","");
         $emergencyWorkOrders =EmergencyMission::where('work_orders_type_id',WorkOrderTypeEnum::Emergency)->pluck('work_order_number', 'id')->prepend("اختر","");
-        // dd($emergencyWorkOrders);
         $districts = District::where("city_id",$city_id)->pluck('name', 'id')->prepend("اختر","");
         $missionTypes = MissionType::pluck('name', 'id')->prepend("اختر","");
         $missionReceivedEmployees =Employee::where("job_id",JobNameEnum::Observer)->pluck('name', 'id')->prepend("اختر","");
@@ -200,16 +191,11 @@ class EmergencyMissionController extends AppBaseController
         }
         $request->merge(['user_id'=>auth()->id()]);
         LandscapeInformation::updateOrCreate(['work_order_id' => $emergencyMission->id], $request->all());
-        // $this->workOrderNotesService->save($request, $workOrder);
-        // $emergencyMission->fill($request->all());
-        // $emergencyMission->save();
-        //dd($request->all(),$emergencyMission);
         $this->workOrderService->updateWorkOrder($request, $emergencyMission);
         $emergencyMissionDetail = $this->workOrderService->creatEmergencyMissionDetail($request, $emergencyMission);
         DB::commit();
         Flash::success(__('messages.updated', ['model' => __('models/emergencyMissions.singular')]));
 
-        // return redirect(route('emergencyMissions.index'));
         return Helper::redirectAfterSaving($id,$request,'emergencyMissions');
 
     }
@@ -239,20 +225,17 @@ class EmergencyMissionController extends AppBaseController
             $emergencyMission->status = WorkOrderStatusEnum::WorkingDone->value;
             $emergencyMission->electrical_operations_status = 1;
         }else if ($statusKey=="convertDepartment"){
-//            $emergencyMission->status = WorkOrderStatusEnum::WorkingDone->value;
             $emergencyMission->electrical_operations_status = 1;
             $emergencyMission['current_department_id']=4;  //قسم الإعادة والتسليم
 
         }
         WorkOrderTransactionsHistory::createTransactionsHistory($emergencyMission,$emergencyMission->status);
-        // $this->workOrderService->sendNotificationBasedOnStatus($statusKey,$emergencyMission,$emergencyMission['current_department_id']);
+
         $message = 'تم تحويل التصريح رقم ' . $emergencyMission->id . ' الي اعاده الوضع';
 
-        // //Helper::SendTelegramNotifications($message, $emergencyMission->current_department_id);
         $emergencyNumber = $emergencyMission->work_order_number ?? $emergencyMission->mission_number;
 
-                // dd($emergencyMission->current_department_id);
-        Helper::SendTelegramNotifications($statusKey,$emergencyNumber,$emergencyMission->current_department_id);
+        $this->notificationService->sendTelegramNotification($statusKey, $workOrder, $emergencyMission['current_department_id']);
 
 
 

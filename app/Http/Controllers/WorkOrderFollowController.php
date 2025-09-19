@@ -26,14 +26,16 @@ use App\Services\WorkOrders\WorkOrderService;
 use App\Http\Requests\CreateWorkOrderFollowRequest;
 use App\Http\Requests\UpdateWorkOrderFollowRequest;
 use Illuminate\Http\Request;
-
+use App\Services\NotificationService;
 
 class WorkOrderFollowController extends AppBaseController
 {
     private $workOrderService;
+    private $notificationService;
 
-    function __construct(WorkOrderService $workOrderService) {
+    function __construct(WorkOrderService $workOrderService,NotificationService $notificationService) {
         $this->workOrderService = $workOrderService;
+        $this->notificationService = $notificationService;
     }
     /**
      * Display a listing of the WorkOrderFollow.
@@ -315,10 +317,8 @@ class WorkOrderFollowController extends AppBaseController
             $inputWorkOrder['drilling_status']=WorkOrderOperationsStatusEnum::WorkingInProgress->value;
             $redirectAction="index";
         }
-        // dd($workOrderFollow);
-        // $this->workOrderService->sendNotificationBasedOnStatus($statusKey,$workOrderFollow->workOrders->first(),$workOrderFollow->toArray());
-        // //Helper::SendTelegramNotifications($message, $workOrderFollow->workOrders->current_department_id);
-        Helper::SendTelegramNotifications($statusKey,$workOrderFollow->permit_number,$workOrderFollow->workOrders[0]->current_department_id);
+    
+        $this->notificationService->sendTelegramNotification($statusKey, $workOrder, $workOrderFollow->workOrders[0]->current_department_id);
 
         if($inputWorkOrder){
             $workOrder->fill($inputWorkOrder);
