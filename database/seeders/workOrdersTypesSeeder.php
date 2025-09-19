@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Models\WorkOrdersType;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class workOrdersTypesSeeder extends Seeder
@@ -21,10 +21,10 @@ class workOrdersTypesSeeder extends Seeder
         //
         foreach ($workOrdersTypes as $workOrdersType) {
             $workOrdersTypeData = WorkOrdersType::create([
-                'name' => $workOrdersType['name'] ,
-                //'description' => $workOrdersType['description'] ,
+                'name' => $workOrdersType['name'],
+                // 'description' => $workOrdersType['description'] ,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ]);
         }
     }

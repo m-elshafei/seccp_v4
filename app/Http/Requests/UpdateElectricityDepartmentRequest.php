@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\ElectricityDepartment;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateElectricityDepartmentRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateElectricityDepartmentRequest extends FormRequest
     public function rules()
     {
         $rules = ElectricityDepartment::$rules;
-        
+
         return $rules;
     }
 }

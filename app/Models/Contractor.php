@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Http\Traits\AttachmentTrait;
+use App\Traits\Branchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class Contractor
- * @package App\Models
+ *
  * @version January 6, 2022, 12:13 pm UTC
  *
  * @property string $name
@@ -21,23 +19,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Contractor extends AppBaseModel
 {
-    use SoftDeletes;
     use AttachmentTrait;
     use Branchable;
+    use SoftDeletes;
 
     public $table = 'contractors';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
         'company_name',
         'contact_name',
         'contact_mobile_number',
-        'notes'
+        'notes',
     ];
 
     /**
@@ -52,7 +45,7 @@ class Contractor extends AppBaseModel
         'contact_name' => 'string',
         'contact_mobile_number' => 'string',
         'notes' => 'string',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -61,13 +54,11 @@ class Contractor extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
     protected function getDisplayNameAttribute()
     {
         return $this->attributes['id'].' / '.$this->attributes['name'];
     }
-
-    
 }

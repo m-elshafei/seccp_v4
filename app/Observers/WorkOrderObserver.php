@@ -19,29 +19,29 @@ class WorkOrderObserver
 
     public function updating(WorkOrder $workOrder)
     {
-        if($workOrder->isDirty('status')){
+        if ($workOrder->isDirty('status')) {
             WorkOrderTransactionsHistory::createTransactionsHistory($workOrder, 2);
-           
-            if($workOrder->status == WorkOrderStatusEnum::WorkingDone() || $workOrder->status == WorkOrderStatusEnum::DeliveryDone()){
-                if(!$workOrder->finished_date){
-                    $workOrder->finished_date=Carbon::now();
+
+            if ($workOrder->status == WorkOrderStatusEnum::WorkingDone() || $workOrder->status == WorkOrderStatusEnum::DeliveryDone()) {
+                if (! $workOrder->finished_date) {
+                    $workOrder->finished_date = Carbon::now();
                 }
             }
-            
+
         }
 
-        if($workOrder->isDirty('current_department_id')){
+        if ($workOrder->isDirty('current_department_id')) {
             WorkOrderTransactionsHistory::createTransactionsHistory($workOrder, 3);
         }
 
-        if($workOrder->isDirty('drilling_status')){
+        if ($workOrder->isDirty('drilling_status')) {
             WorkOrderTransactionsHistory::createTransactionsHistory($workOrder, 4);
         }
 
-        if($workOrder->isDirty('electrical_operations_status')){
+        if ($workOrder->isDirty('electrical_operations_status')) {
             WorkOrderTransactionsHistory::createTransactionsHistory($workOrder, 5);
         }
-      
+
     }
 
     /**

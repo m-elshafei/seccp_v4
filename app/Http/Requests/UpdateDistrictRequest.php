@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\District;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateDistrictRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateDistrictRequest extends FormRequest
     public function rules()
     {
         $rules = District::$rules;
-        
+
         return $rules;
     }
 }

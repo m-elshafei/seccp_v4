@@ -2,34 +2,24 @@
 
 namespace App\Models;
 
-use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Class Consultant
- * @package App\Models
+ *
  * @version January 2, 2023, 5:50 am UTC
  *
  * @property string $name
  */
 class Consultant extends AppBaseModel
 {
-use LogsActivity;
+    use LogsActivity;
     use SoftDeletes;
 
-
     public $table = 'consultants';
-    
-
-   
-
-
-
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -41,7 +31,7 @@ use LogsActivity;
     }
 
     public $fillable = [
-        'name'
+        'name',
     ];
 
     /**
@@ -52,7 +42,7 @@ use LogsActivity;
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -61,14 +51,11 @@ use LogsActivity;
      * @var array
      */
     public static $rules = [
-        
+
     ];
 
-    
-
-
-
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\Consultant']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\Consultant']);
     }
 }

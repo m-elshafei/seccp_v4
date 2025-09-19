@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Flash;
-use App\Services\Notifications\NotificationService;
 use App\DataObjects\NotificationData;
+use App\Services\Notifications\NotificationService;
 use Exception;
+use Flash;
+use Illuminate\Http\Request;
 
 class NotificationController extends AppBaseController
 {
@@ -17,28 +17,32 @@ class NotificationController extends AppBaseController
         $this->notificationService = $notificationService;
     }
 
-    public function markAsReadNotificationAll(){
+    public function markAsReadNotificationAll()
+    {
         auth()->user()->unreadNotifications->markAsRead();
         // return $this->sendSuccess('تم تعليم كمقروء');
-        Flash::success( 'تم تعليم كمقروء');
+        Flash::success('تم تعليم كمقروء');
+
         return redirect()->back();
     }
 
-    public function markAsReadNotification($id){
+    public function markAsReadNotification($id)
+    {
         $notifications = auth()->user()->unreadNotifications;
-        //dd($notifications->where('id',$id));
-        $notifications->where('id',$id)->markAsRead();
+        // dd($notifications->where('id',$id));
+        $notifications->where('id', $id)->markAsRead();
         // return $this->sendSuccess('تم تعليم كمقروء');
-        Flash::success( 'تم تعليم كمقروء');
+        Flash::success('تم تعليم كمقروء');
+
         return redirect()->back();
     }
 
-    public function showNotification(){
+    public function showNotification()
+    {
         $notifications = auth()->user()->notifications()->paginate();
-        return view('notification.index',['notifications'=>$notifications]);
+
+        return view('notification.index', ['notifications' => $notifications]);
     }
-
-
 
     public function sendUserNotifications(Request $request)
     {

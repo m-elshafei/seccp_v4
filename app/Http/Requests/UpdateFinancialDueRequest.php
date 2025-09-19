@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\FinancialDue;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateFinancialDueRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateFinancialDueRequest extends FormRequest
     public function rules()
     {
         $rules = FinancialDue::$rules;
-        
+
         return $rules;
     }
 }

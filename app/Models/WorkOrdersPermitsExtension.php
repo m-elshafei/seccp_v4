@@ -3,19 +3,12 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WorkOrdersPermitsExtension extends AppBaseModel
 {
-    
-    use SoftDeletes , CreatedUpdatedBy , Branchable;
-
-
-   
-
+    use Branchable , CreatedUpdatedBy , SoftDeletes;
 
     public $fillable = [
         'work_orders_permit_id',
@@ -43,9 +36,9 @@ class WorkOrdersPermitsExtension extends AppBaseModel
         'sadad_number' => 'integer',
         'amount' => 'decimal:2',
         'status' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
-    
+
     /**
      * Validation rules
      *
@@ -60,8 +53,7 @@ class WorkOrdersPermitsExtension extends AppBaseModel
         // 'to_date' => 'required'
     ];
 
-
-  /**
+    /**
      * Get the start_date
      *
      * @param  string  $value
@@ -69,7 +61,7 @@ class WorkOrdersPermitsExtension extends AppBaseModel
      */
     public function getFromDateAttribute($value)
     {
-        return $value ;
+        return $value;
     }
 
     /**
@@ -93,6 +85,4 @@ class WorkOrdersPermitsExtension extends AppBaseModel
     {
         return $value;
     }
-
-
 }

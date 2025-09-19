@@ -7,22 +7,27 @@ use Illuminate\View\Component;
 class Select2 extends Component
 {
     public $name;
+
     public $labelTitle;
+
     public $defaultValue;
+
     public $options;
+
     public $class;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name,$labelTitle="",$options=[],$defaultValue=null,$class='select2 form-select form-control')
+    public function __construct($name, $labelTitle = '', $options = [], $defaultValue = null, $class = 'select2 form-select form-control')
     {
-        $this->name=$name;
-        $this->labelTitle=$labelTitle;
-        $this->defaultValue=$defaultValue;
-        $this->options=$options;
-        $this->class=$class;
+        $this->name = $name;
+        $this->labelTitle = $labelTitle;
+        $this->defaultValue = $defaultValue;
+        $this->options = $options;
+        $this->class = $class;
     }
 
     /**

@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Http\Middleware;
 
+use App\Models\SiteSetting;
 use Closure;
 use Illuminate\Support\Facades\View;
-use App\Models\SiteSetting;
 
 class SiteSettingsMiddleware
 {

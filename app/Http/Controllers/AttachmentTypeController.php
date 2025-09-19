@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\AttachmentTypeDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateAttachmentTypeRequest;
 use App\Http\Requests\UpdateAttachmentTypeRequest;
 use App\Models\AttachmentType;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class AttachmentTypeController extends AppBaseController
@@ -16,7 +14,6 @@ class AttachmentTypeController extends AppBaseController
     /**
      * Display a listing of the AttachmentType.
      *
-     * @param AttachmentTypeDataTable $attachmentTypeDataTable
      * @return Response
      */
     public function index(AttachmentTypeDataTable $attachmentTypeDataTable)
@@ -37,7 +34,6 @@ class AttachmentTypeController extends AppBaseController
     /**
      * Store a newly created AttachmentType in storage.
      *
-     * @param CreateAttachmentTypeRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class AttachmentTypeController extends AppBaseController
     /**
      * Display the specified AttachmentType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class AttachmentTypeController extends AppBaseController
     /**
      * Show the form for editing the specified AttachmentType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class AttachmentTypeController extends AppBaseController
     /**
      * Update the specified AttachmentType in storage.
      *
-     * @param  int              $id
-     * @param UpdateAttachmentTypeRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateAttachmentTypeRequest $request)
@@ -125,11 +117,10 @@ class AttachmentTypeController extends AppBaseController
     /**
      * Remove the specified AttachmentType from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

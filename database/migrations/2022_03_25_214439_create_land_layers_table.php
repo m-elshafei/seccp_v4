@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('work_order_id')->constrained();
             $table->foreignId('work_orders_permit_id')->constrained();
             // $table->foreignId('work_orders_permit_id')->references('id')->on('work_orders_permits');
-            
+
             // $table->integer('layer_id');
             $table->foreignId('layer_id')->constrained('layers');
             $table->date('start_date');
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->integer('layer_status')->default(1);
             $table->foreignId('lab_id')->constrained();
             // $table->foreignId('lab_id')->references('id')->on('labs');
-            
+
             $table->integer('lab_result_status')->default(1);
             $table->text('note')->nullable();
             $table->foreignId('branch_id')->constrained();

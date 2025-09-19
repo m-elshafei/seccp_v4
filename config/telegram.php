@@ -30,28 +30,27 @@ return [
     |                       Acme\Project\Commands\BotFather\ByeCommand::class,
     |             ]
     */
-   'bots' => [
-    'notification_bot' => [
-        'token' => env('TELEGRAM_BOT_TOKEN', 'YOUR-NOTIFICATION-BOT-TOKEN'),
-        'certificate_path' => env('TELEGRAM_CERTIFICATE_PATH', 'YOUR-CERTIFICATE-PATH'),
-        'webhook_url' => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
-        'allowed_updates' => null,
-        'commands' => [
-            // Define commands for this bot if any
+    'bots' => [
+        'notification_bot' => [
+            'token' => env('TELEGRAM_BOT_TOKEN', 'YOUR-NOTIFICATION-BOT-TOKEN'),
+            'certificate_path' => env('TELEGRAM_CERTIFICATE_PATH', 'YOUR-CERTIFICATE-PATH'),
+            'webhook_url' => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
+            'allowed_updates' => null,
+            'commands' => [
+                // Define commands for this bot if any
+            ],
+        ],
+
+        'log_bot' => [
+            'token' => env('TELEGRAM_BOT_TOKEN_LOG', 'YOUR-LOG-BOT-TOKEN'),
+            'certificate_path' => env('TELEGRAM_CERTIFICATE_PATH', 'YOUR-CERTIFICATE-PATH'),
+            'webhook_url' => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
+            'allowed_updates' => null,
+            'commands' => [
+                // Define commands for this bot if any
+            ],
         ],
     ],
-
-    'log_bot' => [
-        'token' => env('TELEGRAM_BOT_TOKEN_LOG', 'YOUR-LOG-BOT-TOKEN'),
-        'certificate_path' => env('TELEGRAM_CERTIFICATE_PATH', 'YOUR-CERTIFICATE-PATH'),
-        'webhook_url' => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
-        'allowed_updates' => null,
-        'commands' => [
-            // Define commands for this bot if any
-        ],
-    ],
-],
-
 
     /*
     |--------------------------------------------------------------------------

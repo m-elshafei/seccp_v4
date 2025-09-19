@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'general'=>[
+    'general' => [
         'isDemoMode' => env('IS_DEMO_MODE', false), // options[Boolean]: true, false(default) (warning:if you set this option to true, it will use the demo data for the whole project.)
         'initiationDataFolderName' => env('INITIATION_DATA_FOLDER_NAME', 'initiation-data'),
     ],
@@ -18,7 +18,7 @@ return [
         'bodyClass' => '', // add custom class
         'pageHeader' => true, // options[Boolean]: true(default), false (Page Header for Breadcrumbs)
         'contentLayout' => 'default', // options[String]: default, content-left-sidebar, content-right-sidebar, content-detached-left-sidebar, content-detached-right-sidebar (warning:use this option if your whole project with sidenav Otherwise override this option as page level )
-        'defaultLanguage' => 'ar',    //en(default)/de/pt/fr here are four optional language provided in theme
+        'defaultLanguage' => 'ar',    // en(default)/de/pt/fr here are four optional language provided in theme
         'blankPage' => false, // options[Boolean]: true, false(default) (warning:only make true if your whole project without navabr and sidebar otherwise override option page wise)
         'direction' => env('MIX_CONTENT_DIRECTION', 'rtl'), // Options[String]: ltr(default), rtl
         'showDashboard' => env('SHOW_DASHBOARD', true), // Options[String]: ltr(default), rtl

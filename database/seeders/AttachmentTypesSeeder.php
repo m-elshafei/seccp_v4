@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Models\AttachmentType;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class AttachmentTypesSeeder extends Seeder
@@ -22,10 +22,10 @@ class AttachmentTypesSeeder extends Seeder
         //
         foreach ($attachmentTypes as $attachmentType) {
             $attachmentTypeData = AttachmentType::create([
-                'title' => $attachmentType['title'] ,
-                'description' => $attachmentType['description'] ,
+                'title' => $attachmentType['title'],
+                'description' => $attachmentType['description'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
 
             ]);
         }

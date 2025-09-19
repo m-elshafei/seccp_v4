@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
- use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class SiteSetting extends Model
 {
-     use SoftDeletes;    public $table = 'site_settings';
+    use SoftDeletes;
+
+    public $table = 'site_settings';
 
     public $fillable = [
         'site_name_en',
@@ -17,7 +20,7 @@ class SiteSetting extends Model
         'site_alias',
         'site_main_color',
         'site_font_name',
-        'message_home_page'
+        'message_home_page',
     ];
 
     protected $casts = [
@@ -25,8 +28,6 @@ class SiteSetting extends Model
     ];
 
     public static array $rules = [
-        
-    ];
 
-    
+    ];
 }

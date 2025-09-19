@@ -7,7 +7,7 @@ return [
         'is_final' => 0,
         'created_at' => '2022-09-20 12:18:22',
         'updated_at' => '2022-10-22 11:07:55',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '2' => [
         'name' => 'طبقة اولى',
@@ -15,7 +15,7 @@ return [
         'is_final' => 0,
         'created_at' => '2022-10-22 11:08:34',
         'updated_at' => '2022-12-31 08:16:51',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '3' => [
         'name' => 'الثانية',
@@ -23,7 +23,7 @@ return [
         'is_final' => 0,
         'created_at' => '2022-10-22 11:08:41',
         'updated_at' => '2022-12-31 08:17:21',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '4' => [
         'name' => 'الاخيرة',
@@ -31,7 +31,7 @@ return [
         'is_final' => 1,
         'created_at' => '2022-10-22 11:08:57',
         'updated_at' => '2022-12-31 08:17:44',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '5' => [
         'name' => 'كشط وحرارة',
@@ -39,7 +39,7 @@ return [
         'is_final' => 0,
         'created_at' => '2022-11-17 08:32:06',
         'updated_at' => '2022-12-31 08:17:57',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '6' => [
         'name' => 'رش MC1  وحرارة',
@@ -47,7 +47,7 @@ return [
         'is_final' => 0,
         'created_at' => '2022-11-17 08:32:28',
         'updated_at' => '2022-12-31 08:18:10',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '7' => [
         'name' => 'دك الاسفلت',
@@ -55,7 +55,7 @@ return [
         'is_final' => 1,
         'created_at' => '2022-11-17 08:32:43',
         'updated_at' => '2022-12-31 08:18:18',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '8' => [
         'name' => 'الخرسانة',
@@ -63,7 +63,7 @@ return [
         'is_final' => 0,
         'created_at' => '2022-12-31 08:15:56',
         'updated_at' => '2022-12-31 08:16:41',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '9' => [
         'name' => 'الرصيف',
@@ -71,6 +71,6 @@ return [
         'is_final' => 1,
         'created_at' => '2023-01-17 07:30:36',
         'updated_at' => '2023-01-17 07:30:36',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
 ];

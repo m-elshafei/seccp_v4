@@ -2,19 +2,17 @@
 
 namespace App\Repositories;
 
-use App\Models\District;
 use App\Models\City;
+use App\Models\District;
 
 class DistrictRepository
 {
-
     protected $model;
 
     public function __construct(District $model)
     {
         $this->model = $model;
     }
-
 
     public function getCities()
     {
@@ -40,6 +38,4 @@ class DistrictRepository
     {
         return $district->update($input);
     }
-
 }
-

@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCitiesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -19,8 +18,8 @@ class CreateCitiesTable extends Migration
             $table->string('name', 150);
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('created_by')->constrained('users');//->constrained('users');
-            $table->foreignId('updated_by')->constrained('users');//->constrained('users');
+            $table->foreignId('created_by')->constrained('users'); // ->constrained('users');
+            $table->foreignId('updated_by')->constrained('users'); // ->constrained('users');
         });
     }
 

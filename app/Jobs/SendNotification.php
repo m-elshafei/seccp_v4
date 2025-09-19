@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\WorkOrdersPermit;
 use App\Models\WorkOrder;
+use App\Models\WorkOrdersPermit;
 use App\Services\Notifications\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -17,14 +17,15 @@ class SendNotification implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $workOrdersPermit;
+
     protected $notificationService; // Add a property for the new service
+
     private const REMAINING_DAYS_THRESHOLD = 15;
 
     /**
      * Create a new job instance.
      *
-     * @param \App\Models\WorkOrdersPermit $workOrdersPermit
-     * @param \App\Services\NotificationService $notificationService
+     * @param  \App\Services\NotificationService  $notificationService
      */
     public function __construct(WorkOrdersPermit $workOrdersPermit, NotificationService $notificationService)
     {
@@ -34,8 +35,6 @@ class SendNotification implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle(): void
     {
@@ -46,7 +45,6 @@ class SendNotification implements ShouldQueue
         }
     }
 
-
     private function hasFifteenDaysRemaining($workOrdersPermit): bool
     {
         $currentDate = Carbon::now();
@@ -56,24 +54,23 @@ class SendNotification implements ShouldQueue
         return ($workOrdersPermit->period - $daysDifference) <= self::REMAINING_DAYS_THRESHOLD;
     }
 
-
     private function sendWorkOrderNotification($workOrdersPermit): void
     {
         $workOrder = WorkOrder::where('work_order_number', $workOrdersPermit->work_order_number)->first();
 
-        if (!$workOrder) {
+        if (! $workOrder) {
             return;
         }
 
         $title = 'قارب تصريح على الانتهاء';
-        $message = "متبقي على انهاء التصريح رقم " . $workOrdersPermit->permit_number . " اقل من 15 يوم";
+        $message = 'متبقي على انهاء التصريح رقم '.$workOrdersPermit->permit_number.' اقل من 15 يوم';
 
         $this->notificationService->send(
             $title,
             $message,
             $workOrder->current_department_id,
             'Department',
-            '/workOrdersManagement/workOrdersPermits/' . $workOrdersPermit->id,
+            '/workOrdersManagement/workOrdersPermits/'.$workOrdersPermit->id,
             'bg-light-success',
             'check'
         );

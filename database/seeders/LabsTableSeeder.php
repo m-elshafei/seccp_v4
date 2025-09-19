@@ -2,14 +2,13 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Models\Lab;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class LabsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -17,10 +16,9 @@ class LabsTableSeeder extends Seeder
      */
     public function run()
     {
-        
 
         $initiationDataPath = config('custom.general.initiationDataFolderName');
-        $labs = config($initiationDataPath . '.labs');
+        $labs = config($initiationDataPath.'.labs');
 
         foreach ($labs as $lab) {
             $labData = Lab::create([
@@ -28,15 +26,15 @@ class LabsTableSeeder extends Seeder
                 'branch_id' => $lab['branch_id'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'deleted_at' => NULL
+                'deleted_at' => null,
 
             ]);
         }
 
         // DB::table('labs')->delete();
-        
+
         // DB::table('labs')->insert(array (
-        //     0 => 
+        //     0 =>
         //     array (
         //         'created_at' => '2022-07-12 09:15:07',
         //         'deleted_at' => NULL,
@@ -46,7 +44,6 @@ class LabsTableSeeder extends Seeder
         //         'branch_id' => 1,
         //     ),
         // ));
-        
-        
+
     }
 }

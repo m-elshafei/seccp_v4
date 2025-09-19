@@ -4,16 +4,16 @@ namespace App\Services\Notifications;
 
 use App\Contracts\NotificationSenderInterface;
 use App\Contracts\UserRepositoryInterface;
+use App\Enums\StatusMessages;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
-use App\Enums\StatusMessages;
 
 class NotificationService
 {
     private UserRepositoryInterface $userRepository;
-    private NotificationSenderInterface $notificationSender;
 
+    private NotificationSenderInterface $notificationSender;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
@@ -22,7 +22,6 @@ class NotificationService
         $this->userRepository = $userRepository;
         $this->notificationSender = $notificationSender;
     }
-
 
     public function sendTelegramNotification($statusKey, $workOrder, $ids = null, $remainingDays = null)
     {
@@ -34,18 +33,18 @@ class NotificationService
                 $ids = [$ids];
             }
 
-            if (is_array($ids) && !empty($ids)) {
+            if (is_array($ids) && ! empty($ids)) {
                 $users = $this->userRepository->findUsersByDepartmentIds($ids);
                 $userNames = $users->implode(' - ');
                 Telegram::bot('notification_bot')->sendMessage([
                     'chat_id' => env('TELEGRAM_CHAT_ID'),
-                    'text' => $statusMessage . " - " . $userNames,
-                    'parse_mode' => 'HTML'
+                    'text' => $statusMessage.' - '.$userNames,
+                    'parse_mode' => 'HTML',
                 ]);
             }
         } catch (Exception $e) {
             // Log the exception but don't let it break the application flow
-            Log::error('Telegram notification failed: ' . $e->getMessage());
+            Log::error('Telegram notification failed: '.$e->getMessage());
         }
     }
 }

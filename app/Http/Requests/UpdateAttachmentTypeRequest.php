@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\AttachmentType;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAttachmentTypeRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateAttachmentTypeRequest extends FormRequest
     public function rules()
     {
         $rules = AttachmentType::$rules;
-        
+
         return $rules;
     }
 }

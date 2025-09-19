@@ -2,10 +2,10 @@
 
 namespace App\View\Components;
 
-use Closure;
 use App\Models\SystemRelease;
-use Illuminate\View\Component;
+use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\View\Component;
 
 class CurrentSystemRelease extends Component
 {
@@ -22,7 +22,8 @@ class CurrentSystemRelease extends Component
      */
     public function render(): View|Closure|string
     {
-        $currentSystemRelease=  SystemRelease::limit(1)->first()->version_number ?? '';
-        return view('components.current-system-release',compact(['currentSystemRelease']));
+        $currentSystemRelease = SystemRelease::limit(1)->first()->version_number ?? '';
+
+        return view('components.current-system-release', compact(['currentSystemRelease']));
     }
 }

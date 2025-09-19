@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Consultant;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateConsultantRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateConsultantRequest extends FormRequest
     public function rules()
     {
         $rules = Consultant::$rules;
-        
+
         return $rules;
     }
 }

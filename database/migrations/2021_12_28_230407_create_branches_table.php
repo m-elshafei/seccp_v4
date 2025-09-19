@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateBranchesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -16,7 +15,7 @@ class CreateBranchesTable extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id('id');
-            $table->string('name',150);
+            $table->string('name', 150);
             $table->foreignId('city_id')->constrained();
             $table->foreignId('district_id')->nullable()->constrained();
             $table->smallInteger('is_main_branch')->default(0);

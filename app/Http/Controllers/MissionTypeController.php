@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\MissionTypeDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateMissionTypeRequest;
 use App\Http\Requests\UpdateMissionTypeRequest;
 use App\Models\MissionType;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class MissionTypeController extends AppBaseController
@@ -16,7 +14,6 @@ class MissionTypeController extends AppBaseController
     /**
      * Display a listing of the MissionType.
      *
-     * @param MissionTypeDataTable $missionTypeDataTable
      * @return Response
      */
     public function index(MissionTypeDataTable $missionTypeDataTable)
@@ -37,7 +34,6 @@ class MissionTypeController extends AppBaseController
     /**
      * Store a newly created MissionType in storage.
      *
-     * @param CreateMissionTypeRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class MissionTypeController extends AppBaseController
     /**
      * Display the specified MissionType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class MissionTypeController extends AppBaseController
     /**
      * Show the form for editing the specified MissionType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class MissionTypeController extends AppBaseController
     /**
      * Update the specified MissionType in storage.
      *
-     * @param  int              $id
-     * @param UpdateMissionTypeRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateMissionTypeRequest $request)
@@ -125,11 +117,10 @@ class MissionTypeController extends AppBaseController
     /**
      * Remove the specified MissionType from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

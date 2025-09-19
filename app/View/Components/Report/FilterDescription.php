@@ -9,12 +9,13 @@ use Illuminate\View\Component;
 class FilterDescription extends Component
 {
     public $reportRouteName;
+
     /**
      * Create a new component instance.
      */
     public function __construct($reportRouteName)
     {
-        $this->reportRouteName=$reportRouteName;
+        $this->reportRouteName = $reportRouteName;
     }
 
     /**
@@ -22,24 +23,23 @@ class FilterDescription extends Component
      */
     public function render(): View|Closure|string
     {
-        $html="";
-        if($this->reportRouteName){
+        $html = '';
+        if ($this->reportRouteName) {
             // dd($this->reportRouteName);
-            $searchArr = session('reports.'.$this->reportRouteName.'.filter') ;  
-            if(!empty($searchArr)){
+            $searchArr = session('reports.'.$this->reportRouteName.'.filter');
+            if (! empty($searchArr)) {
                 // dd($searchArr);
                 foreach ($searchArr as $key => $value) {
-                    if($value){
-                        if (str_contains($value,"||")){
-                            $arr =explode("||",$value);
-                            $value =$arr[1];
+                    if ($value) {
+                        if (str_contains($value, '||')) {
+                            $arr = explode('||', $value);
+                            $value = $arr[1];
                         }
-                        $line=__("report-filter.".$this->reportRouteName.".".$key) . " " . $value . " ";
-                        $html= $html.$line;
-                        
-                        
+                        $line = __('report-filter.'.$this->reportRouteName.'.'.$key).' '.$value.' ';
+                        $html = $html.$line;
+
                     }
-                    
+
                 }
 
             }

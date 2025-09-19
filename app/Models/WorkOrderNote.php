@@ -3,27 +3,21 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WorkOrderNote extends AppBaseModel
 {
-    use HasFactory;
     use Branchable;
-    use LogsActivity;
     use CreatedUpdatedBy;
-
+    use HasFactory;
+    use LogsActivity;
     use SoftDeletes;
 
-
     public $table = 'work_order_notes';
-    
-
-   
 
     public $fillable = [
         'work_order_number',
@@ -40,7 +34,7 @@ class WorkOrderNote extends AppBaseModel
         'note' => 'string',
         'work_order_status' => 'integer',
         'user_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     public static $rules = [

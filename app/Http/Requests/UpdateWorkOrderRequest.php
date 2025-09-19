@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\WorkOrder;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateWorkOrderRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateWorkOrderRequest extends FormRequest
     public function rules()
     {
         $rules = WorkOrder::$rules_update;
-        
+
         return $rules;
     }
 }

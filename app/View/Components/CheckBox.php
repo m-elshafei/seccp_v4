@@ -7,18 +7,21 @@ use Illuminate\View\Component;
 class CheckBox extends Component
 {
     public $name;
+
     public $labelTitle;
+
     public $isCheckedByDefault;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name,$labelTitle="",$isCheckedByDefault=null)
+    public function __construct($name, $labelTitle = '', $isCheckedByDefault = null)
     {
-        $this->name=$name;
-        $this->labelTitle=$labelTitle;
-        $this->isCheckedByDefault=$isCheckedByDefault;
+        $this->name = $name;
+        $this->labelTitle = $labelTitle;
+        $this->isCheckedByDefault = $isCheckedByDefault;
     }
 
     /**

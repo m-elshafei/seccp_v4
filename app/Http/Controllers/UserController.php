@@ -2,31 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Flash;
-use Response;
-use App\Models\User;
-use App\Http\Requests;
-use App\Models\Branch;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Overrides\Spatie\Role;
-use App\Utils\PermissionsUtil;
 use App\DataTables\UserDataTable;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Branch;
+use App\Models\User;
+use App\Overrides\Spatie\Role;
+use App\Utils\PermissionsUtil;
+use Flash;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
-use App\Http\Controllers\AppBaseController;
+use Response;
 
 class UserController extends AppBaseController
 {
-
-        public $gClient;
+    public $gClient;
 
     /**
      * Display a listing of the User.
      *
-     * @param UserDataTable $userDataTable
      * @return Response
      */
     public function index(UserDataTable $userDataTable)
@@ -41,14 +37,14 @@ class UserController extends AppBaseController
      */
     public function create()
     {
-        $branches = Branch::pluck('name', 'id')->prepend("اختر","");
-        return view('users.create',compact('branches'));
+        $branches = Branch::pluck('name', 'id')->prepend('اختر', '');
+
+        return view('users.create', compact('branches'));
     }
 
     /**
      * Store a newly created User in storage.
      *
-     * @param CreateUserRequest $request
      *
      * @return Response
      */
@@ -58,11 +54,11 @@ class UserController extends AppBaseController
         // $pass =Str::random(12);
         // $pass =$input['username']."@Alfaseel";
         // /** @var User $user */
-        $input['password']=  Hash::make($request->password);
-        if (!$request->branch_id){
-            $input['branch_id']=  1;
+        $input['password'] = Hash::make($request->password);
+        if (! $request->branch_id) {
+            $input['branch_id'] = 1;
         }
-        $input['pass_need_to_be_changed']=  1;
+        $input['pass_need_to_be_changed'] = 1;
         $user = User::create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/users.singular')]));
@@ -73,8 +69,7 @@ class UserController extends AppBaseController
     /**
      * Display the specified User.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -94,15 +89,14 @@ class UserController extends AppBaseController
     /**
      * Show the form for editing the specified User.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
     {
         /** @var User $user */
         $user = User::find($id);
-        $branches = Branch::pluck('name', 'id')->prepend("اختر","");
+        $branches = Branch::pluck('name', 'id')->prepend('اختر', '');
 
         if (empty($user)) {
             Flash::error(__('messages.not_found', ['model' => __('models/users.singular')]));
@@ -110,29 +104,27 @@ class UserController extends AppBaseController
             return redirect(route('users.index'));
         }
 
-        $roles_list  = Role::pluck('ar_name' , 'id');
+        $roles_list = Role::pluck('ar_name', 'id');
 
         $userRoles = $user->roles()
-                            ->select('id', 'ar_name')
-                            ->get();
+            ->select('id', 'ar_name')
+            ->get();
 
-        return view('users.edit',compact('user','roles_list' , 'userRoles','branches'));
+        return view('users.edit', compact('user', 'roles_list', 'userRoles', 'branches'));
     }
 
     /**
      * Update the specified User in storage.
      *
-     * @param  int              $id
-     * @param UpdateUserRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateUserRequest $request)
     {
-        $this->validate($request,[
-            'username' => 'required|unique:users,username,'. $id,
-            'email' => 'required|email|unique:users,email,'. $id
-         ]);
+        $this->validate($request, [
+            'username' => 'required|unique:users,username,'.$id,
+            'email' => 'required|email|unique:users,email,'.$id,
+        ]);
 
         /** @var User $user */
         $user = User::find($id);
@@ -144,7 +136,7 @@ class UserController extends AppBaseController
         }
         $input = $request->all();
 
-        $input['password']=  Hash::make($request->password);
+        $input['password'] = Hash::make($request->password);
         $user->fill($input);
         $user->save();
 
@@ -159,11 +151,10 @@ class UserController extends AppBaseController
     /**
      * Remove the specified User from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {
@@ -190,7 +181,7 @@ class UserController extends AppBaseController
 
     public function updatePassword(Request $request)
     {
-        # Validation
+        // Validation
         $request->validate([
             'old_password' => 'required',
             // 'new_password' => 'required|confirmed',
@@ -198,24 +189,22 @@ class UserController extends AppBaseController
                 'required',
                 'confirmed',
                 Password::min(8)
-                  ->mixedCase()
+                    ->mixedCase(),
             ],
             // 'new_password_confirmation' => 'required|same:new_password'
         ]);
 
-
-        #Match The Old Password
-        if(!Hash::check($request->old_password, auth()->user()->password)){
-            return back()->with("error", __("Old Password Doesn't match!"));
+        // Match The Old Password
+        if (! Hash::check($request->old_password, auth()->user()->password)) {
+            return back()->with('error', __("Old Password Doesn't match!"));
         }
 
-
-        #Update the new Password
+        // Update the new Password
         User::whereId(auth()->user()->id)->update([
             'password' => Hash::make($request->new_password),
-            'pass_need_to_be_changed'=>0
+            'pass_need_to_be_changed' => 0,
         ]);
 
-        return back()->with("status", __("Password changed successfully!"));
+        return back()->with('status', __('Password changed successfully!'));
     }
 }

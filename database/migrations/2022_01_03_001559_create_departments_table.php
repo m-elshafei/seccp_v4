@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateDepartmentsTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -17,7 +16,7 @@ class CreateDepartmentsTable extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('departments', function (Blueprint $table) {
             $table->id('id');
-            $table->string('name',200);
+            $table->string('name', 200);
             $table->foreignId('branch_id')->constrained();
             $table->text('description')->nullable();
             $table->foreignId('manager_id')->nullable()->constrained('employees');

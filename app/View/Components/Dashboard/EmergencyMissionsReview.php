@@ -2,10 +2,10 @@
 
 namespace App\View\Components\Dashboard;
 
-use Closure;
-use Illuminate\View\Component;
 use App\Models\EmergencyMissionsV;
+use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\View\Component;
 
 class EmergencyMissionsReview extends Component
 {
@@ -22,13 +22,13 @@ class EmergencyMissionsReview extends Component
      */
     public function render(): View|Closure|string
     {
-        $emergencyMissions=  EmergencyMissionsV::selectRaw("count(*) as count , status")->whereIn('status',[1,2,3,4,5,6,9])->groupBy("status")->orderBy('status')->get();
+        $emergencyMissions = EmergencyMissionsV::selectRaw('count(*) as count , status')->whereIn('status', [1, 2, 3, 4, 5, 6, 9])->groupBy('status')->orderBy('status')->get();
         // dd($emergencyMissions);
         $allCount = $emergencyMissions->sum('count');
-        $emergencyMissionsFinishedCount=  EmergencyMissionsV::whereIn('status',[4,5])->count();
-        $percentage = ($allCount)? (int)round(($emergencyMissionsFinishedCount/  $allCount)*100) : 0;
-        //$emergencyWorkOrderCount = WorkOrder::where('is_emergency_mission',0)->where('work_orders_type_id',3)->whereNull('mission_number')->count();
-        
-        return view('components.dashboard.emergency-missions-review',compact('emergencyMissions','allCount','percentage'));
+        $emergencyMissionsFinishedCount = EmergencyMissionsV::whereIn('status', [4, 5])->count();
+        $percentage = ($allCount) ? (int) round(($emergencyMissionsFinishedCount / $allCount) * 100) : 0;
+        // $emergencyWorkOrderCount = WorkOrder::where('is_emergency_mission',0)->where('work_orders_type_id',3)->whereNull('mission_number')->count();
+
+        return view('components.dashboard.emergency-missions-review', compact('emergencyMissions', 'allCount', 'percentage'));
     }
 }

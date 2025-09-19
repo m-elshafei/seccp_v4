@@ -1,15 +1,15 @@
 <?php
+
 namespace App\Enums;
-use ArchTech\Enums\InvokableCases as InvokableCases;
-use ArchTech\Enums\Names as Names;
-use ArchTech\Enums\Values as Values;
-use ArchTech\Enums\Options  as Options;
 
+use ArchTech\Enums\InvokableCases;
+use ArchTech\Enums\Names;
+use ArchTech\Enums\Options;
+use ArchTech\Enums\Values;
 
-
-enum WorkOrderStatusEnum:int {
-
-    use InvokableCases,Names,Values,Options;
+enum WorkOrderStatusEnum: int
+{
+    use InvokableCases,Names,Options,Values;
 
     case New = 1;
     case NotStarted = 2;
@@ -22,7 +22,8 @@ enum WorkOrderStatusEnum:int {
     case WorkingInProgressStillProgram = 9;
     case PermanentStoped = 10;
 
-    static function getOptions()  {
+    public static function getOptions()
+    {
         return array_flip(WorkOrderStatusEnum::options());
     }
 }

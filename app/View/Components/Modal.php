@@ -7,16 +7,18 @@ use Illuminate\View\Component;
 class Modal extends Component
 {
     public $modal;
+
     public $mode;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($modal,$mode)
+    public function __construct($modal, $mode)
     {
-        $this->modal= $modal;
-        $this->mode= $mode;
+        $this->modal = $modal;
+        $this->mode = $mode;
     }
 
     /**

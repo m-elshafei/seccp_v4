@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Unit;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUnitRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateUnitRequest extends FormRequest
     public function rules()
     {
         $rules = Unit::$rules;
-        
+
         return $rules;
     }
 }

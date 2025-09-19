@@ -16,11 +16,11 @@ return new class extends Migration
         //     $table->dropForeign(['project_stage_id']);
         //     $table->dropForeign(['payment_clearance_id']);
         //     $table->dropForeign(['work_orders_stage_id']);
-            
+
         //     $table->dropColumn(['project_id', 'project_stage_id','work_orders_stage_id', 'payment_clearance_id']);
         // });
         // Schema::table('work_orders', function (Blueprint $table) {
-            
+
         //     $table->foreignId('project_id')->nullable()->constrained('work_orders_projects');
         //     // $table->foreignId('project_stage_id')->nullable()->constrained('work_orders_stages');
         //     $table->integer('project_stage_id')->nullable();
@@ -39,7 +39,7 @@ return new class extends Migration
         //     $table->dropForeign(['project_stage_id']);
         //     $table->dropForeign(['payment_clearance_id']);
         //     $table->dropForeign(['work_orders_stage_id']);
-            
+
         //     $table->dropColumn(['project_id', 'project_stage_id','work_orders_stage_id', 'payment_clearance_id']);
         // });
     }

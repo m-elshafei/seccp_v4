@@ -3,20 +3,18 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ElectricalOperation extends AppBaseModel
 {
-    use SoftDeletes;
-    use LogsActivity;
     use Branchable;
     use CreatedUpdatedBy;
+    use LogsActivity;
+    use SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -27,9 +25,7 @@ class ElectricalOperation extends AppBaseModel
             ->logAll();
     }
 
-
     public $table = 'electrical_operations';
-
 
     /**
      * The attributes that should be casted to native types.
@@ -37,10 +33,8 @@ class ElectricalOperation extends AppBaseModel
      * @var array
      */
     protected $casts = [
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
-
-
 
     public $fillable = [
         'work_order_id',
@@ -59,28 +53,32 @@ class ElectricalOperation extends AppBaseModel
         'electrical_contractor_id',
         'voltage',
         'outlet_no',
-        'note'
+        'note',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      **/
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\ElectricalOperation']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\ElectricalOperation']);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      **/
-    public function workOrder(){
-        return $this->belongsTo(WorkOrder::class,'work_order_id','id');
+    public function workOrder()
+    {
+        return $this->belongsTo(WorkOrder::class, 'work_order_id', 'id');
     }
 
-    public function employee(){
-        return $this->belongsTo(Employee::class,'electrical_employee_id','id');
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'electrical_employee_id', 'id');
     }
 
-    public function contractor(){
-        return $this->belongsTo(Contractor::class,'electrical_contractor_id','id');
+    public function contractor()
+    {
+        return $this->belongsTo(Contractor::class, 'electrical_contractor_id', 'id');
     }
 }

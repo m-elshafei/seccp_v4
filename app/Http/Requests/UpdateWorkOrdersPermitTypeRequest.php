@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\WorkOrdersPermitType;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateWorkOrdersPermitTypeRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateWorkOrdersPermitTypeRequest extends FormRequest
     public function rules()
     {
         $rules = WorkOrdersPermitType::$rules;
-        
+
         return $rules;
     }
 }

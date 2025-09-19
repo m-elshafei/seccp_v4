@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\SystemRelease;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class SystemReleasesSeeder extends Seeder
 {
@@ -20,7 +19,7 @@ class SystemReleasesSeeder extends Seeder
         $initiationDataPath = config('custom.general.initiationDataFolderName');
         $systemReleases = config($initiationDataPath.'.systemReleases');
         //
-        foreach ($systemReleases as $key =>  $systemRelease) {
+        foreach ($systemReleases as $key => $systemRelease) {
             // $parent_id = 0 ;
             // $parent_route_name = $systemComponent['parent_route_name'] ;
             // $config = $systemComponent['config'] ?? NULL ;
@@ -32,14 +31,14 @@ class SystemReleasesSeeder extends Seeder
             // }
             // new Carbon('12-10-2023')
             $systemComponentData = SystemRelease::create([
-                'version_number' => $systemRelease['version_number'] ,
-                'release_date' =>  $systemRelease['release_date'] ,
-                'is_current' => $systemRelease['is_current'] ,
-                'order' => $systemRelease['order'] ,
-                 
+                'version_number' => $systemRelease['version_number'],
+                'release_date' => $systemRelease['release_date'],
+                'is_current' => $systemRelease['is_current'],
+                'order' => $systemRelease['order'],
+
             ]);
             $systemComponentData->features()->createMany($systemRelease['system_releases_features']);
         }
-        
+
     }
 }

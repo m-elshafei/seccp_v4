@@ -2,7 +2,6 @@
 
 namespace App\Strategies\UserRetrieval;
 
-use App\Contracts\UserRepositoryInterface;
 use InvalidArgumentException;
 
 class UserRetrievalStrategyFactory
@@ -16,10 +15,10 @@ class UserRetrievalStrategyFactory
     {
         $strategyClass = self::STRATEGY_MAPPINGS[$type] ?? null;
 
-        if (!$strategyClass) {
+        if (! $strategyClass) {
             throw new InvalidArgumentException("Unsupported user retrieval type: {$type}");
         }
 
-        return new $strategyClass();
+        return new $strategyClass;
     }
 }

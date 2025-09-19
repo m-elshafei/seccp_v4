@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\LayerDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateLayerRequest;
 use App\Http\Requests\UpdateLayerRequest;
 use App\Models\Layer;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class LayerController extends AppBaseController
@@ -16,7 +14,6 @@ class LayerController extends AppBaseController
     /**
      * Display a listing of the Layer.
      *
-     * @param LayerDataTable $layerDataTable
      * @return Response
      */
     public function index(LayerDataTable $layerDataTable)
@@ -37,7 +34,6 @@ class LayerController extends AppBaseController
     /**
      * Store a newly created Layer in storage.
      *
-     * @param CreateLayerRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class LayerController extends AppBaseController
     /**
      * Display the specified Layer.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class LayerController extends AppBaseController
     /**
      * Show the form for editing the specified Layer.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class LayerController extends AppBaseController
     /**
      * Update the specified Layer in storage.
      *
-     * @param  int              $id
-     * @param UpdateLayerRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateLayerRequest $request)
@@ -125,11 +117,10 @@ class LayerController extends AppBaseController
     /**
      * Remove the specified Layer from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

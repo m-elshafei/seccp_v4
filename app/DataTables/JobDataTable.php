@@ -3,14 +3,12 @@
 namespace App\DataTables;
 
 use App\Models\Job;
-use App\DataTables\AppDataTable;
 use Yajra\DataTables\Html\Column;
 
 class JobDataTable extends AppDataTable
 {
-
-
-    function __construct() {
+    public function __construct()
+    {
         $this->dataTableName = 'jobs';
         $this->actionViewBlade = 'jobs.datatables_actions';
     }
@@ -18,7 +16,6 @@ class JobDataTable extends AppDataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Job $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(Job $model)
@@ -35,8 +32,7 @@ class JobDataTable extends AppDataTable
     {
         return [
             'name' => new Column(['title' => __('models/jobs.fields.name'), 'data' => 'name']),
-            'description' => new Column(['title' => __('models/jobs.fields.description'), 'data' => 'description'])
+            'description' => new Column(['title' => __('models/jobs.fields.description'), 'data' => 'description']),
         ];
     }
-
 }

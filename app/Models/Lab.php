@@ -3,35 +3,25 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
-
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Lab
- * @package App\Models
+ *
  * @version March 25, 2022, 1:41 pm UTC
  *
  * @property string $name
  */
 class Lab extends AppBaseModel
 {
+    use Branchable;
     use LogsActivity;
     use SoftDeletes;
-    use Branchable;
-
 
     public $table = 'labs';
-    
-
-   
-
-
-
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -41,9 +31,9 @@ class Lab extends AppBaseModel
             ->dontSubmitEmptyLogs()
             ->logAll();
     }
-    
+
     public $fillable = [
-        'name'
+        'name',
     ];
 
     /**
@@ -54,7 +44,7 @@ class Lab extends AppBaseModel
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -63,14 +53,11 @@ class Lab extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
-    
-
-
-
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\Lab']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\Lab']);
     }
 }

@@ -4,15 +4,15 @@ namespace App\Repositories;
 
 use App\Models\City;
 
-
 class CityRepository
 {
-
     protected $model;
+
     public function __construct(City $model)
     {
         $this->model = $model;
     }
+
     public function getCities()
     {
         return $this->model;

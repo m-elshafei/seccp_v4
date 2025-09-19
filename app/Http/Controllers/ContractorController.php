@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ContractorDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateContractorRequest;
 use App\Http\Requests\UpdateContractorRequest;
 use App\Models\Contractor;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class ContractorController extends AppBaseController
@@ -16,7 +14,6 @@ class ContractorController extends AppBaseController
     /**
      * Display a listing of the Contractor.
      *
-     * @param ContractorDataTable $contractorDataTable
      * @return Response
      */
     public function index(ContractorDataTable $contractorDataTable)
@@ -37,7 +34,6 @@ class ContractorController extends AppBaseController
     /**
      * Store a newly created Contractor in storage.
      *
-     * @param CreateContractorRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class ContractorController extends AppBaseController
     /**
      * Display the specified Contractor.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class ContractorController extends AppBaseController
     /**
      * Show the form for editing the specified Contractor.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class ContractorController extends AppBaseController
     /**
      * Update the specified Contractor in storage.
      *
-     * @param  int              $id
-     * @param UpdateContractorRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateContractorRequest $request)
@@ -125,11 +117,10 @@ class ContractorController extends AppBaseController
     /**
      * Remove the specified Contractor from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

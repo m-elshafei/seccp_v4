@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Contractor;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateContractorRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateContractorRequest extends FormRequest
     public function rules()
     {
         $rules = Contractor::$rules;
-        
+
         return $rules;
     }
 }

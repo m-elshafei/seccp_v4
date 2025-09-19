@@ -2,13 +2,10 @@
 
 namespace App\View\Components\Report;
 
+use App\Services\WorkOrders\WorkOrderService;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use App\Models\Consultant;
-use App\Enums\WorkOrderStatusEnum;
-use App\Models\ElectricityDepartment;
-use App\Services\WorkOrders\WorkOrderService;
 
 class FinishedElectricityFilter extends Component
 {
@@ -29,6 +26,4 @@ class FinishedElectricityFilter extends Component
     {
         return view('components.report.finished-electricity-filter');
     }
-
-
 }

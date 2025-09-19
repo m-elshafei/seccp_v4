@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\EmergencyMission;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateEmergencyMissionRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *

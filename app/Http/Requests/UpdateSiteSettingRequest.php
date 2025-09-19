@@ -25,7 +25,7 @@ class UpdateSiteSettingRequest extends FormRequest
     public function rules()
     {
         $rules = SiteSetting::$rules;
-        
+
         return $rules;
     }
 }

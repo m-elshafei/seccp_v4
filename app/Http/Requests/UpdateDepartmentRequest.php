@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Department;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateDepartmentRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateDepartmentRequest extends FormRequest
     public function rules()
     {
         $rules = Department::$rules;
-        
+
         return $rules;
     }
 }

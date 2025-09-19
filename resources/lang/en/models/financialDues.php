@@ -1,4 +1,5 @@
 <?php
+
 return [
     'singular' => 'FinancialDue',
     'plural' => 'FinancialDues',

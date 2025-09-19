@@ -2,36 +2,28 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class Department
- * @package App\Models
+ *
  * @version January 3, 2022, 12:15 am UTC
  *
  * @property \App\Models\Branch $branch
  * @property string $name
- * @property integer $branch_id
+ * @property int $branch_id
  * @property string $description
  */
 class Department extends AppBaseModel
 {
     use SoftDeletes;
 
-
     public $table = 'departments';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
         'branch_id',
-        'description'
+        'description',
     ];
 
     /**
@@ -44,7 +36,7 @@ class Department extends AppBaseModel
         'name' => 'string',
         'branch_id' => 'integer',
         'description' => 'string',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -53,7 +45,7 @@ class Department extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
     /**

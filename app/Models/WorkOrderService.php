@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-
 /**
  * Class WorkOrderService
- * @package App\Models
+ *
  * @version March 5, 2022, 2:22 pm UTC
  *
  * @property \App\Models\Unit $unit
@@ -21,12 +18,12 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property string $code
  * @property number $price
  * @property string $description
- * @property integer $unit_id
- * @property integer $services_category_id
+ * @property int $unit_id
+ * @property int $services_category_id
  */
 class WorkOrderService extends AppBaseModel
 {
-    use SoftDeletes, LogsActivity;
+    use LogsActivity, SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -37,13 +34,7 @@ class WorkOrderService extends AppBaseModel
             ->logOnly(['name', 'username', 'email']);
     }
 
-
     public $table = 'work_order_services';
-
-
-
-
-
 
     public $fillable = [
         'name',
@@ -52,7 +43,7 @@ class WorkOrderService extends AppBaseModel
         'price',
         'description',
         'unit_id',
-        'services_category_id'
+        'services_category_id',
     ];
 
     /**
@@ -69,7 +60,7 @@ class WorkOrderService extends AppBaseModel
         'description' => 'string',
         'unit_id' => 'integer',
         'services_category_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**

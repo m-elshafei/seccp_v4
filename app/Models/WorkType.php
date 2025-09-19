@@ -2,35 +2,28 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class WorkType
- * @package App\Models
+ *
  * @version January 6, 2022, 10:38 am UTC
  *
  * @property \Illuminate\Database\Eloquent\Collection $depatments
  * @property string $code
  * @property string $name
  * @property string $notes
- * @property boolean $needs_drilling_operations
- * @property boolean $needs_electrical_work
- * @property boolean $needs_work_orders_permit
+ * @property bool $needs_drilling_operations
+ * @property bool $needs_electrical_work
+ * @property bool $needs_work_orders_permit
  */
 class WorkType extends AppBaseModel
 {
     use SoftDeletes;
 
-
     public $table = 'work_types';
-    
 
-   
-
-    protected $appends = ['full_name' , 'full_name_to_permit'];
-
+    protected $appends = ['full_name', 'full_name_to_permit'];
 
     public $fillable = [
         'code',
@@ -39,7 +32,7 @@ class WorkType extends AppBaseModel
         'needs_drilling_operations',
         'needs_electrical_work',
         'needs_work_orders_permit',
-        'default_department_id'
+        'default_department_id',
     ];
 
     /**
@@ -56,7 +49,7 @@ class WorkType extends AppBaseModel
         'needs_electrical_work' => 'boolean',
         'needs_work_orders_permit' => 'boolean',
         'default_department_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -66,8 +59,8 @@ class WorkType extends AppBaseModel
      */
     public static $rules = [
         'code' => 'required',
-        'name' => 'required'
-        
+        'name' => 'required',
+
     ];
 
     /**
@@ -77,7 +70,6 @@ class WorkType extends AppBaseModel
     {
         return $this->belongsToMany(\App\Models\Depatment::class, 'work_types_depatments', 'work_type_id', 'department_id');
     }
-
 
     public function getFullNameAttribute()
     {

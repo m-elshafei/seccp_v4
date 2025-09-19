@@ -3,26 +3,24 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class AssayService
- * @package App\Models
+ *
  * @version March 15, 2022, 2:16 pm UTC
  *
- * @property integer $assay_form_id
- * @property integer $service_id
- * @property integer $quantity
+ * @property int $assay_form_id
+ * @property int $service_id
+ * @property int $quantity
  */
 class AssayService extends AppBaseModel
 {
-    use SoftDeletes, LogsActivity, Branchable , CreatedUpdatedBy;
+    use Branchable, CreatedUpdatedBy, LogsActivity , SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -33,19 +31,13 @@ class AssayService extends AppBaseModel
             ->logAll();
     }
 
-
     public $table = 'assay_services';
-    
-
-   
-
-
 
     public $fillable = [
         'assay_form_id',
         'service_id',
         'quantity',
-        'price'
+        'price',
     ];
 
     /**
@@ -58,7 +50,7 @@ class AssayService extends AppBaseModel
         'assay_form_id' => 'integer',
         'service_id' => 'integer',
         'quantity' => 'float',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -68,8 +60,8 @@ class AssayService extends AppBaseModel
      */
     public static $rules = [
         'assay_form_id' => 'required',
-        'service_id'    => 'required|exists:work_order_services,id',
-        'quantity'      => 'required|gt:0'
+        'service_id' => 'required|exists:work_order_services,id',
+        'quantity' => 'required|gt:0',
     ];
 
     protected $appends = [
@@ -78,37 +70,43 @@ class AssayService extends AppBaseModel
         'service_price',
     ];
 
-
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\AssayService']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\AssayService']);
     }
 
-    public function service(){
-        return $this->belongsTo(WorkOrderService::class,'service_id','id')->withDefault();
+    public function service()
+    {
+        return $this->belongsTo(WorkOrderService::class, 'service_id', 'id')->withDefault();
     }
 
-    public function getServiceNameAttribute(){
-        $row = $this->belongsTo(WorkOrderService::class,'service_id','id')->first();
-        if ($row){
+    public function getServiceNameAttribute()
+    {
+        $row = $this->belongsTo(WorkOrderService::class, 'service_id', 'id')->first();
+        if ($row) {
             return $row->name ?? '';
         }
+
         return '';
     }
 
-    public function getServiceCodeAttribute(){
-        $row = $this->belongsTo(WorkOrderService::class,'service_id','id')->first();
-        if ($row){
+    public function getServiceCodeAttribute()
+    {
+        $row = $this->belongsTo(WorkOrderService::class, 'service_id', 'id')->first();
+        if ($row) {
             return $row->code ?? '';
         }
+
         return '';
     }
 
-    public function getServicePriceAttribute(){
-        $row = $this->belongsTo(WorkOrderService::class,'service_id','id')->first();
-        if ($row){
+    public function getServicePriceAttribute()
+    {
+        $row = $this->belongsTo(WorkOrderService::class, 'service_id', 'id')->first();
+        if ($row) {
             return $row->price ?? 0;
         }
+
         return 0;
     }
-    
 }

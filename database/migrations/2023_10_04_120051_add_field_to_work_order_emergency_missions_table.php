@@ -15,7 +15,6 @@ return new class extends Migration
             // $table->foreignId('emergency_mission_type_id')->nullable()->after('mission_complete_date');
             $table->foreignId('emergency_issues_type_id')->nullable()->constrained('emergency_issues_types');
 
-
         });
     }
 

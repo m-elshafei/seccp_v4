@@ -2,9 +2,7 @@
 
 namespace App\Providers;
 
-
 use Illuminate\Support\ServiceProvider;
-
 
 class GoogleDriveServiceProvider extends ServiceProvider
 {
@@ -19,17 +17,18 @@ class GoogleDriveServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      */
-    public function boot(){
+    public function boot()
+    {
         // ...
         try {
-            \Storage::extend('google', function($app, $config) {
+            \Storage::extend('google', function ($app, $config) {
                 $options = [];
 
-                if (!empty($config['teamDriveId'] ?? null)) {
+                if (! empty($config['teamDriveId'] ?? null)) {
                     $options['teamDriveId'] = $config['teamDriveId'];
                 }
 
-                $client = new \Google\Client();
+                $client = new \Google\Client;
                 $client->setClientId($config['clientId']);
                 $client->setClientSecret($config['clientSecret']);
                 $client->refreshToken($config['refreshToken']);
@@ -40,7 +39,7 @@ class GoogleDriveServiceProvider extends ServiceProvider
 
                 return new \Illuminate\Filesystem\FilesystemAdapter($driver, $adapter);
             });
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             // your exception handling logic
         }
         // ...

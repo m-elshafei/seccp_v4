@@ -2,25 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Response;
-use App\Http\Requests;
-use Laracasts\Flash\Flash;
-use App\Overrides\Spatie\Role;
-use App\Utils\PermissionsUtil;
 use App\DataTables\RoleDataTable;
-use Illuminate\Support\Facades\DB;
-use App\Overrides\Spatie\Permission;
 use App\Http\Requests\CreateRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
-use App\Http\Controllers\AppBaseController;
 use App\Models\SystemComponent;
+use App\Overrides\Spatie\Permission;
+use App\Overrides\Spatie\Role;
+use App\Utils\PermissionsUtil;
+use Illuminate\Support\Facades\DB;
+use Laracasts\Flash\Flash;
+use Response;
 
 class RoleController extends AppBaseController
 {
     /**
      * Display a listing of the Role.
      *
-     * @param RoleDataTable $roleDataTable
      * @return Response
      */
     public function index(RoleDataTable $roleDataTable)
@@ -41,7 +38,6 @@ class RoleController extends AppBaseController
     /**
      * Store a newly created Role in storage.
      *
-     * @param CreateRoleRequest $request
      *
      * @return Response
      */
@@ -60,8 +56,7 @@ class RoleController extends AppBaseController
     /**
      * Display the specified Role.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -81,8 +76,7 @@ class RoleController extends AppBaseController
     /**
      * Show the form for editing the specified Role.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -96,24 +90,21 @@ class RoleController extends AppBaseController
             return redirect(route('roles.index'));
         }
 
-        $sysScreens = SystemComponent::where('comp_type',1)->get();
+        $sysScreens = SystemComponent::where('comp_type', 1)->get();
 
         $permissions = Permission::get();
 
         $rolePermissions = $role->permissions();
 
         return view('roles.edit')
-                ->with('role', $role)
-                ->with('sysScreens', $sysScreens)
-                ;
+            ->with('role', $role)
+            ->with('sysScreens', $sysScreens);
     }
 
     /**
      * Update the specified Role in storage.
      *
-     * @param  int              $id
-     * @param UpdateRoleRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateRoleRequest $request)
@@ -130,20 +121,20 @@ class RoleController extends AppBaseController
         $role->fill($request->all());
         $role->save();
 
-        if($request->has("objectId")){
-            $parentNode = SystemComponent::find($request->objectId);    
+        if ($request->has('objectId')) {
+            $parentNode = SystemComponent::find($request->objectId);
             $childNodes = SystemComponent::whereDescendantOf($parentNode)
-                                            ->get()
+                ->get()
                                             // ->where('comp_type', '=', 3)
-                                            ->whereIn('comp_type', [3,4])
-                                            ->pluck('id');
+                ->whereIn('comp_type', [3, 4])
+                ->pluck('id');
 
             $objectsPermIds = Permission::whereIn('system_component_id', $childNodes)->get()->pluck('id');
 
             $role->revokePermissionTo($objectsPermIds);
             $role->givePermissionTo($request->input('permission'));
         }
-        
+
         PermissionsUtil::clearPermissionCash();
 
         Flash::success(__('messages.updated', ['model' => __('models/roles.singular')]));
@@ -154,11 +145,10 @@ class RoleController extends AppBaseController
     /**
      * Remove the specified Role from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {
@@ -186,21 +176,20 @@ class RoleController extends AppBaseController
         // $models= PermissionsUtil::getObjectsByParent($objectId);
 
         $nodes = SystemComponent::whereDescendantOf($node)
-                                ->get()
+            ->get()
                                 // ->where('comp_type', '=', 3)
-                                ->whereIn('comp_type', [3,4]);
+            ->whereIn('comp_type', [3, 4]);
         // $filtered = $parents->where('comp_type', '=', 1)->pluck('route_name')->first();
 
         $permission = Permission::get();
 
         // $rolePermissions[] = $role->permissions();
 
-        $rolePermissions = DB::table("role_has_permissions")
-                                    ->where("role_has_permissions.role_id",$id)
-                                    ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-                                    ->all();
+        $rolePermissions = DB::table('role_has_permissions')
+            ->where('role_has_permissions.role_id', $id)
+            ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
+            ->all();
 
-        return view('roles._permissions',compact('permission','nodes' , 'role' ,'rolePermissions' , 'objectId'));
+        return view('roles._permissions', compact('permission', 'nodes', 'role', 'rolePermissions', 'objectId'));
     }
-
 }

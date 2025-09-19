@@ -3,34 +3,26 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 /**
  * Class WorkOrdersProject
- * @package App\Models
+ *
  * @version February 12, 2022, 12:12 pm UTC
  *
  * @property string $name
  * @property string $description
  * @property string $start_date
  * @property string $end_date
- * @property integer $status
- * @property integer $stages_count
+ * @property int $status
+ * @property int $stages_count
  */
 class WorkOrdersProject extends AppBaseModel
 {
-    use SoftDeletes, Branchable , CreatedUpdatedBy;
-
+    use Branchable, CreatedUpdatedBy , SoftDeletes;
 
     public $table = 'work_orders_projects';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
@@ -40,7 +32,7 @@ class WorkOrdersProject extends AppBaseModel
         'status',
         'stages_count',
         'closed_work_order_number',
-        'copy_from_work_order_id'
+        'copy_from_work_order_id',
     ];
 
     /**
@@ -56,7 +48,7 @@ class WorkOrdersProject extends AppBaseModel
         'end_date' => 'date',
         'status' => 'integer',
         'stages_count' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -65,7 +57,7 @@ class WorkOrdersProject extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
     /**
@@ -73,16 +65,14 @@ class WorkOrdersProject extends AppBaseModel
      **/
     public function workOrders()
     {
-        return $this->hasMany(WorkOrder::class, 'project_id' , 'id');
+        return $this->hasMany(WorkOrder::class, 'project_id', 'id');
     }
 
-     /**
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      **/
     public function projectSteps()
     {
-        return $this->hasMany(WorkOrder::class, 'project_id' , 'id')->whereNotNull('project_stage_id');
+        return $this->hasMany(WorkOrder::class, 'project_id', 'id')->whereNotNull('project_stage_id');
     }
-
-    
 }

@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Models\Layer;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class LayersTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -16,9 +15,9 @@ class LayersTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
         $initiationDataPath = config('custom.general.initiationDataFolderName');
-        $layers = config($initiationDataPath . '.layers');
+        $layers = config($initiationDataPath.'.layers');
 
         foreach ($layers as $layer) {
             $layerData = Layer::create([
@@ -27,16 +26,15 @@ class LayersTableSeeder extends Seeder
                 'is_final' => $layer['is_final'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'deleted_at' => NULL
+                'deleted_at' => null,
 
             ]);
         }
 
-
         // \DB::table('layers')->delete();
-        
+
         // \DB::table('layers')->insert(array (
-        //     0 => 
+        //     0 =>
         //     array (
         //         'id' => 1,
         //         'name' => 'الحماية',
@@ -46,7 +44,7 @@ class LayersTableSeeder extends Seeder
         //         'updated_at' => '2022-10-22 11:07:55',
         //         'deleted_at' => NULL,
         //     ),
-        //     1 => 
+        //     1 =>
         //     array (
         //         'id' => 2,
         //         'name' => 'طبقة اولى',
@@ -56,7 +54,7 @@ class LayersTableSeeder extends Seeder
         //         'updated_at' => '2022-12-31 08:16:51',
         //         'deleted_at' => NULL,
         //     ),
-        //     2 => 
+        //     2 =>
         //     array (
         //         'id' => 3,
         //         'name' => 'الثانية',
@@ -66,7 +64,7 @@ class LayersTableSeeder extends Seeder
         //         'updated_at' => '2022-12-31 08:17:21',
         //         'deleted_at' => NULL,
         //     ),
-        //     3 => 
+        //     3 =>
         //     array (
         //         'id' => 4,
         //         'name' => 'الاخيرة',
@@ -76,7 +74,7 @@ class LayersTableSeeder extends Seeder
         //         'updated_at' => '2022-12-31 08:17:44',
         //         'deleted_at' => NULL,
         //     ),
-        //     4 => 
+        //     4 =>
         //     array (
         //         'id' => 5,
         //         'name' => 'كشط وحرارة',
@@ -86,7 +84,7 @@ class LayersTableSeeder extends Seeder
         //         'updated_at' => '2022-12-31 08:17:57',
         //         'deleted_at' => NULL,
         //     ),
-        //     5 => 
+        //     5 =>
         //     array (
         //         'id' => 6,
         //         'name' => 'رش MC1  وحرارة',
@@ -96,7 +94,7 @@ class LayersTableSeeder extends Seeder
         //         'updated_at' => '2022-12-31 08:18:10',
         //         'deleted_at' => NULL,
         //     ),
-        //     6 => 
+        //     6 =>
         //     array (
         //         'id' => 7,
         //         'name' => 'دك الاسفلت',
@@ -106,7 +104,7 @@ class LayersTableSeeder extends Seeder
         //         'updated_at' => '2022-12-31 08:18:18',
         //         'deleted_at' => NULL,
         //     ),
-        //     7 => 
+        //     7 =>
         //     array (
         //         'id' => 8,
         //         'name' => 'الخرسانة',
@@ -116,7 +114,7 @@ class LayersTableSeeder extends Seeder
         //         'updated_at' => '2022-12-31 08:16:41',
         //         'deleted_at' => NULL,
         //     ),
-        //     8 => 
+        //     8 =>
         //     array (
         //         'id' => 9,
         //         'name' => 'الرصيف',
@@ -127,7 +125,6 @@ class LayersTableSeeder extends Seeder
         //         'deleted_at' => NULL,
         //     ),
         // ));
-        
-        
+
     }
 }

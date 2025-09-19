@@ -32,10 +32,9 @@ class CreateCompaniesTable extends Migration
             $table->string('stamp_path')->nullable();
             $table->string('admin_layout_name')->nullable();
             $table->json('settings')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
-            
 
         });
     }

@@ -25,7 +25,7 @@ class UpdateWorkOrderTransactionsHistoryRequest extends FormRequest
     public function rules()
     {
         $rules = WorkOrderTransactionsHistory::$rules;
-        
+
         return $rules;
     }
 }

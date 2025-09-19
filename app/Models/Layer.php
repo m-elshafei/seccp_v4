@@ -2,35 +2,25 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Class Layer
- * @package App\Models
+ *
  * @version May 4, 2022, 8:54 pm UTC
  *
  * @property string $name
- * @property integer $is_final
+ * @property int $is_final
  */
 class Layer extends AppBaseModel
 {
-use LogsActivity;
+    use LogsActivity;
     use SoftDeletes;
 
-
     public $table = 'layers';
-    
-
-   
-
-
-
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -44,7 +34,7 @@ use LogsActivity;
     public $fillable = [
         'name',
         'order',
-        'is_final'
+        'is_final',
     ];
 
     /**
@@ -57,7 +47,7 @@ use LogsActivity;
         'order' => 'integer',
         'name' => 'string',
         'is_final' => 'boolean',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -66,14 +56,11 @@ use LogsActivity;
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
-    
-
-
-
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\Layer']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\Layer']);
     }
 }

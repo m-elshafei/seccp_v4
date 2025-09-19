@@ -1,9 +1,6 @@
 <?php
 
 use App\Helpers\Helper;
-use App\Http\Controllers\AssayFormController;
-use App\Http\Controllers\AssayItemController;
-use App\Http\Controllers\AssayServiceController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\NotificationController;
@@ -12,7 +9,6 @@ use App\Http\Controllers\TestController;
 use App\Jobs\TestJob;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -29,17 +25,15 @@ Route::get('/pageComingSoon', [App\Http\Controllers\HomeController::class, 'page
 Route::get('/', [App\Http\Controllers\HomeController::class, 'pageComingSoon'])->name('home-page');
 Auth::routes();
 
-Route::get('testupload', function() {
+Route::get('testupload', function () {
     Storage::disk('google')->put('test.txt', 'Hello World');
 });
 
-
 Route::group([
-    'middleware' => 'auth'
+    'middleware' => 'auth',
 ], function () {
 
-
-    Route::get('fixWorkOrdersPermits', [TestController::class, 'fixWorkOrdersPermits'])->name("fixWorkOrdersPermits");
+    Route::get('fixWorkOrdersPermits', [TestController::class, 'fixWorkOrdersPermits'])->name('fixWorkOrdersPermits');
 
     // Route::post('login', [AuthController::class, 'login']);
     // Route::post('register', [AuthController::class, 'register']);
@@ -57,13 +51,10 @@ Route::group([
     Route::get('/previewPdf', [App\Http\Controllers\HomeController::class, 'previewPdf'])->name('previewPdf');
     Route::get('/workOrderTestReport', [App\Http\Controllers\HomeController::class, 'workOrderReport'])->name('workOrderTestReport');
 
-
-
     Route::resource('systemReleases', App\Http\Controllers\SystemReleaseController::class);
-    Route::get('systemReleasesShow', [App\Http\Controllers\SystemReleaseController::class,'systemReleasesShow'])->name('systemReleasesShow');
+    Route::get('systemReleasesShow', [App\Http\Controllers\SystemReleaseController::class, 'systemReleasesShow'])->name('systemReleasesShow');
     Route::resource('systemReleasesFeatures', App\Http\Controllers\SystemReleasesFeatureController::class);
     Route::resource('workOrderTransactionsHistories', App\Http\Controllers\WorkOrderTransactionsHistoryController::class);
-
 
     // Route Components
     Route::get('layouts/collapsed-menu', [StaterkitController::class, 'collapsed_menu'])->name('collapsed-menu');
@@ -73,19 +64,18 @@ Route::group([
     Route::get('layouts/blank', [StaterkitController::class, 'layout_blank'])->name('layout-blank');
 
     // Route::get('glogin',array('as'=>'glogin','uses'=>'UserController@googleLogin')) ;
-    Route::get('glogin', [App\Http\Controllers\UserController::class, 'googleLogin'])->name('glogin') ;
+    Route::get('glogin', [App\Http\Controllers\UserController::class, 'googleLogin'])->name('glogin');
     // Route::post('upload-file',array('as'=>'upload-file','uses'=>'UserController@uploadFileUsingAccessToken')) ;
-    Route::post('upload-file',[App\Http\Controllers\UserController::class, 'upload-file'])->name('upload-file') ;
+    Route::post('upload-file', [App\Http\Controllers\UserController::class, 'upload-file'])->name('upload-file');
     // locale Route
     Route::get('lang/{locale}', [LanguageController::class, 'swap']);
 
     //
-    Route::get('me/notifications/read', [NotificationController::class, 'markAsReadNotificationAll'])->name("markAsReadNotificationAll");
-    Route::get('me/notifications/read/{id}', [NotificationController::class, 'markAsReadNotification'])->name("markAsReadNotification");
-    Route::get('me/notifications/', [NotificationController::class, 'showNotification'])->name("showNotification");
+    Route::get('me/notifications/read', [NotificationController::class, 'markAsReadNotificationAll'])->name('markAsReadNotificationAll');
+    Route::get('me/notifications/read/{id}', [NotificationController::class, 'markAsReadNotification'])->name('markAsReadNotification');
+    Route::get('me/notifications/', [NotificationController::class, 'showNotification'])->name('showNotification');
 
-
-    //infyomlabs generator builder ui package routes
+    // infyomlabs generator builder ui package routes
     Route::get('generator_builder', '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@builder')->name('io_generator_builder');
     Route::get('field_template', '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@fieldTemplate')->name('io_field_template');
     Route::get('relation_field_template', '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@relationFieldTemplate')->name('io_relation_field_template');
@@ -100,27 +90,26 @@ Route::group([
     Route::prefix(config('attachment.route.prefix'))->
     middleware(config('attachment.route.middleware'))->
     name('attachment.')->group(function () {
-        Route::get("view/{uuid}",[AttachmentController::class, 'view'])->name("view");
-        Route::get("download/{uuid}",[AttachmentController::class, 'download'])->name("download");
-        Route::get("delete/{uuid}",[AttachmentController::class, 'delete'])->name("delete");
+        Route::get('view/{uuid}', [AttachmentController::class, 'view'])->name('view');
+        Route::get('download/{uuid}', [AttachmentController::class, 'download'])->name('download');
+        Route::get('delete/{uuid}', [AttachmentController::class, 'delete'])->name('delete');
     });
     /* Routes for attachment end */
 
-    //testing
+    // testing
     /*************Start testing*************** */
-    Route::get("send_notifications",function(){
-        $title="تصريح قارب على الانتهاء";
-        $message= "رقم التصريح : - ٥٤٦٦٤٦٦٤٤٦ - التابع لامر العمل  ٥٥٥٤٦٨٤٦٣";
-        Helper::SendNotifications($title,$message, 7,'Department','/workOrdersManagement/workOrders/15','bg-light-success', 'check');
+    Route::get('send_notifications', function () {
+        $title = 'تصريح قارب على الانتهاء';
+        $message = 'رقم التصريح : - ٥٤٦٦٤٦٦٤٤٦ - التابع لامر العمل  ٥٥٥٤٦٨٤٦٣';
+        Helper::SendNotifications($title, $message, 7, 'Department', '/workOrdersManagement/workOrders/15', 'bg-light-success', 'check');
+
         return redirect()->to('/home');
-    })->name("SendTestNotification");
+    })->name('SendTestNotification');
 
-
-    Route::prefix("post")->group(function () {
-        Route::get('one', [TestController::class, 'one'])->name("post_one");
-        Route::get('many', [TestController::class, 'many'])->name("post_many");
-        Route::get('view/{id}', [TestController::class, 'view'])->name("post_view");
-
+    Route::prefix('post')->group(function () {
+        Route::get('one', [TestController::class, 'one'])->name('post_one');
+        Route::get('many', [TestController::class, 'many'])->name('post_many');
+        Route::get('view/{id}', [TestController::class, 'view'])->name('post_view');
 
     });
 
@@ -138,8 +127,7 @@ Route::group([
 
 Route::middleware(['auth', 'acl'])->group(function () {
 
-
-    Route::group(array('prefix' => 'commonScreens'), function () {
+    Route::group(['prefix' => 'commonScreens'], function () {
         Route::resource('districts', App\Http\Controllers\DistrictController::class);
         Route::resource('cities', App\Http\Controllers\CityController::class);
         Route::resource('attachmentTypes', App\Http\Controllers\AttachmentTypeController::class);
@@ -147,7 +135,7 @@ Route::middleware(['auth', 'acl'])->group(function () {
         Route::resource('baladies', App\Http\Controllers\BaladyController::class);
     });
 
-    Route::group(array('prefix' => 'userManagement'), function () {
+    Route::group(['prefix' => 'userManagement'], function () {
         Route::get('/change-password', [App\Http\Controllers\UserController::class, 'changePassword'])->name('change-password');
         Route::post('/change-password', [App\Http\Controllers\UserController::class, 'updatePassword'])->name('update-password');
         Route::resource('users', App\Http\Controllers\UserController::class);
@@ -156,8 +144,7 @@ Route::middleware(['auth', 'acl'])->group(function () {
 
     });
 
-
-    Route::group(array('prefix' => 'workOrdersManagement'), function () {
+    Route::group(['prefix' => 'workOrdersManagement'], function () {
         Route::resource('electricalStationsTypes', App\Http\Controllers\ElectricalStationsTypeController::class);
         Route::resource('electricityDepartments', App\Http\Controllers\ElectricityDepartmentController::class);
         Route::resource('workTypes', App\Http\Controllers\WorkTypeController::class);
@@ -169,7 +156,7 @@ Route::middleware(['auth', 'acl'])->group(function () {
         Route::resource('workOrdersPermitTypes', App\Http\Controllers\WorkOrdersPermitTypeController::class);
 
         Route::resource('workOrdersProjects', App\Http\Controllers\WorkOrdersProjectController::class);
-        Route::post('workOrdersProjects/{id}/close',[App\Http\Controllers\WorkOrdersProjectController::class, 'closeProject'])->name('workOrdersProjects.close');
+        Route::post('workOrdersProjects/{id}/close', [App\Http\Controllers\WorkOrdersProjectController::class, 'closeProject'])->name('workOrdersProjects.close');
         Route::resource('servicesCategories', App\Http\Controllers\ServicesCategoryController::class);
         Route::resource('workOrderServices', App\Http\Controllers\WorkOrderServiceController::class);
 
@@ -183,19 +170,19 @@ Route::middleware(['auth', 'acl'])->group(function () {
         Route::resource('workOrdersElectricity', App\Http\Controllers\WorkOrderController::class);
         Route::resource('workOrdersElectricTowers', App\Http\Controllers\WorkOrderController::class);
         Route::resource('workOrdersPermits', App\Http\Controllers\WorkOrdersPermitController::class);
-        Route::get('recalculateWorkOrdersPermit',[ App\Http\Controllers\WorkOrdersPermitController::class,'recalculateWorkOrdersPermit']);
+        Route::get('recalculateWorkOrdersPermit', [App\Http\Controllers\WorkOrdersPermitController::class, 'recalculateWorkOrdersPermit']);
         Route::resource('workOrdersPermitsExtensions', App\Http\Controllers\WorkOrdersPermitsExtensionController::class);
         Route::resource('workOrdersPermitsFines', App\Http\Controllers\WorkOrdersPermitsFineController::class);
         Route::resource('electricityCompanyEmployees', App\Http\Controllers\ElectricityCompanyEmployeesController::class);
     });
 
-    Route::group(array('prefix' => 'employeesManagement'), function () {
+    Route::group(['prefix' => 'employeesManagement'], function () {
         Route::resource('departments', App\Http\Controllers\DepartmentController::class);
         Route::resource('jobs', App\Http\Controllers\JobController::class);
         Route::resource('employees', App\Http\Controllers\EmployeeController::class);
     });
 
-    Route::group(array('prefix' => 'stores'), function () {
+    Route::group(['prefix' => 'stores'], function () {
         Route::resource('units', App\Http\Controllers\UnitController::class);
         Route::resource('itemsCategories', App\Http\Controllers\ItemsCategoryController::class);
         Route::resource('items', App\Http\Controllers\ItemController::class);
@@ -203,45 +190,45 @@ Route::middleware(['auth', 'acl'])->group(function () {
         Route::resource('servicesCategories', App\Http\Controllers\ServicesCategoryController::class);
         Route::resource('workOrderServices', App\Http\Controllers\WorkOrderServiceController::class);
 
-        Route::get('assayForms/printAssay/{id}', [App\Http\Controllers\AssayFormController::class, 'print_assay'])->name("assayForms.printAssay");
+        Route::get('assayForms/printAssay/{id}', [App\Http\Controllers\AssayFormController::class, 'print_assay'])->name('assayForms.printAssay');
         Route::resource('assayForms', App\Http\Controllers\AssayFormController::class);
         Route::resource('assayService', App\Http\Controllers\AssayServiceController::class);
         Route::resource('assayItem', App\Http\Controllers\AssayItemController::class);
-        Route::get('assayForms/approval/{id}', [App\Http\Controllers\AssayFormController::class, 'approval'])->name("assayForms.approval");
-        Route::post('assayForms/{id}/services',[App\Http\Controllers\AssayServiceController::class, 'add_services'])->name("assayService.services");
+        Route::get('assayForms/approval/{id}', [App\Http\Controllers\AssayFormController::class, 'approval'])->name('assayForms.approval');
+        Route::post('assayForms/{id}/services', [App\Http\Controllers\AssayServiceController::class, 'add_services'])->name('assayService.services');
     });
 
-    Route::group(array('prefix' => 'systemManagement'), function () {
+    Route::group(['prefix' => 'systemManagement'], function () {
         Route::resource('systemComponents', App\Http\Controllers\SystemComponentController::class);
         Route::resource('siteSettings', App\Http\Controllers\SiteSettingController::class);
         Route::post('/employees/{id}/updateTheme', [App\Http\Controllers\EmployeeController::class, 'updateTheme'])->name('updateTheme');
     });
 
-    Route::group(array('prefix' => 'restablishWorkOrders'), function () {
+    Route::group(['prefix' => 'restablishWorkOrders'], function () {
         Route::resource('layers', App\Http\Controllers\LayerController::class);
         Route::resource('landLayers', App\Http\Controllers\LandLayerController::class);
-        Route::delete('delete_history/{id}', [App\Http\Controllers\LandLayerController::class,'deleteFromHistory']);
+        Route::delete('delete_history/{id}', [App\Http\Controllers\LandLayerController::class, 'deleteFromHistory']);
         Route::resource('labs', App\Http\Controllers\LabController::class);
         Route::resource('returnSituations', App\Http\Controllers\ReturnSituationController::class);
         Route::patch('workOrderFollows/updateStatus/{Status}/{work_order_id}/{redirectTo?}', [App\Http\Controllers\WorkOrderFollowController::class, 'updateStatus'])->name('WorkOrderFollows.changeStatus');
 
-        Route::get('workOrderDailyFollows/{type?}', [App\Http\Controllers\WorkOrderFollowController::class, 'index'])->name("workOrderDailyFollows.index");
-        Route::get('workOrderDailyFollows/notFinished', [App\Http\Controllers\WorkOrderFollowController::class, 'index'])->name("workOrderDailyNotFinishedFollows.index");
+        Route::get('workOrderDailyFollows/{type?}', [App\Http\Controllers\WorkOrderFollowController::class, 'index'])->name('workOrderDailyFollows.index');
+        Route::get('workOrderDailyFollows/notFinished', [App\Http\Controllers\WorkOrderFollowController::class, 'index'])->name('workOrderDailyNotFinishedFollows.index');
         Route::resource('workOrderFollows', App\Http\Controllers\WorkOrderFollowController::class);
         Route::post('workOrderFollows/updateStatus/{id}/updatePermit', [App\Http\Controllers\WorkOrderFollowController::class, 'updatePermit'])->name('updatePermit');
-        Route::get('workOrderFollows/printWorkOrderFollows/{id}', [App\Http\Controllers\WorkOrderFollowController::class, 'printWorkOrderFollows'])->name("workOrderFollows.printFollow");
+        Route::get('workOrderFollows/printWorkOrderFollows/{id}', [App\Http\Controllers\WorkOrderFollowController::class, 'printWorkOrderFollows'])->name('workOrderFollows.printFollow');
 
     });
 
-    Route::group(array('prefix' => 'emergency'), function () {
+    Route::group(['prefix' => 'emergency'], function () {
         Route::post('emergencyMissions/update_attachment/{work_order_id}', [App\Http\Controllers\EmergencyMissionController::class, 'update_attachment'])->name('emergencyMissions.update_attachment');
         Route::post('emergencyMissions/convertToWorkOrder/{emergency_mission_id}', [App\Http\Controllers\EmergencyMissionController::class, 'convertToWorkOrder'])->name('emergencyMissions.convertToWorkOrder');
         Route::patch('emergencyMissions/updateStatus/{Status}/{emergency_mission_id}/{redirectTo?}', [App\Http\Controllers\EmergencyMissionController::class, 'updateStatus'])->name('emergencyMissions.changeStatus');
 
-        Route::get('emergencyMissions/electricTowers', [App\Http\Controllers\EmergencyMissionController::class, 'index'])->name("electricTowers.index");
-        Route::get('emergencyMissions/electricTowers/create', [App\Http\Controllers\EmergencyMissionController::class, 'create'])->name("electricTowers.create");
-        Route::get('emergencyMissions/emergency', [App\Http\Controllers\EmergencyMissionController::class, 'index'])->name("emergency.index");
-        Route::get('emergencyMissions/emergency/create', [App\Http\Controllers\EmergencyMissionController::class, 'create'])->name("emergency.create");
+        Route::get('emergencyMissions/electricTowers', [App\Http\Controllers\EmergencyMissionController::class, 'index'])->name('electricTowers.index');
+        Route::get('emergencyMissions/electricTowers/create', [App\Http\Controllers\EmergencyMissionController::class, 'create'])->name('electricTowers.create');
+        Route::get('emergencyMissions/emergency', [App\Http\Controllers\EmergencyMissionController::class, 'index'])->name('emergency.index');
+        Route::get('emergencyMissions/emergency/create', [App\Http\Controllers\EmergencyMissionController::class, 'create'])->name('emergency.create');
         // Route::get('emergencyMissions/{id}', [App\Http\Controllers\EmergencyMissionController::class, 'show'])->name("emergency.show");
         // Route::get('emergencyMissions/create', [App\Http\Controllers\EmergencyMissionController::class, 'create'])->name("emergencyMissions.create");
         // Route::get('emergencyMissions/{type?}', [App\Http\Controllers\EmergencyMissionController::class, 'index'])->name("emergencyMissions.index");
@@ -251,18 +238,18 @@ Route::middleware(['auth', 'acl'])->group(function () {
         Route::resource('emergencyIssuesTypes', App\Http\Controllers\EmergencyIssuesTypeController::class);
     });
 
-    Route::group(array('prefix' => 'paymentClearances'), function () {
+    Route::group(['prefix' => 'paymentClearances'], function () {
         Route::resource('financialDueTypes', App\Http\Controllers\FinancialDueTypeController::class);
         Route::resource('achievementCertificates', App\Http\Controllers\AchievementCertificateController::class);
-        Route::get('achievementCertificates/approval/{id}', [App\Http\Controllers\AchievementCertificateController::class, 'approval'])->name("achievementCertificates.approval");
+        Route::get('achievementCertificates/approval/{id}', [App\Http\Controllers\AchievementCertificateController::class, 'approval'])->name('achievementCertificates.approval');
         Route::resource('financialDues', App\Http\Controllers\FinancialDueController::class);
-        Route::get('financialDues/approval/{id}', [App\Http\Controllers\FinancialDueController::class, 'approval'])->name("financialDues.approval");
-        Route::get('financialDues/{financial_due_id}/{work_order_id}', [App\Http\Controllers\FinancialDueController::class, 'deleteWorkOrder'])->name("financialDues.deleteWorkOrder");
-        Route::post('financialDues/{financial_due_id}', [App\Http\Controllers\FinancialDueController::class, 'storeWorkOrder'])->name("financialDues.storeWorkOrder");
+        Route::get('financialDues/approval/{id}', [App\Http\Controllers\FinancialDueController::class, 'approval'])->name('financialDues.approval');
+        Route::get('financialDues/{financial_due_id}/{work_order_id}', [App\Http\Controllers\FinancialDueController::class, 'deleteWorkOrder'])->name('financialDues.deleteWorkOrder');
+        Route::post('financialDues/{financial_due_id}', [App\Http\Controllers\FinancialDueController::class, 'storeWorkOrder'])->name('financialDues.storeWorkOrder');
     });
 
-      // Reports
-      Route::group(array('prefix' => 'reports'), function () {
+    // Reports
+    Route::group(['prefix' => 'reports'], function () {
         Route::get('/previewPdf/{reportName}', [App\Http\Controllers\Reports\ReportController::class, 'show'])->name('previewReport');
         Route::post('/previewPdf/{reportName}', [App\Http\Controllers\Reports\ReportController::class, 'show'])->name('previewReport');
 
@@ -287,12 +274,10 @@ Route::middleware(['auth', 'acl'])->group(function () {
         Route::get('/permitFinesAmountsReport', [App\Http\Controllers\Reports\TopManagementReportsController::class, 'permitFinesAmountsReport'])->name('permitFinesAmountsReport');
         Route::get('/totalPermitAmountsReport', [App\Http\Controllers\Reports\TopManagementReportsController::class, 'totalPermitAmountsReport'])->name('totalPermitAmountsReport');
 
-
-
-
     });
     Route::get('/test-job', function () {
-        dispatch(new TestJob());
+        dispatch(new TestJob);
+
         return 'Test Job Dispatched!';
     });
 

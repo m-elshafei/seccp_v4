@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\EmployeeDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Branch;
@@ -12,7 +11,6 @@ use App\Models\Employee;
 use App\Models\Job;
 use App\Models\User;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class EmployeeController extends AppBaseController
@@ -20,7 +18,6 @@ class EmployeeController extends AppBaseController
     /**
      * Display a listing of the Employee.
      *
-     * @param EmployeeDataTable $employeeDataTable
      * @return Response
      */
     public function index(EmployeeDataTable $employeeDataTable)
@@ -39,7 +36,7 @@ class EmployeeController extends AppBaseController
         $departments = Department::pluck('name', 'id');
         $jobs = Job::pluck('name', 'id');
 
-        return view('employees.create',[
+        return view('employees.create', [
             'departments' => $departments,
             'branches' => $branches,
             'jobs' => $jobs,
@@ -49,7 +46,6 @@ class EmployeeController extends AppBaseController
     /**
      * Store a newly created Employee in storage.
      *
-     * @param CreateEmployeeRequest $request
      *
      * @return Response
      */
@@ -68,14 +64,13 @@ class EmployeeController extends AppBaseController
     /**
      * Display the specified Employee.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
     {
         /** @var Employee $employee */
-        $employee = Employee::with(['user','branch','department','job'])->find($id);
+        $employee = Employee::with(['user', 'branch', 'department', 'job'])->find($id);
 
         if (empty($employee)) {
             Flash::error(__('models/employees.singular').' '.__('messages.not_found'));
@@ -89,8 +84,7 @@ class EmployeeController extends AppBaseController
     /**
      * Show the form for editing the specified Employee.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -107,11 +101,10 @@ class EmployeeController extends AppBaseController
         $branches = Branch::pluck('name', 'id');
         $departments = Department::pluck('name', 'id');
         $jobs = Job::pluck('name', 'id');
-        $user = User::where('id',$employee->user_id)->pluck('name', 'id');
-
+        $user = User::where('id', $employee->user_id)->pluck('name', 'id');
 
         return view('employees.edit')->with([
-            'employee'=>$employee,
+            'employee' => $employee,
             'departments' => $departments,
             'branches' => $branches,
             'jobs' => $jobs,
@@ -122,9 +115,7 @@ class EmployeeController extends AppBaseController
     /**
      * Update the specified Employee in storage.
      *
-     * @param  int              $id
-     * @param UpdateEmployeeRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateEmployeeRequest $request)
@@ -149,11 +140,10 @@ class EmployeeController extends AppBaseController
     /**
      * Remove the specified Employee from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {
@@ -175,9 +165,10 @@ class EmployeeController extends AppBaseController
 
     public function updateTheme($id)
     {
-        $employee = Employee::where('name',$id)->first();
+        $employee = Employee::where('name', $id)->first();
         $employee->theme = ($employee->theme == 0) ? 1 : 0;
         $employee->save();
+
         return redirect()->back();
     }
 }

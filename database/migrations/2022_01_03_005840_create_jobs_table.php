@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateJobsTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -16,7 +15,7 @@ class CreateJobsTable extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id('id');
-            $table->string('name',150);
+            $table->string('name', 150);
             $table->smallInteger('is_workersـsupervisor')->default(0);
             $table->text('description')->nullable();
             $table->timestamps();

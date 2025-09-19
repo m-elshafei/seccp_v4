@@ -3,19 +3,15 @@
 namespace App\DataTables;
 
 use App\Models\WorkOrderFollowV;
-use App\DataTables\AppDataTable;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\EloquentDataTable;
 
 class WorkOrderDailyFollowDataTable extends AppDataTable
 {
-
-
-    function __construct() {
+    public function __construct()
+    {
         $this->dataTableName = 'work_orders_permits';
         $this->actionViewBlade = 'work_orders_permits.datatables_actions';
     }
-
 
     public function html()
     {
@@ -24,50 +20,48 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
             ->minifiedAjax()
             // ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
             ->parameters([
-                "dom"=> 'Bflrtip',//Bfrtip
+                'dom' => 'Bflrtip', // Bfrtip
                 'stateSave' => false,
-                'pageLength'=> 20,
-                'lengthMenu'=> [5,10,15,20,30,50],
-                'order'     => [[0, 'desc']],
+                'pageLength' => 20,
+                'lengthMenu' => [5, 10, 15, 20, 30, 50],
+                'order' => [[0, 'desc']],
                 // "orderColumn" =>['id', '-id $1'],
                 'drawCallback' => 'function() { feather.replace({width: 14,height: 14}); }',
                 // 'initComplete' => 'function() {  }',
-                'buttons'   => [
+                'buttons' => [
                     [
-                       'extend' => 'print',
-                       'className' => 'btn btn-primary btn-sm no-corner',
-                       'text' => '<i data-feather="printer"></i> ' .__('auth.app.print').'',
-                       'init'=> 'function(api, node, config) {$(node).removeClass("btn-secondary");$(node).removeClass("buttons-print");}'
+                        'extend' => 'print',
+                        'className' => 'btn btn-primary btn-sm no-corner',
+                        'text' => '<i data-feather="printer"></i> '.__('auth.app.print').'',
+                        'init' => 'function(api, node, config) {$(node).removeClass("btn-secondary");$(node).removeClass("buttons-print");}',
                     ],
                     [
-                       'extend' => 'reload',
-                       'className' => 'btn btn-primary btn-sm no-corner',
-                       'text' => '<i data-feather="refresh-cw"></i> ' .__('auth.app.reload').'',
-                       'init'=> 'function(api, node, config) {$(node).removeClass("btn-secondary")}'
+                        'extend' => 'reload',
+                        'className' => 'btn btn-primary btn-sm no-corner',
+                        'text' => '<i data-feather="refresh-cw"></i> '.__('auth.app.reload').'',
+                        'init' => 'function(api, node, config) {$(node).removeClass("btn-secondary")}',
                     ],
                     [
                         'extend' => 'reset',
                         'className' => 'btn btn-primary btn-sm no-corner',
-                        'text' => '<i data-feather="repeat"></i> ' .__('auth.app.reset').'',
-                        'init'=> 'function(api, node, config) {$(node).removeClass("btn-secondary")}'
-                     ],
+                        'text' => '<i data-feather="repeat"></i> '.__('auth.app.reset').'',
+                        'init' => 'function(api, node, config) {$(node).removeClass("btn-secondary")}',
+                    ],
                 ],
-                 'language' => [
-                   'url' => url('//cdn.datatables.net/plug-ins/1.10.12/i18n/Arabic.json'),
-                 ],
+                'language' => [
+                    'url' => url('//cdn.datatables.net/plug-ins/1.10.12/i18n/Arabic.json'),
+                ],
             ]);
     }
-
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\WorkOrderFollowV $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(WorkOrderFollowV $model)
     {
-        return $model->getRestablishDailyWorkOrders()->with(["workOrders.district" , "workOrders.workType" , 'restablishWorkOrders'])->orderBy('created_at', 'desc');
+        return $model->getRestablishDailyWorkOrders()->with(['workOrders.district', 'workOrders.workType', 'restablishWorkOrders'])->orderBy('created_at', 'desc');
 
     }
 
@@ -78,12 +72,12 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
      */
     protected function getColumns()
     {
-        $work_order_status= json_encode(config("const.work_order_general_status"));
-        $lab_result_status= json_encode(config("const.lab_result_status_list2"));
-        $work_order_permit_status= json_encode(config("const.work_order_permit_status"));
+        $work_order_status = json_encode(config('const.work_order_general_status'));
+        $lab_result_status = json_encode(config('const.lab_result_status_list2'));
+        $work_order_permit_status = json_encode(config('const.work_order_permit_status'));
 
         return [
-            'index'=> $this->getIndexCol(),
+            'index' => $this->getIndexCol(),
             'work_order_number' => new Column([
                 'title' => __('models/workOrders.fields.work_order_number'),
                 'data' => 'work_order_number',
@@ -99,7 +93,7 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                             return ( \'<a class="text-danger" title="مهمة طوارئ" href=" \'+ `${BASE_URL}/emergency/emergencyMissions/${row.work_order_id}` + \'"> \' + row.mission_number + \' </a>\'  );
                         }
                     return null;
-                }}'
+                }}',
             ]),
             'work_permit_number' => new Column([
                 'title' => __('models/workOrders.fields.work_permit_number'),
@@ -111,17 +105,17 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                         return data;
                     }
                     return null;
-                }'
+                }',
             ]),
 
-            //'received_date' => new Column(['title' => __('models/workOrders.fields.received_date'), 'data' => 'received_date']),
-            'work_order_received_date' => new Column(['title' => __('models/workOrders.fields.received_date'), 'data' => 'work_order_received_date','width'=>"7%"]),
-            'restablish_convert_date' => new Column(['title' => __('models/workOrders.fields.restablish_convert_date'), 'data' => 'restablish_convert_date','width'=>"7%"]),
+            // 'received_date' => new Column(['title' => __('models/workOrders.fields.received_date'), 'data' => 'received_date']),
+            'work_order_received_date' => new Column(['title' => __('models/workOrders.fields.received_date'), 'data' => 'work_order_received_date', 'width' => '7%']),
+            'restablish_convert_date' => new Column(['title' => __('models/workOrders.fields.restablish_convert_date'), 'data' => 'restablish_convert_date', 'width' => '7%']),
 
             'work_type_code' => new Column([
-                                            'title' => __('models/workOrders.fields.work_type_name'),
-                                            'data' => 'work_type_code',
-                                            'render' => 'function() {
+                'title' => __('models/workOrders.fields.work_type_name'),
+                'data' => 'work_type_code',
+                'render' => 'function() {
                                                 row=meta.settings.aoData[meta.row]._aData;
                                                 if(data){
                                                     // console.log(data[0]);
@@ -135,8 +129,8 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                                                     }
                                                 }
                                                 return null;
-                                            }'
-                                        ]),
+                                            }',
+            ]),
             'district_name' => new Column(['title' => __('models/workOrders.fields.district_name'), 'data' => 'district_name']),
             // 'work_period' => new Column([
             //                                 'title' => __('models/workOrders.fields.work_period'),
@@ -151,7 +145,7 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                 'render' => 'function() {
                     if(data){
                         // console.log(data[0]);
-                        var $status =' . $lab_result_status   .';
+                        var $status ='.$lab_result_status.';
                         row=meta.settings.aoData[meta.row]._aData;
                         //return row.lab_result_status
                         if(data){
@@ -161,7 +155,7 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                         return data;
                     }
                     return null;
-                }'
+                }',
             ]),
             'layer_date' => new Column([
                 'title' => __('models/workOrderFollows.fields.layer_date'),
@@ -169,7 +163,7 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                 'render' => 'function() {
                     if(data){
                         // console.log(data[0]);
-                        var $status =' . $lab_result_status   .';
+                        var $status ='.$lab_result_status.';
                         row=meta.settings.aoData[meta.row]._aData;
                         if(data){
                            //return ( \'<a href=" \'+ `${BASE_URL}/workOrdersManagement/workTypes/${row.work_type_id}` + \'"> \' + data + \' </a>\'  );
@@ -178,7 +172,7 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                         return data;
                     }
                     return null;
-                }'
+                }',
             ]),
             // 'layer1' => new Column([
             //     'title' => 'ط1',
@@ -269,7 +263,7 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                 'title' => __('models/workOrderFollows.fields.total_permit_period'),
                 'data' => 'total_permit_period',
                 'searchable' => false,
-                'orderable' => false
+                'orderable' => false,
             ]),
             'total_permit_period_percentage' => new Column([
                 'title' => 'المدة المنقضيه من التصريح',
@@ -294,7 +288,7 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                                         </div>
                                     </div>`;
                         }
-                }'
+                }',
             ]),
             'total_permit_period_day' => new Column([
                 'title' => 'المدة المتبقيه من التصريح',
@@ -316,36 +310,35 @@ class WorkOrderDailyFollowDataTable extends AppDataTable
                 'title' => 'حالة أمر العمل',
                 'data' => 'work_order_status',
                 'render' => 'function() {
-                                    var $status =' . $work_order_status   .';
+                                    var $status ='.$work_order_status.';
                                     if (typeof $status[data] === "undefined") {
                                     return data;
                                     }
                                     return ( \'<span class="badge rounded-pill \' + $status[data].class + \'">\' + $status[data].title + \'</span>\'  );
-                                }'
+                                }',
             ]),
             'PermitStatus' => new Column([
                 'title' => 'حالة التصريح',
                 'data' => 'status',
                 'render' => 'function() {
-                                            var $status =' . $work_order_permit_status   .';
+                                            var $status ='.$work_order_permit_status.';
                                             if (typeof $status[data] === "undefined") {
                                             return data;
                                             }
                                             return ( \'<span class="badge rounded-pill \' + $status[data].class + \'">\' + $status[data].title + \'</span>\'  );
-                                        }'
+                                        }',
             ]),
-            'issued_amount' => new Column(['title' => __('models/workOrdersPermits.fields.issued_amount'), 'data' => 'issued_amount','width'=>"5%"]),
-            'clearance_sdad_amount' => new Column(['title' => __('models/workOrdersPermits.fields.clearance_sdad_amount'), 'data' => 'clearance_sdad_amount','width'=>"5%"]),
+            'issued_amount' => new Column(['title' => __('models/workOrdersPermits.fields.issued_amount'), 'data' => 'issued_amount', 'width' => '5%']),
+            'clearance_sdad_amount' => new Column(['title' => __('models/workOrdersPermits.fields.clearance_sdad_amount'), 'data' => 'clearance_sdad_amount', 'width' => '5%']),
             // 'total_amount' => new Column(['title' => __('models/workOrdersPermits.fields.total_amount'), 'data' => 'total_amount','width'=>"5%"]),
             'action' => new Column([
                 'title' => __('action'),
                 'data' => 'id',
-                'render'=> 'function() {
+                'render' => 'function() {
                 return \'<a href="/restablishWorkOrders/workOrderFollows/\' + data + \'/edit" class="btn btn-outline-warning btn-sm"><i data-feather="edit"></i></a>\';
-                }'
-            ])
+                }',
+            ]),
 
         ];
     }
-
 }

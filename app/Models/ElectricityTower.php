@@ -3,21 +3,20 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ElectricityTower extends AppBaseModel
 {
-    use HasFactory;
-    use SoftDeletes;
-    use LogsActivity;
     use Branchable;
     use CreatedUpdatedBy;
+    use HasFactory;
+    use LogsActivity;
+    use SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -29,7 +28,7 @@ class ElectricityTower extends AppBaseModel
     }
 
     protected $casts = [
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     public $fillable = [
@@ -40,7 +39,7 @@ class ElectricityTower extends AppBaseModel
         'converter',
         'shadad',
         'grid_high_voltage',
-        'grid_low_voltage'
+        'grid_low_voltage',
     ];
 
     /**
@@ -52,11 +51,11 @@ class ElectricityTower extends AppBaseModel
 
     ];
 
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      **/
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\ElectricityTower']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\ElectricityTower']);
     }
 }

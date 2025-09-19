@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateMissionTypesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *

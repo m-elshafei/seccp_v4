@@ -3,14 +3,12 @@
 namespace App\DataTables;
 
 use App\Models\District;
-use App\DataTables\AppDataTable;
 use Yajra\DataTables\Html\Column;
 
 class DistrictDataTable extends AppDataTable
 {
-
-
-    function __construct() {
+    public function __construct()
+    {
         $this->dataTableName = 'districts';
         $this->actionViewBlade = 'districts.datatables_actions';
     }
@@ -18,12 +16,11 @@ class DistrictDataTable extends AppDataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\District $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(District $model)
     {
-        return $model->newQuery()->with("city");
+        return $model->newQuery()->with('city');
     }
 
     /**
@@ -34,12 +31,11 @@ class DistrictDataTable extends AppDataTable
     protected function getColumns()
     {
         return [
-            'index'=> $this->getIndexCol(),
+            'index' => $this->getIndexCol(),
             // 'id' => new Column(['id' => __('id'), 'data' => 'id']),
             'name' => new Column(['title' => __('models/districts.fields.name'), 'data' => 'name']),
-            'city_name' => new Column(['title' => __('models/districts.fields.city_name'), 'data' => 'city.name',"targets"=> "_all","defaultContent"=> "-",'orderable'      => false,]),
-            
+            'city_name' => new Column(['title' => __('models/districts.fields.city_name'), 'data' => 'city.name', 'targets' => '_all', 'defaultContent' => '-', 'orderable' => false]),
+
         ];
     }
-
 }

@@ -2,16 +2,14 @@
 
 namespace App\View\Components\Report;
 
+use App\Models\Employee;
+use App\Models\MissionType;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use App\Models\MissionType;
-use App\Models\Employee;
-
 
 class EmergencyMissionsDailyFilter extends Component
 {
-
     /**
      * Create a new component instance.
      */
@@ -25,9 +23,9 @@ class EmergencyMissionsDailyFilter extends Component
      */
     public function render(): View|Closure|string
     {
-        $workOrdersType = MissionType::pluck('name', 'name')->prepend("اختر","");
-        $Employee = Employee::pluck('name', 'name')->prepend("اختر","");
+        $workOrdersType = MissionType::pluck('name', 'name')->prepend('اختر', '');
+        $Employee = Employee::pluck('name', 'name')->prepend('اختر', '');
 
-        return view('components.report.emergency-missions-daily-filter',compact('workOrdersType','Employee'));
+        return view('components.report.emergency-missions-daily-filter', compact('workOrdersType', 'Employee'));
     }
 }

@@ -1,17 +1,17 @@
 <?php
 
-use Tests\TestCase;
+use App\Enums\WorkOrderStatusEnum;
 use App\Models\WorkOrder;
 use App\Models\WorkOrderNote;
-use App\Enums\WorkOrderStatusEnum;
-use App\Services\WorkOrders\WorkOrderService as WorkOrderService;
+use App\Services\WorkOrders\WorkOrderService;
+use Tests\TestCase;
 
 class CreateStopNoteTest extends TestCase
 {
-    public function testTemporaryStopNoteIsCreated()
+    public function test_temporary_stop_note_is_created()
     {
         return true;
-        $workOrderService =   app(WorkOrderService::class);
+        $workOrderService = app(WorkOrderService::class);
         $workOrder = new WorkOrder([
             'work_order_number' => 'WO1234',
             'id' => 1,
@@ -30,10 +30,10 @@ class CreateStopNoteTest extends TestCase
         $this->assertEquals($note->user_id, auth()->id());
     }
 
-    public function testPermanentStopNoteIsCreated()
+    public function test_permanent_stop_note_is_created()
     {
         return true;
-        $workOrderService =   app(WorkOrderService::class);
+        $workOrderService = app(WorkOrderService::class);
         $workOrder = new WorkOrder([
             'mission_number' => 'MN5678',
             'id' => 2,
@@ -51,10 +51,10 @@ class CreateStopNoteTest extends TestCase
         $this->assertEquals($note->user_id, auth()->id());
     }
 
-    public function testNoteIsNotCreatedForInvalidStatusKey()
+    public function test_note_is_not_created_for_invalid_status_key()
     {
         return true;
-        $workOrderService =   app(WorkOrderService::class);
+        $workOrderService = app(WorkOrderService::class);
         $workOrder = new WorkOrder([
             'work_order_number' => 'WO1234',
             'id' => 1,

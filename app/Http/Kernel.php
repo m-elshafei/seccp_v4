@@ -21,9 +21,9 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        //This for security
+        // This for security
         // \App\Http\Middleware\TrustRequestHeaders::class,
-         // \App\Http\Middleware\TrustReferer::class,
+        // \App\Http\Middleware\TrustReferer::class,
         // \ProtoneMedia\LaravelXssProtection\Middleware\XssCleanInput::class,
         // \App\Http\Middleware\XssClean::class,
 

@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Flash;
-use Response;
-use App\Http\Requests;
-use App\Models\Branch;
-use App\Models\Department;
 use App\DataTables\DepartmentDataTable;
-use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CreateDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
+use App\Models\Branch;
+use App\Models\Department;
+use Flash;
+use Response;
 
 class DepartmentController extends AppBaseController
 {
     /**
      * Display a listing of the Department.
      *
-     * @param DepartmentDataTable $departmentDataTable
      * @return Response
      */
     public function index(DepartmentDataTable $departmentDataTable)
@@ -33,13 +30,13 @@ class DepartmentController extends AppBaseController
     public function create()
     {
         $branches = Branch::pluck('name', 'id');
-        return view('departments.create',compact('branches'));
+
+        return view('departments.create', compact('branches'));
     }
 
     /**
      * Store a newly created Department in storage.
      *
-     * @param CreateDepartmentRequest $request
      *
      * @return Response
      */
@@ -58,14 +55,13 @@ class DepartmentController extends AppBaseController
     /**
      * Display the specified Department.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
     {
         /** @var Department $department */
-        $department = Department::with("branch")->find($id);
+        $department = Department::with('branch')->find($id);
 
         if (empty($department)) {
             Flash::error(__('models/departments.singular').' '.__('messages.not_found'));
@@ -79,8 +75,7 @@ class DepartmentController extends AppBaseController
     /**
      * Show the form for editing the specified Department.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -101,9 +96,7 @@ class DepartmentController extends AppBaseController
     /**
      * Update the specified Department in storage.
      *
-     * @param  int              $id
-     * @param UpdateDepartmentRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateDepartmentRequest $request)
@@ -128,11 +121,10 @@ class DepartmentController extends AppBaseController
     /**
      * Remove the specified Department from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

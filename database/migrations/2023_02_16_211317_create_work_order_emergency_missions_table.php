@@ -24,21 +24,21 @@ return new class extends Migration
             $table->string('mission_operation_number')->nullable();
             $table->string('mission_meter_number')->nullable();
             $table->string('electricity_employee_name')->nullable();
-            $table->enum('mission_executed_worker_type',['employee','contractor'])->default('employee');
+            $table->enum('mission_executed_worker_type', ['employee', 'contractor'])->default('employee');
             $table->foreignId('mission_executed_employee_id')->nullable()->constrained(
-                table: 'employees', 
+                table: 'employees',
                 indexName: 'mission_ex_emp_id_foreign'
             );
-            
+
             $table->foreignId('mission_executed_contractor_id')->nullable()->constrained(
-                table: 'contractors', 
+                table: 'contractors',
                 indexName: 'mission_ex_contr_foreign'
             );
 
             // $table->integer('mission_executed_employee_id')->nullable();
             // $table->integer('mission_executed_contractor_id')->nullable();
-            $table->date("mission_complete_date")->nullable();
-            
+            $table->date('mission_complete_date')->nullable();
+
             $table->foreignId('branch_id')->constrained();
             $table->timestamps();
             $table->softDeletes();

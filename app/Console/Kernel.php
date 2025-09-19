@@ -2,10 +2,9 @@
 
 namespace App\Console;
 
+use App\Jobs\CheckPermitExpirations;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Services\PermitService;
-use App\Jobs\CheckPermitExpirations;
 
 class Kernel extends ConsoleKernel
 {
@@ -21,7 +20,6 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -30,7 +28,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('db:delete')->dailyAt('20:00')->withoutOverlapping();
         $schedule->command('notify:permitExpire')->dailyAt('8:00')->withoutOverlapping();
         // $schedule->job(new CheckPermitExpirations())->dailyAt('10:47');
-
 
     }
 

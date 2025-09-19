@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Overrides\Spatie\Role;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRoleRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *

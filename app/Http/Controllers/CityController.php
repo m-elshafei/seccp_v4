@@ -4,20 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCityRequest;
 use App\Http\Requests\UpdateCityRequest;
-use App\Http\Controllers\AppBaseController;
 use App\Models\City;
-use Illuminate\Http\Request;
-use Flash;
-use Response;
 use App\Repositories\CityRepository;
+use Flash;
+use Illuminate\Http\Request;
+use Response;
 
 class CityController extends AppBaseController
 {
     /**
      * Display a listing of the City.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return Response
      */
     public $cityRepository;
@@ -49,7 +47,6 @@ class CityController extends AppBaseController
     /**
      * Store a newly created City in storage.
      *
-     * @param CreateCityRequest $request
      *
      * @return Response
      */
@@ -67,8 +64,7 @@ class CityController extends AppBaseController
     /**
      * Display the specified City.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -88,8 +84,7 @@ class CityController extends AppBaseController
     /**
      * Show the form for editing the specified City.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -108,9 +103,7 @@ class CityController extends AppBaseController
     /**
      * Update the specified City in storage.
      *
-     * @param int $id
-     * @param UpdateCityRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateCityRequest $request)
@@ -134,11 +127,10 @@ class CityController extends AppBaseController
     /**
      * Remove the specified City from storage.
      *
-     * @param int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

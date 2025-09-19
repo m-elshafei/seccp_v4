@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\WorkOrdersStageDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateWorkOrdersStageRequest;
 use App\Http\Requests\UpdateWorkOrdersStageRequest;
 use App\Models\WorkOrdersStage;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class WorkOrdersStageController extends AppBaseController
@@ -16,7 +14,6 @@ class WorkOrdersStageController extends AppBaseController
     /**
      * Display a listing of the WorkOrdersStage.
      *
-     * @param WorkOrdersStageDataTable $workOrdersStageDataTable
      * @return Response
      */
     public function index(WorkOrdersStageDataTable $workOrdersStageDataTable)
@@ -37,7 +34,6 @@ class WorkOrdersStageController extends AppBaseController
     /**
      * Store a newly created WorkOrdersStage in storage.
      *
-     * @param CreateWorkOrdersStageRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class WorkOrdersStageController extends AppBaseController
     /**
      * Display the specified WorkOrdersStage.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class WorkOrdersStageController extends AppBaseController
     /**
      * Show the form for editing the specified WorkOrdersStage.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class WorkOrdersStageController extends AppBaseController
     /**
      * Update the specified WorkOrdersStage in storage.
      *
-     * @param  int              $id
-     * @param UpdateWorkOrdersStageRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateWorkOrdersStageRequest $request)
@@ -125,11 +117,10 @@ class WorkOrdersStageController extends AppBaseController
     /**
      * Remove the specified WorkOrdersStage from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

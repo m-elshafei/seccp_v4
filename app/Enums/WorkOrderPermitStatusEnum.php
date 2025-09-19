@@ -1,12 +1,15 @@
 <?php
-namespace App\Enums;
-use ArchTech\Enums\InvokableCases as InvokableCases;
-use ArchTech\Enums\Names as Names;
-use ArchTech\Enums\Values as Values;
-use ArchTech\Enums\Options  as Options;
 
-enum WorkOrderPermitStatusEnum:int {
-    use InvokableCases,Names,Values,Options;
+namespace App\Enums;
+
+use ArchTech\Enums\InvokableCases;
+use ArchTech\Enums\Names;
+use ArchTech\Enums\Options;
+use ArchTech\Enums\Values;
+
+enum WorkOrderPermitStatusEnum: int
+{
+    use InvokableCases,Names,Options,Values;
 
     case New = 1;
     case WaitingForPayment = 2;
@@ -19,8 +22,8 @@ enum WorkOrderPermitStatusEnum:int {
     case Canceled = 8;
     case Rejected = 9;
 
-
-    static function getOptions()  {
+    public static function getOptions()
+    {
         return array_flip(WorkOrderPermitStatusEnum::options());
     }
 }

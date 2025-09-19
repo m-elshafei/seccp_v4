@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-use Spatie\Activitylog\LogOptions;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\Activitylog\Models\Activity;
-use Illuminate\Notifications\Notifiable;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, LogsActivity, HasRoles ;
-
-
+    use HasFactory, HasRoles, LogsActivity, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +28,7 @@ class User extends Authenticatable
         'last_login_at',
         'last_login_ip_address',
         'access_token',
-        'pass_need_to_be_changed'
+        'pass_need_to_be_changed',
     ];
 
     /**
@@ -42,15 +39,14 @@ class User extends Authenticatable
     public static $rules = [
         'name' => 'required',
         'username' => 'required|unique:users',
-        'email' => 'required|email|unique:users'
+        'email' => 'required|email|unique:users',
     ];
 
-    public static $rulesForUpdate =  [
+    public static $rulesForUpdate = [
         'name' => 'required',
         'username' => 'required',
-        'email' => 'required|email'
+        'email' => 'required|email',
     ];
-
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -81,10 +77,9 @@ class User extends Authenticatable
         'last_login_at' => 'datetime',
     ];
 
-
-
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\User']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\User']);
     }
 
     /**

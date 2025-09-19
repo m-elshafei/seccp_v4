@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
 class TestController extends AppBaseController
 {
-
     public function one()
     {
         return view('post.post_file');
@@ -18,17 +16,19 @@ class TestController extends AppBaseController
 
     public function view($id)
     {
-        $post = \App\Models\Post::with("attachments")->findOrFail($id);
+        $post = \App\Models\Post::with('attachments')->findOrFail($id);
+
         return view('post.view_file_list', ['post' => $post]);
     }
 
     public function test($request)
     {
         $post = \App\Models\Post::create([
-            'title' => $request->get("title"),
-            'body' => $request->get("body"),
+            'title' => $request->get('title'),
+            'body' => $request->get('body'),
         ]);
-        return redirect()->route("post_view", ['id' => $post->id]);
+
+        return redirect()->route('post_view', ['id' => $post->id]);
     }
 
     public function fixWorkOrdersPermits()
@@ -36,7 +36,7 @@ class TestController extends AppBaseController
         $data = \App\Models\WorkOrdersPermit::whereIn('status', ['4', '5', '6', '7', '10'])->whereNull('restablish_convert_date')->orderBy('id', 'desc')->get();
         foreach ($data as $row) {
             if ($row->workOrders() && $row->workOrders()->first()) {
-                $WorkOrderTransactionsHistory =  \App\Models\WorkOrderTransactionsHistory::where('new_department', 4)->where('work_order_id', $row->workOrders()->first()->id)->first();
+                $WorkOrderTransactionsHistory = \App\Models\WorkOrderTransactionsHistory::where('new_department', 4)->where('work_order_id', $row->workOrders()->first()->id)->first();
                 if ($WorkOrderTransactionsHistory) {
                     $row->restablish_convert_date = $WorkOrderTransactionsHistory->created_at;
                     $result = $row->save();
@@ -66,7 +66,6 @@ class TestController extends AppBaseController
             $permit->save();
         }
 
-
-        dd("Done");
+        dd('Done');
     }
 }

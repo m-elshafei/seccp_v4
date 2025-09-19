@@ -17,12 +17,12 @@ class TrustReferer
     public function handle(Request $request, Closure $next): Response
     {
         $referrer = $request->headers->get('referer');
-    
-        if (is_string($referrer) &&  $this->validateDomain($referrer) === false) {
+
+        if (is_string($referrer) && $this->validateDomain($referrer) === false) {
             $request->headers->remove('referer');
             App::abort(403, 'Bad URL');
         }
-        
+
         return $next($request);
     }
 
@@ -31,11 +31,12 @@ class TrustReferer
         $referrerDomain = parse_url($referrer, PHP_URL_HOST);
         // dd($referrerDomain );
         $referrerScheme = parse_url($referrer, PHP_URL_SCHEME);
-        $referrerDomain = str_replace('www.','',$referrerDomain);
-        $r = $referrerScheme . '://'.$referrerDomain;
-        if($r != env('APP_URL')){
+        $referrerDomain = str_replace('www.', '', $referrerDomain);
+        $r = $referrerScheme.'://'.$referrerDomain;
+        if ($r != env('APP_URL')) {
             return false;
         }
+
         return true;
     }
 }

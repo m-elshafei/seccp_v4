@@ -3,21 +3,20 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ElectricMeter extends AppBaseModel
 {
-    use HasFactory;
-    use SoftDeletes;
-    use LogsActivity;
     use Branchable;
     use CreatedUpdatedBy;
+    use HasFactory;
+    use LogsActivity;
+    use SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -29,7 +28,7 @@ class ElectricMeter extends AppBaseModel
     }
 
     protected $casts = [
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     public $fillable = [
@@ -39,7 +38,7 @@ class ElectricMeter extends AppBaseModel
         'reading',
         'previous_capacity',
         'approved_capacity',
-        'user_id'
+        'user_id',
     ];
 
     /**
@@ -48,18 +47,18 @@ class ElectricMeter extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'subscription_no'   => 'required',
-        'meter_no'          => 'required',
-        'reading'           => 'required|numeric|gte:0',
+        'subscription_no' => 'required',
+        'meter_no' => 'required',
+        'reading' => 'required|numeric|gte:0',
         'previous_capacity' => 'required|numeric|gte:0',
         'approved_capacity' => 'required|numeric|gte:0',
     ];
 
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      **/
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\ElectricMeter']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\ElectricMeter']);
     }
 }

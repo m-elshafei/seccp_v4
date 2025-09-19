@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ConsultantDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateConsultantRequest;
 use App\Http\Requests\UpdateConsultantRequest;
 use App\Models\Consultant;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class ConsultantController extends AppBaseController
@@ -16,7 +14,6 @@ class ConsultantController extends AppBaseController
     /**
      * Display a listing of the Consultant.
      *
-     * @param ConsultantDataTable $consultantDataTable
      * @return Response
      */
     public function index(ConsultantDataTable $consultantDataTable)
@@ -37,7 +34,6 @@ class ConsultantController extends AppBaseController
     /**
      * Store a newly created Consultant in storage.
      *
-     * @param CreateConsultantRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class ConsultantController extends AppBaseController
     /**
      * Display the specified Consultant.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class ConsultantController extends AppBaseController
     /**
      * Show the form for editing the specified Consultant.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class ConsultantController extends AppBaseController
     /**
      * Update the specified Consultant in storage.
      *
-     * @param  int              $id
-     * @param UpdateConsultantRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateConsultantRequest $request)
@@ -125,11 +117,10 @@ class ConsultantController extends AppBaseController
     /**
      * Remove the specified Consultant from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

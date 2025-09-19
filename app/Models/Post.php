@@ -4,12 +4,11 @@ namespace App\Models;
 
 use App\Http\Traits\AttachmentTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\AppBaseModel;
 
 class Post extends AppBaseModel
 {
-    use HasFactory;
     use AttachmentTrait;
+    use HasFactory;
 
     protected $fillable = ['title', 'body'];
 }

@@ -1,11 +1,11 @@
 <?php
-namespace App\Repositories;
-use App\Models\Balady;
 
+namespace App\Repositories;
+
+use App\Models\Balady;
 
 class BaladyRepository
 {
-
     protected $model;
 
     public function __construct(Balady $model)
@@ -13,7 +13,7 @@ class BaladyRepository
         $this->model = $model;
     }
 
-   public function getCities()
+    public function getCities()
     {
         return $this->model->pluck('name', 'id');
     }

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Models\SystemComponent;
-use Illuminate\Database\Seeder;
 use App\Overrides\Spatie\Permission;
+use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class PermissionsSeeder extends Seeder
 {
@@ -28,32 +28,32 @@ class PermissionsSeeder extends Seeder
         //     ]);
 
         // }
-        $actions = array('index','edit','show','create','delete');
+        $actions = ['index', 'edit', 'show', 'create', 'delete'];
 
-        $systemComponents = SystemComponent::where("comp_type",3)->get();
+        $systemComponents = SystemComponent::where('comp_type', 3)->get();
         // dd($systemComponents);
         foreach ($systemComponents as $component) {
-            foreach ($actions  as $action) {
+            foreach ($actions as $action) {
                 $permissionData = Permission::create([
-                    'name' => $component->prefix .".".$component->route_name.".".$action  ,
-                    'guard_name' => 'web' ,
-                    'system_component_id' => $component->id ,
+                    'name' => $component->prefix.'.'.$component->route_name.'.'.$action,
+                    'guard_name' => 'web',
+                    'system_component_id' => $component->id,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]);
             }
-            
+
         }
 
-        $systemComponents = SystemComponent::where("comp_type",4)->get();
+        $systemComponents = SystemComponent::where('comp_type', 4)->get();
         foreach ($systemComponents as $component) {
             $permissionData = Permission::create([
-                'name' => "reports.".$component->route_name  ,
-                'guard_name' => 'web' ,
-                'system_component_id' => $component->id ,
+                'name' => 'reports.'.$component->route_name,
+                'guard_name' => 'web',
+                'system_component_id' => $component->id,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ]); 
-        } 
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ]);
+        }
     }
 }

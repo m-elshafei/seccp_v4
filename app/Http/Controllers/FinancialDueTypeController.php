@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\FinancialDueTypeDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateFinancialDueTypeRequest;
 use App\Http\Requests\UpdateFinancialDueTypeRequest;
 use App\Models\FinancialDueType;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class FinancialDueTypeController extends AppBaseController
@@ -16,7 +14,6 @@ class FinancialDueTypeController extends AppBaseController
     /**
      * Display a listing of the FinancialDueType.
      *
-     * @param FinancialDueTypeDataTable $financialDueTypeDataTable
      * @return Response
      */
     public function index(FinancialDueTypeDataTable $financialDueTypeDataTable)
@@ -37,7 +34,6 @@ class FinancialDueTypeController extends AppBaseController
     /**
      * Store a newly created FinancialDueType in storage.
      *
-     * @param CreateFinancialDueTypeRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class FinancialDueTypeController extends AppBaseController
     /**
      * Display the specified FinancialDueType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class FinancialDueTypeController extends AppBaseController
     /**
      * Show the form for editing the specified FinancialDueType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class FinancialDueTypeController extends AppBaseController
     /**
      * Update the specified FinancialDueType in storage.
      *
-     * @param  int              $id
-     * @param UpdateFinancialDueTypeRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateFinancialDueTypeRequest $request)
@@ -125,11 +117,10 @@ class FinancialDueTypeController extends AppBaseController
     /**
      * Remove the specified FinancialDueType from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

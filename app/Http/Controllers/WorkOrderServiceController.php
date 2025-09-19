@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\WorkOrderServiceDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateWorkOrderServiceRequest;
 use App\Http\Requests\UpdateWorkOrderServiceRequest;
 use App\Models\ServicesCategory;
 use App\Models\Unit;
 use App\Models\WorkOrderService;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class WorkOrderServiceController extends AppBaseController
@@ -18,7 +16,6 @@ class WorkOrderServiceController extends AppBaseController
     /**
      * Display a listing of the WorkOrderService.
      *
-     * @param WorkOrderServiceDataTable $workOrderServiceDataTable
      * @return Response
      */
     public function index(WorkOrderServiceDataTable $workOrderServiceDataTable)
@@ -35,7 +32,8 @@ class WorkOrderServiceController extends AppBaseController
     {
         $units = Unit::pluck('name', 'id');
         $categories = ServicesCategory::pluck('name', 'id');
-        return view('work_order_services.create',[
+
+        return view('work_order_services.create', [
             'units' => $units,
             'categories' => $categories,
         ]);
@@ -44,17 +42,16 @@ class WorkOrderServiceController extends AppBaseController
     /**
      * Store a newly created WorkOrderService in storage.
      *
-     * @param CreateWorkOrderServiceRequest $request
      *
      * @return Response
      */
     public function store(CreateWorkOrderServiceRequest $request)
     {
         $input = $request->all();
-        $_count = WorkOrderService::where('code','like', $input['code'])->count();
-        if ($_count != 0){
-            //flash("هذا الكود تم ادخاله من قبل")->error();
-            return redirect()->back()->withErrors("هذا الكود تم ادخاله من قبل")->withInput();
+        $_count = WorkOrderService::where('code', 'like', $input['code'])->count();
+        if ($_count != 0) {
+            // flash("هذا الكود تم ادخاله من قبل")->error();
+            return redirect()->back()->withErrors('هذا الكود تم ادخاله من قبل')->withInput();
         }
 
         /** @var WorkOrderService $workOrderService */
@@ -68,14 +65,13 @@ class WorkOrderServiceController extends AppBaseController
     /**
      * Display the specified WorkOrderService.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
     {
         /** @var WorkOrderService $workOrderService */
-        $workOrderService = WorkOrderService::with(['servicesCategory','unit'])->find($id);
+        $workOrderService = WorkOrderService::with(['servicesCategory', 'unit'])->find($id);
 
         if (empty($workOrderService)) {
             Flash::error(__('models/workOrderServices.singular').' '.__('messages.not_found'));
@@ -89,8 +85,7 @@ class WorkOrderServiceController extends AppBaseController
     /**
      * Show the form for editing the specified WorkOrderService.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -105,7 +100,8 @@ class WorkOrderServiceController extends AppBaseController
         }
         $units = Unit::pluck('name', 'id');
         $categories = ServicesCategory::pluck('name', 'id');
-        return view('work_order_services.edit',[
+
+        return view('work_order_services.edit', [
             'workOrderService' => $workOrderService,
             'units' => $units,
             'categories' => $categories,
@@ -115,9 +111,7 @@ class WorkOrderServiceController extends AppBaseController
     /**
      * Update the specified WorkOrderService in storage.
      *
-     * @param  int              $id
-     * @param UpdateWorkOrderServiceRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateWorkOrderServiceRequest $request)
@@ -125,10 +119,10 @@ class WorkOrderServiceController extends AppBaseController
         /** @var WorkOrderService $workOrderService */
         $workOrderService = WorkOrderService::find($id);
 
-        $_count = WorkOrderService::where('id','<>',$id)->where('code','like', $request->get('code'))->count();
-        if ($_count != 0){
-            //flash("هذا الكود تم ادخاله من قبل")->error();
-            return redirect()->back()->withErrors("هذا الكود تم ادخاله من قبل")->withInput();
+        $_count = WorkOrderService::where('id', '<>', $id)->where('code', 'like', $request->get('code'))->count();
+        if ($_count != 0) {
+            // flash("هذا الكود تم ادخاله من قبل")->error();
+            return redirect()->back()->withErrors('هذا الكود تم ادخاله من قبل')->withInput();
         }
 
         if (empty($workOrderService)) {
@@ -148,11 +142,10 @@ class WorkOrderServiceController extends AppBaseController
     /**
      * Remove the specified WorkOrderService from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

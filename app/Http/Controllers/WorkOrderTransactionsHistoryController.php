@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\WorkOrderTransactionsHistoryDataTable;
 use App\Http\Requests\CreateWorkOrderTransactionsHistoryRequest;
 use App\Http\Requests\UpdateWorkOrderTransactionsHistoryRequest;
-use App\Http\Controllers\AppBaseController;
 use App\Models\WorkOrderTransactionsHistory;
-use Illuminate\Http\Request;
 use Flash;
 
 class WorkOrderTransactionsHistoryController extends AppBaseController
@@ -17,9 +15,8 @@ class WorkOrderTransactionsHistoryController extends AppBaseController
      */
     public function index(WorkOrderTransactionsHistoryDataTable $workOrderTransactionsHistoryDataTable)
     {
-    return $workOrderTransactionsHistoryDataTable->render('work_order_transactions_histories.index');
+        return $workOrderTransactionsHistoryDataTable->render('work_order_transactions_histories.index');
     }
-
 
     /**
      * Show the form for creating a new WorkOrderTransactionsHistory.

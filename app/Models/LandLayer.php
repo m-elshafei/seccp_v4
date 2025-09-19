@@ -3,22 +3,19 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class LandLayer extends AppBaseModel
 {
-    use HasFactory;
-    use SoftDeletes;
     use Branchable;
     use CreatedUpdatedBy;
+    use HasFactory;
     use LogsActivity;
-
-
+    use SoftDeletes;
 
     public $fillable = [
         'name',
@@ -35,10 +32,10 @@ class LandLayer extends AppBaseModel
         'layer_employee_id',
         'layer_contractor_id',
         'work_orders_permit_id',
-        'description'
+        'description',
     ];
 
-      /**
+    /**
      * The attributes that should be casted to native types.
      *
      * @var array
@@ -51,7 +48,7 @@ class LandLayer extends AppBaseModel
         'lab_send_date' => 'date:Y-m-d',
         'work_order_id' => 'integer',
         'layer_status' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
         // 'lab_result_status' => 'integer'
     ];
 
@@ -76,15 +73,16 @@ class LandLayer extends AppBaseModel
 
     public function getStartDateAttribute($value)
     {
-        return $value ;
+        return $value;
     }
 
-    public function employee(){
-        return $this->belongsTo(Employee::class,'layer_employee_id','id')->withDefault();
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'layer_employee_id', 'id')->withDefault();
     }
 
-    public function contractor(){
-        return $this->belongsTo(Contractor::class,'layer_contractor_id','id')->withDefault();
+    public function contractor()
+    {
+        return $this->belongsTo(Contractor::class, 'layer_contractor_id', 'id')->withDefault();
     }
-
 }

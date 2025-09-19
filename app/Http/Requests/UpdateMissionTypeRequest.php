@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\MissionType;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateMissionTypeRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateMissionTypeRequest extends FormRequest
     public function rules()
     {
         $rules = MissionType::$rules;
-        
+
         return $rules;
     }
 }

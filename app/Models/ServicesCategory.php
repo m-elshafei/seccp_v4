@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-
 /**
  * Class ServicesCategory
- * @package App\Models
+ *
  * @version March 5, 2022, 2:18 pm UTC
  *
  * @property string $name
@@ -18,7 +16,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class ServicesCategory extends AppBaseModel
 {
-    use SoftDeletes, LogsActivity;
+    use LogsActivity, SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -29,17 +27,11 @@ class ServicesCategory extends AppBaseModel
             ->logOnly(['name', 'username', 'email']);
     }
 
-
     public $table = 'services_categories';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
-        'name_ar'
+        'name_ar',
     ];
 
     /**
@@ -51,7 +43,7 @@ class ServicesCategory extends AppBaseModel
         'id' => 'integer',
         'name' => 'string',
         'name_ar' => 'string',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -60,11 +52,11 @@ class ServicesCategory extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        
+
     ];
 
-    public function WorkOrderService(){
-        return $this->hasMany(ServicesCategory::class,'services_category_id', 'id');
+    public function WorkOrderService()
+    {
+        return $this->hasMany(ServicesCategory::class, 'services_category_id', 'id');
     }
-    
 }

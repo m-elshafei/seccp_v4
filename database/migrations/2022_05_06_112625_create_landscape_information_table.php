@@ -40,8 +40,8 @@ class CreateLandscapeInformationTable extends Migration
             $table->double('cabel_length_lv70')->nullable();
             $table->double('cabel_length_lv185')->nullable();
             $table->double('cabel_length_lv300')->nullable();
-            $table->date("drilling_complete_date")->nullable();
-            $table->enum('drilling_worker_type',['employee','contractor'])->default('employee');
+            $table->date('drilling_complete_date')->nullable();
+            $table->enum('drilling_worker_type', ['employee', 'contractor'])->default('employee');
             $table->foreignId('drilling_employee_id')->nullable();
             $table->foreignId('drilling_contractor_id')->nullable();
             $table->text('note')->nullable();

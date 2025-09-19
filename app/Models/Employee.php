@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class Employee
- * @package App\Models
+ *
  * @version January 3, 2022, 1:22 am UTC
  *
  * @property \App\Models\Branch $branch
@@ -16,29 +14,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \App\Models\Job $job
  * @property \App\Models\User $user
  * @property string $name
- * @property integer $branch_id
- * @property integer $department_id
- * @property integer $job_id
- * @property integer $user_id
+ * @property int $branch_id
+ * @property int $department_id
+ * @property int $job_id
+ * @property int $user_id
  */
 class Employee extends AppBaseModel
 {
     use SoftDeletes;
 
-
     public $table = 'employees';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
         'branch_id',
         'department_id',
         'job_id',
-        'user_id'
+        'user_id',
     ];
 
     /**
@@ -53,7 +45,7 @@ class Employee extends AppBaseModel
         'department_id' => 'integer',
         'job_id' => 'integer',
         'user_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -65,9 +57,8 @@ class Employee extends AppBaseModel
         'name' => 'required',
         'branch_id' => 'required',
         'department_id' => 'required',
-        'job_id' => 'required'
+        'job_id' => 'required',
     ];
-
 
     protected function getDisplayNameAttribute()
     {

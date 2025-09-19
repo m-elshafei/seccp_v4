@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ItemsCategoryDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateItemsCategoryRequest;
 use App\Http\Requests\UpdateItemsCategoryRequest;
 use App\Models\ItemsCategory;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class ItemsCategoryController extends AppBaseController
@@ -16,7 +14,6 @@ class ItemsCategoryController extends AppBaseController
     /**
      * Display a listing of the ItemsCategory.
      *
-     * @param ItemsCategoryDataTable $itemsCategoryDataTable
      * @return Response
      */
     public function index(ItemsCategoryDataTable $itemsCategoryDataTable)
@@ -32,7 +29,8 @@ class ItemsCategoryController extends AppBaseController
     public function create()
     {
         $itemsCategories = ItemsCategory::pluck('name', 'id');
-        return view('items_categories.create',[
+
+        return view('items_categories.create', [
             'itemsCategories' => $itemsCategories,
         ]);
     }
@@ -40,7 +38,6 @@ class ItemsCategoryController extends AppBaseController
     /**
      * Store a newly created ItemsCategory in storage.
      *
-     * @param CreateItemsCategoryRequest $request
      *
      * @return Response
      */
@@ -59,14 +56,13 @@ class ItemsCategoryController extends AppBaseController
     /**
      * Display the specified ItemsCategory.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
     {
         /** @var ItemsCategory $itemsCategory */
-        $itemsCategory = ItemsCategory::with("category")->find($id);
+        $itemsCategory = ItemsCategory::with('category')->find($id);
 
         if (empty($itemsCategory)) {
             Flash::error(__('models/itemsCategories.singular').' '.__('messages.not_found'));
@@ -80,8 +76,7 @@ class ItemsCategoryController extends AppBaseController
     /**
      * Show the form for editing the specified ItemsCategory.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -94,20 +89,18 @@ class ItemsCategoryController extends AppBaseController
 
             return redirect(route('itemsCategories.index'));
         }
-        $itemsCategories = ItemsCategory::where('id','<>',$id)->pluck('name', 'id');
+        $itemsCategories = ItemsCategory::where('id', '<>', $id)->pluck('name', 'id');
 
         return view('items_categories.edit')->with([
-            'itemsCategory'=> $itemsCategory,
-            'itemsCategories'=> $itemsCategories,
+            'itemsCategory' => $itemsCategory,
+            'itemsCategories' => $itemsCategories,
         ]);
     }
 
     /**
      * Update the specified ItemsCategory in storage.
      *
-     * @param  int              $id
-     * @param UpdateItemsCategoryRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateItemsCategoryRequest $request)
@@ -132,11 +125,10 @@ class ItemsCategoryController extends AppBaseController
     /**
      * Remove the specified ItemsCategory from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

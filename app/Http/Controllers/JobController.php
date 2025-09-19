@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\JobDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateJobRequest;
 use App\Http\Requests\UpdateJobRequest;
 use App\Models\Job;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class JobController extends AppBaseController
@@ -16,7 +14,6 @@ class JobController extends AppBaseController
     /**
      * Display a listing of the Job.
      *
-     * @param JobDataTable $jobDataTable
      * @return Response
      */
     public function index(JobDataTable $jobDataTable)
@@ -37,7 +34,6 @@ class JobController extends AppBaseController
     /**
      * Store a newly created Job in storage.
      *
-     * @param CreateJobRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class JobController extends AppBaseController
     /**
      * Display the specified Job.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class JobController extends AppBaseController
     /**
      * Show the form for editing the specified Job.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class JobController extends AppBaseController
     /**
      * Update the specified Job in storage.
      *
-     * @param  int              $id
-     * @param UpdateJobRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateJobRequest $request)
@@ -125,11 +117,10 @@ class JobController extends AppBaseController
     /**
      * Remove the specified Job from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

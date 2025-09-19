@@ -1,9 +1,8 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -14,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE OR REPLACE VIEW work_orders_permits_v AS
+        DB::statement('CREATE OR REPLACE VIEW work_orders_permits_v AS
             SELECT
                 wop.*,
                 pt.name AS permit_type_name,
@@ -26,7 +25,7 @@ return new class extends Migration
             WHERE
                 wop.work_orders_permit_type_id = pt.id;
 
-                ");
+                ');
     }
 
     /**
@@ -37,6 +36,6 @@ return new class extends Migration
     public function down()
     {
         DB::statement('DROP VIEW IF EXISTS work_orders_permits_v');
-        //Schema::dropIfExists('work_orders_permits_view');
+        // Schema::dropIfExists('work_orders_permits_view');
     }
 };

@@ -19,7 +19,7 @@ class CreateWorkOrdersPermitsExtensionsTable extends Migration
             $table->date('issue_date');
             $table->date('from_date');
             $table->date('to_date');
-            $table->string('sadad_number',150);
+            $table->string('sadad_number', 150);
             $table->decimal('amount');
             $table->smallInteger('status');
             $table->longText('notes')->nullable();

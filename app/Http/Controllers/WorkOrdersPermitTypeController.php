@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\WorkOrdersPermitTypeDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateWorkOrdersPermitTypeRequest;
 use App\Http\Requests\UpdateWorkOrdersPermitTypeRequest;
 use App\Models\WorkOrdersPermitType;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class WorkOrdersPermitTypeController extends AppBaseController
@@ -16,7 +14,6 @@ class WorkOrdersPermitTypeController extends AppBaseController
     /**
      * Display a listing of the WorkOrdersPermitType.
      *
-     * @param WorkOrdersPermitTypeDataTable $workOrdersPermitTypeDataTable
      * @return Response
      */
     public function index(WorkOrdersPermitTypeDataTable $workOrdersPermitTypeDataTable)
@@ -37,7 +34,6 @@ class WorkOrdersPermitTypeController extends AppBaseController
     /**
      * Store a newly created WorkOrdersPermitType in storage.
      *
-     * @param CreateWorkOrdersPermitTypeRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class WorkOrdersPermitTypeController extends AppBaseController
     /**
      * Display the specified WorkOrdersPermitType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class WorkOrdersPermitTypeController extends AppBaseController
     /**
      * Show the form for editing the specified WorkOrdersPermitType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class WorkOrdersPermitTypeController extends AppBaseController
     /**
      * Update the specified WorkOrdersPermitType in storage.
      *
-     * @param  int              $id
-     * @param UpdateWorkOrdersPermitTypeRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateWorkOrdersPermitTypeRequest $request)
@@ -125,11 +117,10 @@ class WorkOrdersPermitTypeController extends AppBaseController
     /**
      * Remove the specified WorkOrdersPermitType from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

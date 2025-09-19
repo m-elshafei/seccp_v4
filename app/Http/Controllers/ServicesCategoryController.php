@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ServicesCategoryDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateServicesCategoryRequest;
 use App\Http\Requests\UpdateServicesCategoryRequest;
 use App\Models\ServicesCategory;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class ServicesCategoryController extends AppBaseController
@@ -16,7 +14,6 @@ class ServicesCategoryController extends AppBaseController
     /**
      * Display a listing of the ServicesCategory.
      *
-     * @param ServicesCategoryDataTable $servicesCategoryDataTable
      * @return Response
      */
     public function index(ServicesCategoryDataTable $servicesCategoryDataTable)
@@ -37,7 +34,6 @@ class ServicesCategoryController extends AppBaseController
     /**
      * Store a newly created ServicesCategory in storage.
      *
-     * @param CreateServicesCategoryRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class ServicesCategoryController extends AppBaseController
     /**
      * Display the specified ServicesCategory.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class ServicesCategoryController extends AppBaseController
     /**
      * Show the form for editing the specified ServicesCategory.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class ServicesCategoryController extends AppBaseController
     /**
      * Update the specified ServicesCategory in storage.
      *
-     * @param  int              $id
-     * @param UpdateServicesCategoryRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateServicesCategoryRequest $request)
@@ -125,11 +117,10 @@ class ServicesCategoryController extends AppBaseController
     /**
      * Remove the specified ServicesCategory from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

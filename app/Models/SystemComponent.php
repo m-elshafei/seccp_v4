@@ -2,38 +2,27 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Kalnoy\Nestedset\NodeTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use phpDocumentor\Reflection\Types\Collection;
-use PhpParser\Node\Expr\Cast\Array_;
+use Kalnoy\Nestedset\NodeTrait;
 
 /**
  * Class SystemComponent
- * @package App\Models
+ *
  * @version January 14, 2022, 8:54 pm UTC
  *
  * @property string $comp_name
- * @property integer $_lft
- * @property integer $_rgt
- * @property integer $comp_type
+ * @property int $_lft
+ * @property int $_rgt
+ * @property int $comp_type
  * @property string $route_name
- * @property integer $parent_id
+ * @property int $parent_id
  * @property string $comp_ar_label
  */
 class SystemComponent extends AppBaseModel
 {
-    use SoftDeletes , NodeTrait;
-
+    use NodeTrait , SoftDeletes;
 
     public $table = 'system_components';
-    
-    
-   
-
-
 
     public $fillable = [
         'comp_name',
@@ -47,7 +36,7 @@ class SystemComponent extends AppBaseModel
         'is_active',
         'icon_name',
         'config',
-        'description'
+        'description',
     ];
 
     /**
@@ -65,9 +54,9 @@ class SystemComponent extends AppBaseModel
         'prefix' => 'string',
         'parent_id' => 'integer',
         'comp_ar_label' => 'string',
-        'deleted_at'   =>'datetime',
-        'config'   =>'array',
-        
+        'deleted_at' => 'datetime',
+        'config' => 'array',
+
     ];
 
     /**
@@ -78,16 +67,16 @@ class SystemComponent extends AppBaseModel
     public static $rules = [
         'comp_name' => 'required',
         'comp_type' => 'required',
-        'route_name' => 'required'
+        'route_name' => 'required',
     ];
 
     /**
-     * Scope a query to only include 
+     * Scope a query to only include
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeGetSystemName($query ,$id)
+    public function scopeGetSystemName($query, $id)
     {
         $node = self::find($id);
         $parents = self::whereAncestorOf($node)->get();
@@ -96,28 +85,33 @@ class SystemComponent extends AppBaseModel
 
         return $filtered;
     }
-    
-    function parentData()  {
-        return $this->belongsTo(\App\Models\SystemComponent::class, 'parent_id' , 'id');
+
+    public function parentData()
+    {
+        return $this->belongsTo(\App\Models\SystemComponent::class, 'parent_id', 'id');
     }
 
-    function getConfig() : array {
-        return json_decode($this->config,true) ;
+    public function getConfig(): array
+    {
+        return json_decode($this->config, true);
     }
 
-    function getReportTemplateName() : string {
-        $config = $this->getConfig() ;
-        return $config['reportTemplate'] ;
+    public function getReportTemplateName(): string
+    {
+        $config = $this->getConfig();
+
+        return $config['reportTemplate'];
     }
 
-    function getReportButtonsArray() : array {
-        $config = $this->getConfig() ;
-        return $config['reportButtons'] ;
+    public function getReportButtonsArray(): array
+    {
+        $config = $this->getConfig();
+
+        return $config['reportButtons'];
     }
 
-    function getReportNumber() : string {
+    public function getReportNumber(): string
+    {
         return $this->id + 10000;
     }
-  
-
 }

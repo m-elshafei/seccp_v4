@@ -2,49 +2,40 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use App\Models\AppBaseModel;
 use App\Http\Traits\AttachmentTrait;
-use App\Models\WorkOrdersPermitsFine;
-use App\Models\WorkOrdersPermitsExtension;
 use App\Traits\Branchable;
 use App\Traits\CreatedUpdatedBy;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Helpers\Helper;
-use App\Models\WorkOrdersPermitNote;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * Class WorkOrdersPermit
- * @package App\Models
+ *
  * @version February 10, 2022, 7:16 pm UTC
  *
  * @property string $permit_number
- * @property integer $work_orders_permit_type_id
- * @property integer $sadad_number
- * @property integer $total_extend_period
+ * @property int $work_orders_permit_type_id
+ * @property int $sadad_number
+ * @property int $total_extend_period
  * @property number $issued_amount
  * @property number $total_amount
  * @property number $total_extend_amount
  * @property number $total_fines_amount
- * @property integer $period
+ * @property int $period
  * @property string $issue_date
  * @property string $start_date
  * @property string $end_date
  * @property string $notes
- * @property integer $status
+ * @property int $status
  */
 class WorkOrdersPermit extends AppBaseModel
 {
-    use SoftDeletes , AttachmentTrait , CreatedUpdatedBy , Branchable;
-
+    use AttachmentTrait , Branchable , CreatedUpdatedBy , SoftDeletes;
 
     public $table = 'work_orders_permits';
 
-
-
-
-    protected $appends = ['total_work_period','total_permit_period','total_permit_period_percentage','status_title','total_permit_period_day'];
-
+    protected $appends = ['total_work_period', 'total_permit_period', 'total_permit_period_percentage', 'status_title', 'total_permit_period_day'];
 
     public $fillable = [
         'permit_number',
@@ -84,7 +75,7 @@ class WorkOrdersPermit extends AppBaseModel
         'clearance_sdad_amount',
         'total_extend_period',
         'total_period',
-        'restablish_convert_date'
+        'restablish_convert_date',
 
     ];
 
@@ -113,7 +104,7 @@ class WorkOrdersPermit extends AppBaseModel
         'clearance_sdad_date' => 'date',
         'end_date' => 'date',
         'status' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -123,16 +114,16 @@ class WorkOrdersPermit extends AppBaseModel
      */
     public static $rules = [
 
-        'is_mission'        => 'required|in:0,1',
+        'is_mission' => 'required|in:0,1',
         // 'permit_number'     => 'required_without:sadad_number|nullable|numeric',
         // 'sadad_number'      => 'required|numeric',
         'work_orders_permit_type_id' => 'required',
         'balady_id' => 'required',
-        'issue_date'        => 'required_with:permit_number|date|nullable',
-        'end_date'          => 'required_with:permit_number|date|nullable|after:issue_date',
-        'work_order_id'     => 'required_if:is_mission,0',
-        'mission_id'        => 'required_if:is_mission,1',
-        'issued_amount'     => 'required|regex:/^\d+(\.\d{1,2})?$/'
+        'issue_date' => 'required_with:permit_number|date|nullable',
+        'end_date' => 'required_with:permit_number|date|nullable|after:issue_date',
+        'work_order_id' => 'required_if:is_mission,0',
+        'mission_id' => 'required_if:is_mission,1',
+        'issued_amount' => 'required|regex:/^\d+(\.\d{1,2})?$/',
     ];
 
     /**
@@ -141,20 +132,18 @@ class WorkOrdersPermit extends AppBaseModel
      * @var array
      */
     public static $rules_update = [
-        'permit_number'     => 'required_without:sadad_number|nullable|numeric',
-        'sadad_number'      => 'required|numeric',
+        'permit_number' => 'required_without:sadad_number|nullable|numeric',
+        'sadad_number' => 'required|numeric',
         'work_orders_permit_type_id' => 'required',
-        'issue_date'        => 'required_with:permit_number|date|nullable',
-        'end_date'          => 'required_with:permit_number|date|nullable|after:issue_date',
-        'issued_amount'     => 'required|regex:/^\d+(\.\d{1,2})?$/'
+        'issue_date' => 'required_with:permit_number|date|nullable',
+        'end_date' => 'required_with:permit_number|date|nullable|after:issue_date',
+        'issued_amount' => 'required|regex:/^\d+(\.\d{1,2})?$/',
     ];
-
 
     public function workOrdersPermitType()
     {
         return $this->belongsTo(\App\Models\WorkOrdersPermitType::class);
     }
-
 
     public function workOrdersPermitsExtension()
     {
@@ -163,7 +152,7 @@ class WorkOrdersPermit extends AppBaseModel
 
     public function user()
     {
-        return $this->hasOne(\App\Models\User::class,'id','created_by');
+        return $this->hasOne(\App\Models\User::class, 'id', 'created_by');
     }
 
     public function workOrdersPermitsFine()
@@ -178,17 +167,17 @@ class WorkOrdersPermit extends AppBaseModel
 
     public function landLayers()
     {
-        return $this->hasMany(\App\Models\LandLayer::class , 'work_orders_permit_id' , 'id' );
+        return $this->hasMany(\App\Models\LandLayer::class, 'work_orders_permit_id', 'id');
     }
 
     public function employee()
     {
-        return $this->hasMany(\App\Models\layer_employee_id::class , 'work_orders_permit_id' , 'id' );
+        return $this->hasMany(\App\Models\layer_employee_id::class, 'work_orders_permit_id', 'id');
     }
 
     public function contractor()
     {
-        return $this->hasMany(\App\Models\layer_employee_id::class , 'layer_contractor_id' , 'id' );
+        return $this->hasMany(\App\Models\layer_employee_id::class, 'layer_contractor_id', 'id');
     }
 
     /**
@@ -199,7 +188,7 @@ class WorkOrdersPermit extends AppBaseModel
      */
     public function getStartDateAttribute($value)
     {
-        return $value ;
+        return $value;
     }
 
     /**
@@ -213,11 +202,11 @@ class WorkOrdersPermit extends AppBaseModel
         return $value;
     }
 
-
     public function workOrdersPermitNote()
     {
-        return $this->hasMany(WorkOrdersPermitNote::class,'permit_number','permit_number');
+        return $this->hasMany(WorkOrdersPermitNote::class, 'permit_number', 'permit_number');
     }
+
     /**
      * Get the issue_date
      *
@@ -238,57 +227,56 @@ class WorkOrdersPermit extends AppBaseModel
     {
         return Attribute::make(
             get: function ($value, $attributes) {
-            return config("const.work_order_permit_status.".$attributes['status']);
+                return config('const.work_order_permit_status.'.$attributes['status']);
             }
         );
     }
 
     /**
      * Get the user's first name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
-     */protected function totalWorkPeriod(): Attribute
-{
-    return Attribute::make(
-        get: function ($value, $attributes) {
-            $workOrder = WorkOrder::where('work_order_number', $attributes['work_order_number'])
-                                   ->orWhere('mission_number', $attributes['work_order_number'])->first();
-            if (!$workOrder || !$workOrder->received_date) {
-                return 0;
-            }
-            $receivedDate = Carbon::parse($workOrder->received_date);
-            if ($attributes['status'] > 3) {
-                $transaction = WorkOrderTransactionsHistory::where('work_order_number', $workOrder->work_order_number)
-                                                           ->where('new_status', $attributes['status'])->latest()->first();
-                if ($transaction) {
-                    $transactionDate = Carbon::parse($transaction->created_at);
-                    return $receivedDate->diffInDays($transactionDate);
+     */
+    protected function totalWorkPeriod(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, $attributes) {
+                $workOrder = WorkOrder::where('work_order_number', $attributes['work_order_number'])
+                    ->orWhere('mission_number', $attributes['work_order_number'])->first();
+                if (! $workOrder || ! $workOrder->received_date) {
+                    return 0;
                 }
+                $receivedDate = Carbon::parse($workOrder->received_date);
+                if ($attributes['status'] > 3) {
+                    $transaction = WorkOrderTransactionsHistory::where('work_order_number', $workOrder->work_order_number)
+                        ->where('new_status', $attributes['status'])->latest()->first();
+                    if ($transaction) {
+                        $transactionDate = Carbon::parse($transaction->created_at);
+
+                        return $receivedDate->diffInDays($transactionDate);
+                    }
+                }
+
+                return $receivedDate->diffInDays(Carbon::now());
             }
-            return $receivedDate->diffInDays(Carbon::now());
-        }
-    );
-}
-
-
-
-
+        );
+    }
 
     protected function totalPermitPeriodPercentage(): Attribute
     {
         return Attribute::make(
             get: function ($value, $attributes) {
-                if($attributes['issue_date']  ){
-                   $totalPermitPeriodPercentage = 0;
+                if ($attributes['issue_date']) {
+                    $totalPermitPeriodPercentage = 0;
                     $dt1 = Carbon::now();
                     $dt2 = Carbon::createFromFormat('Y-m-d', $attributes['issue_date']);
-                    $diff =$dt2->diffInDays($dt1);
-                    if($attributes['period'] > 0){
-                    $totalPermitPeriodPercentage = ($diff / $attributes['period'])*100;
+                    $diff = $dt2->diffInDays($dt1);
+                    if ($attributes['period'] > 0) {
+                        $totalPermitPeriodPercentage = ($diff / $attributes['period']) * 100;
                     }
-                    return (int) $totalPermitPeriodPercentage ;
+
+                    return (int) $totalPermitPeriodPercentage;
                 }
-                return 0 ;
+
+                return 0;
 
             }
         );
@@ -298,28 +286,20 @@ class WorkOrdersPermit extends AppBaseModel
     {
         return Attribute::make(
             get: function ($value, $attributes) {
-                if ($attributes['issue_date']){
+                if ($attributes['issue_date']) {
                     $dt1 = Carbon::now();
                     $dt2 = Carbon::createFromFormat('Y-m-d', $attributes['issue_date']);
                     $diff = $dt2->diffInDays($dt1);
-                    if (!isset($attributes['period']) || $attributes['period'] < 0) {
+                    if (! isset($attributes['period']) || $attributes['period'] < 0) {
                         return 0;
                     }
                     $remainingDays = $attributes['period'] - $diff;
+
                     return max($remainingDays, 0);
-                }else{
-                    return "-";
+                } else {
+                    return '-';
                 }
             }
         );
     }
-
-
-
 }
-
-
-
-
-
-

@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\DataTables\SiteSettingDataTable;
 use App\Http\Requests\CreateSiteSettingRequest;
 use App\Http\Requests\UpdateSiteSettingRequest;
-use App\Http\Controllers\AppBaseController;
-use Illuminate\Support\Facades\Storage;
 use App\Models\SiteSetting;
-use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Support\Facades\Storage;
 
 class SiteSettingController extends AppBaseController
 {
@@ -20,7 +18,6 @@ class SiteSettingController extends AppBaseController
     {
         return $siteSettingDataTable->render('site_settings.index');
     }
-
 
     /**
      * Show the form for creating a new SiteSetting.
@@ -39,11 +36,11 @@ class SiteSettingController extends AppBaseController
         $logoPath = $request->logo_path;
         $bigPhoto = $request->big_photo;
         if ($logoPath) {
-            $logoFile = Storage::disk('logo')->put("", $logoPath);
+            $logoFile = Storage::disk('logo')->put('', $logoPath);
             $input['logo_path'] = $logoFile;
         }
         if ($bigPhoto) {
-            $filePath = Storage::disk('logo')->put("", $bigPhoto);
+            $filePath = Storage::disk('logo')->put('', $bigPhoto);
             $input['big_photo'] = $filePath;
         }
         $siteSetting = SiteSetting::create($input);
@@ -52,7 +49,6 @@ class SiteSettingController extends AppBaseController
 
         return redirect(route('siteSettings.index'));
     }
-
 
     /**
      * Display the specified SiteSetting.
@@ -63,7 +59,7 @@ class SiteSettingController extends AppBaseController
         $siteSetting = SiteSetting::find($id);
 
         if (empty($siteSetting)) {
-            Flash::error(__('models/siteSettings.singular') . ' ' . __('messages.not_found'));
+            Flash::error(__('models/siteSettings.singular').' '.__('messages.not_found'));
 
             return redirect(route('siteSettings.index'));
         }
@@ -80,7 +76,7 @@ class SiteSettingController extends AppBaseController
         $siteSetting = SiteSetting::find($id);
 
         if (empty($siteSetting)) {
-            Flash::error(__('models/siteSettings.singular') . ' ' . __('messages.not_found'));
+            Flash::error(__('models/siteSettings.singular').' '.__('messages.not_found'));
 
             return redirect(route('siteSettings.index'));
         }
@@ -97,18 +93,16 @@ class SiteSettingController extends AppBaseController
 
         $file = $request->logo_path;
         if ($file) {
-            $filePath = Storage::disk('logo')->put("", $file);
+            $filePath = Storage::disk('logo')->put('', $file);
             $input['logo_path'] = $filePath;
         }
         $bigPhoto = $request->big_photo;
         if ($bigPhoto) {
-            $filePath = Storage::disk('logo')->put("", $bigPhoto);
+            $filePath = Storage::disk('logo')->put('', $bigPhoto);
             $input['big_photo'] = $filePath;
         }
 
         $siteSetting->update($input);
-
-
 
         Flash::success(__('messages.updated', ['model' => __('models/siteSettings.singular')]));
 
@@ -126,7 +120,7 @@ class SiteSettingController extends AppBaseController
         $siteSetting = SiteSetting::find($id);
 
         if (empty($siteSetting)) {
-            Flash::error(__('models/siteSettings.singular') . ' ' . __('messages.not_found'));
+            Flash::error(__('models/siteSettings.singular').' '.__('messages.not_found'));
 
             return redirect(route('siteSettings.index'));
         }

@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -14,7 +12,7 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE OR REPLACE VIEW emergency_missions_v AS
+        DB::statement('CREATE OR REPLACE VIEW emergency_missions_v AS
             select wo.*  ,(select dep.name  from departments dep WHERE dep.id=wo.current_department_id) as current_department_name,
             (select  l.cabel_length_hv + l.cabel_length_lv70 + l.cabel_length_lv185+ l.cabel_length_lv300 from landscape_information l where l.work_order_id = wo.id) as total_cabel_length
             ,(select wop.permit_number  from work_orders_permits wop ,work_order_work_orders_permit p WHERE wop.id =p.work_orders_permit_id and p.work_order_id = wo.id LIMIT 1) permit_number
@@ -28,7 +26,7 @@ return new class extends Migration
 			from work_orders wo
 			where
             wo.is_emergency_mission =1;
-        ");
+        ');
     }
 
     /**

@@ -3,25 +3,22 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
-
-
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class FinancialDue
- * @package App\Models
+ *
  * @version May 21, 2022, 7:11 pm UTC
  *
  * @property string $due_no
  * @property string $due_date
- * @property integer $status
- * @property integer $financial_due_type_id
- * @property integer $electricity_department_id
+ * @property int $status
+ * @property int $financial_due_type_id
+ * @property int $electricity_department_id
  * @property number $total_amount
  * @property number $total_fines_amount
  * @property number $total_net_amount
@@ -29,20 +26,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class FinancialDue extends AppBaseModel
 {
-    use LogsActivity;
-    use SoftDeletes;
     use Branchable;
     use CreatedUpdatedBy;
-
-
+    use LogsActivity;
+    use SoftDeletes;
 
     public $table = 'financial_dues';
-    
-
-   
-
-
-
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -62,7 +51,7 @@ class FinancialDue extends AppBaseModel
         'total_amount',
         'total_fines_amount',
         'total_net_amount',
-        'notes'
+        'notes',
     ];
 
     /**
@@ -80,7 +69,7 @@ class FinancialDue extends AppBaseModel
         'total_amount' => 'decimal:2',
         'total_fines_amount' => 'decimal:2',
         'total_net_amount' => 'decimal:2',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -98,12 +87,11 @@ class FinancialDue extends AppBaseModel
         'total_net_amount' => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
     ];
 
-
     public function financialDueType()
     {
         return $this->belongsTo(FinancialDueType::class);
     }
-    
+
     public function electricityDepartment()
     {
         return $this->belongsTo(ElectricityDepartment::class);
@@ -114,12 +102,11 @@ class FinancialDue extends AppBaseModel
      **/
     public function workOrder()
     {
-        return $this->belongsToMany(WorkOrder::class,'work_order_financial_due');
+        return $this->belongsToMany(WorkOrder::class, 'work_order_financial_due');
     }
 
-
-
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\FinancialDue']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\FinancialDue']);
     }
 }

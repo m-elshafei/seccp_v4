@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -14,7 +12,7 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE OR REPLACE VIEW work_orders_follows_v AS
+        DB::statement('CREATE OR REPLACE VIEW work_orders_follows_v AS
             select wop.*,wowop.work_order_id ,wo.work_order_number,wo.mission_number,wo.work_type_id ,wo.is_emergency_mission ,wo.status work_order_status
             ,wo.work_period as work_order_period
             ,wo.received_date as work_order_received_date ,p.name  layer_name ,p.lab_result_status ,p.start_date layer_date
@@ -35,7 +33,7 @@ return new class extends Migration
              ) p ON wowop.work_orders_permit_id  = p.work_orders_permit_id
               WHERE  wo.deleted_at IS NULL and wop.deleted_at  IS NULL
             ;
-        ");
+        ');
     }
 
     /**

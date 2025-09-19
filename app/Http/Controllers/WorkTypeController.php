@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Flash;
-use Response;
-use App\Http\Requests;
-use App\Models\WorkType;
-use App\Models\Department;
 use App\DataTables\WorkTypeDataTable;
-use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CreateWorkTypeRequest;
 use App\Http\Requests\UpdateWorkTypeRequest;
+use App\Models\Department;
+use App\Models\WorkType;
+use Flash;
+use Response;
 
 class WorkTypeController extends AppBaseController
 {
     /**
      * Display a listing of the WorkType.
      *
-     * @param WorkTypeDataTable $workTypeDataTable
      * @return Response
      */
     public function index(WorkTypeDataTable $workTypeDataTable)
@@ -32,15 +29,15 @@ class WorkTypeController extends AppBaseController
      */
     public function create()
     {
-        $departmentsList =Department::pluck('name', 'id');
-        $departmentsList->prepend("اختر","");
-        return view('work_types.create',compact('departmentsList'));
+        $departmentsList = Department::pluck('name', 'id');
+        $departmentsList->prepend('اختر', '');
+
+        return view('work_types.create', compact('departmentsList'));
     }
 
     /**
      * Store a newly created WorkType in storage.
      *
-     * @param CreateWorkTypeRequest $request
      *
      * @return Response
      */
@@ -59,8 +56,7 @@ class WorkTypeController extends AppBaseController
     /**
      * Display the specified WorkType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -80,8 +76,7 @@ class WorkTypeController extends AppBaseController
     /**
      * Show the form for editing the specified WorkType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -94,17 +89,16 @@ class WorkTypeController extends AppBaseController
 
             return redirect(route('workTypes.index'));
         }
-        $departmentsList =Department::pluck('name', 'id');
-        $departmentsList->prepend("اختر","");
-        return view('work_types.edit' ,compact('workType','departmentsList'));
+        $departmentsList = Department::pluck('name', 'id');
+        $departmentsList->prepend('اختر', '');
+
+        return view('work_types.edit', compact('workType', 'departmentsList'));
     }
 
     /**
      * Update the specified WorkType in storage.
      *
-     * @param  int              $id
-     * @param UpdateWorkTypeRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateWorkTypeRequest $request)
@@ -129,11 +123,10 @@ class WorkTypeController extends AppBaseController
     /**
      * Remove the specified WorkType from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

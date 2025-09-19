@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateElectricityDepartmentsTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -16,7 +15,7 @@ class CreateElectricityDepartmentsTable extends Migration
     {
         Schema::create('electricity_departments', function (Blueprint $table) {
             $table->id('id');
-            $table->string("name",150);
+            $table->string('name', 150);
             $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();

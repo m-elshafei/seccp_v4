@@ -7,16 +7,18 @@ use Illuminate\View\Component;
 class FileinputCustom extends Component
 {
     public $name;
+
     public $labelTitle;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name,$labelTitle="")
+    public function __construct($name, $labelTitle = '')
     {
-        $this->name=$name;
-        $this->labelTitle=$labelTitle;
+        $this->name = $name;
+        $this->labelTitle = $labelTitle;
     }
 
     /**

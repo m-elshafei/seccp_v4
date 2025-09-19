@@ -2,26 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Flash;
-use Response;
-use App\Models\City;
-use App\Http\Requests;
-use App\Models\District;
 use App\DataTables\DistrictDataTable;
-use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CreateDistrictRequest;
 use App\Http\Requests\UpdateDistrictRequest;
+use App\Models\District;
 use App\Repositories\DistrictRepository;
+use Flash;
+use Response;
 
 class DistrictController extends AppBaseController
 {
     /**
      * Display a listing of the District.
      *
-     * @param DistrictDataTable $districtDataTable
+     * @param  DistrictDataTable  $districtDataTable
      * @return Response
      */
-
     public $districtRepository;
 
     public function __construct(DistrictRepository $districtRepository)
@@ -50,7 +46,6 @@ class DistrictController extends AppBaseController
     /**
      * Store a newly created District in storage.
      *
-     * @param CreateDistrictRequest $request
      *
      * @return Response
      */
@@ -69,8 +64,7 @@ class DistrictController extends AppBaseController
     /**
      * Display the specified District.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -90,8 +84,7 @@ class DistrictController extends AppBaseController
     /**
      * Show the form for editing the specified District.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -112,9 +105,7 @@ class DistrictController extends AppBaseController
     /**
      * Update the specified District in storage.
      *
-     * @param  int              $id
-     * @param UpdateDistrictRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateDistrictRequest $request)
@@ -128,7 +119,6 @@ class DistrictController extends AppBaseController
             return redirect(route('districts.index'));
         }
 
-
         $district = $this->districtRepository->update($district, $request->all());
 
         Flash::success(__('messages.updated', ['model' => __('models/districts.singular')]));
@@ -139,11 +129,10 @@ class DistrictController extends AppBaseController
     /**
      * Remove the specified District from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

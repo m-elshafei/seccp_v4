@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\EmergencyIssuesType;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateEmergencyIssuesTypeRequest extends FormRequest
 {

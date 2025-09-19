@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\FinancialDueType;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateFinancialDueTypeRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *

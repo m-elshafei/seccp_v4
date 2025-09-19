@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'Asia/Riyadh',//'UTC',
+    'timezone' => 'Asia/Riyadh', // 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -235,10 +235,10 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Helper' => App\Helpers\Helper::class,
 
-        'Flash'     => Laracasts\Flash\Flash::class,
+        'Flash' => Laracasts\Flash\Flash::class,
 
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
-        'Telegram'  => Telegram\Bot\Laravel\Facades\Telegram::class,
+        'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
 
         'PDF' => Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::class,
         'UserPermissions' => App\Helpers\UserPermissions::class,

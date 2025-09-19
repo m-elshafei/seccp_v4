@@ -3,14 +3,12 @@
 namespace App\DataTables;
 
 use App\Models\Layer;
-use App\DataTables\AppDataTable;
 use Yajra\DataTables\Html\Column;
 
 class LayerDataTable extends AppDataTable
 {
-
-
-    function __construct() {
+    public function __construct()
+    {
         $this->dataTableName = 'layers';
         $this->actionViewBlade = 'layers.datatables_actions';
     }
@@ -18,7 +16,6 @@ class LayerDataTable extends AppDataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Layer $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(Layer $model)
@@ -40,15 +37,14 @@ class LayerDataTable extends AppDataTable
             'is_final' => new Column([
                 'title' => __('models/layers.fields.is_final'),
                 'data' => 'is_final',
-                'render'=> 'function() {
+                'render' => 'function() {
                      if (data) {
                         return "نهائي";
                      }else{
                         return "-";
                      }
-                }'
-            ])
+                }',
+            ]),
         ];
     }
-
 }

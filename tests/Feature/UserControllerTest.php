@@ -1,13 +1,13 @@
 <?php
+
+use App\Http\Controllers\UserController;
+use App\Http\Requests\CreateUserRequest;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\ValidationException;
-use App\Http\Requests\CreateUserRequest;
-use App\Models\User;
-use App\Http\Controllers\UserController;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -20,7 +20,7 @@ class UserControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->userController = new UserController();
+        $this->userController = new UserController;
     }
 
     public function test_store()
@@ -54,7 +54,7 @@ class UserControllerTest extends TestCase
 
         // Assert that the password has been hashed
         $createdUser = User::where('username', $data['username'])->first();
-        $this->assertTrue(Hash::check($data['username'] . '@Alfaseel', $createdUser->password));
+        $this->assertTrue(Hash::check($data['username'].'@Alfaseel', $createdUser->password));
 
         // Assert that a RedirectResponse is returned and user is redirected to the expected route
         $this->assertInstanceOf(RedirectResponse::class, $response);

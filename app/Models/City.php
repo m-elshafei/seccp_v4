@@ -2,24 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class City
- * @package App\Models
+ *
  * @version December 4, 2021, 8:20 pm UTC
  *
  * @property string $name
  */
 class City extends AppBaseModel
 {
-    use SoftDeletes, LogsActivity , CreatedUpdatedBy;
+    use CreatedUpdatedBy, LogsActivity , SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -30,16 +28,10 @@ class City extends AppBaseModel
             ->logAll();
     }
 
-
     public $table = 'cities';
-    
-
-   
-
-
 
     public $fillable = [
-        'name'
+        'name',
     ];
 
     /**
@@ -50,7 +42,7 @@ class City extends AppBaseModel
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -59,12 +51,11 @@ class City extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\City']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\City']);
     }
-
-    
 }

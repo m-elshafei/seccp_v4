@@ -7,18 +7,21 @@ use Illuminate\View\Component;
 class NumberTouchSpin extends Component
 {
     public $name;
+
     public $labelTitle;
+
     public $defaultValue;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name,$labelTitle="",$defaultValue=null)
+    public function __construct($name, $labelTitle = '', $defaultValue = null)
     {
-        $this->name=$name;
-        $this->labelTitle=$labelTitle;
-        $this->defaultValue=$defaultValue;
+        $this->name = $name;
+        $this->labelTitle = $labelTitle;
+        $this->defaultValue = $defaultValue;
     }
 
     /**

@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ElectricityDepartmentDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateElectricityDepartmentRequest;
 use App\Http\Requests\UpdateElectricityDepartmentRequest;
 use App\Models\ElectricityDepartment;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class ElectricityDepartmentController extends AppBaseController
@@ -16,7 +14,6 @@ class ElectricityDepartmentController extends AppBaseController
     /**
      * Display a listing of the ElectricityDepartment.
      *
-     * @param ElectricityDepartmentDataTable $electricityDepartmentDataTable
      * @return Response
      */
     public function index(ElectricityDepartmentDataTable $electricityDepartmentDataTable)
@@ -37,7 +34,6 @@ class ElectricityDepartmentController extends AppBaseController
     /**
      * Store a newly created ElectricityDepartment in storage.
      *
-     * @param CreateElectricityDepartmentRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class ElectricityDepartmentController extends AppBaseController
     /**
      * Display the specified ElectricityDepartment.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class ElectricityDepartmentController extends AppBaseController
     /**
      * Show the form for editing the specified ElectricityDepartment.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class ElectricityDepartmentController extends AppBaseController
     /**
      * Update the specified ElectricityDepartment in storage.
      *
-     * @param  int              $id
-     * @param UpdateElectricityDepartmentRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateElectricityDepartmentRequest $request)
@@ -125,11 +117,10 @@ class ElectricityDepartmentController extends AppBaseController
     /**
      * Remove the specified ElectricityDepartment from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

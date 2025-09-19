@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class StaterkitController extends Controller
 {
     // home
@@ -13,8 +11,9 @@ class StaterkitController extends Controller
         //     ['link' => "home", 'name' => __("Home")], ['name' => __("Index")]
         // ];
         $breadcrumbs = [
-            ['link' => "home", 'name' => __("Home")]
+            ['link' => 'home', 'name' => __('Home')],
         ];
+
         return view('/content/home', ['breadcrumbs' => $breadcrumbs]);
     }
 
@@ -23,8 +22,9 @@ class StaterkitController extends Controller
     {
         $pageConfigs = ['sidebarCollapsed' => true];
         $breadcrumbs = [
-            ['link' => "home", 'name' => "Home"], ['link' => "javascript:void(0)", 'name' => "Layouts"], ['name' => "Collapsed menu"]
+            ['link' => 'home', 'name' => 'Home'], ['link' => 'javascript:void(0)', 'name' => 'Layouts'], ['name' => 'Collapsed menu'],
         ];
+
         return view('/content/layout-collapsed-menu', ['breadcrumbs' => $breadcrumbs, 'pageConfigs' => $pageConfigs]);
     }
 
@@ -34,8 +34,9 @@ class StaterkitController extends Controller
         $pageConfigs = ['layoutWidth' => 'full'];
 
         $breadcrumbs = [
-            ['link' => "home", 'name' => "Home"], ['name' => "Layouts"], ['name' => "Layout Full"]
+            ['link' => 'home', 'name' => 'Home'], ['name' => 'Layouts'], ['name' => 'Layout Full'],
         ];
+
         return view('/content/layout-full', ['pageConfigs' => $pageConfigs, 'breadcrumbs' => $breadcrumbs]);
     }
 
@@ -44,21 +45,25 @@ class StaterkitController extends Controller
     {
         $pageConfigs = ['showMenu' => false];
         $breadcrumbs = [
-            ['link' => "home", 'name' => "Home"], ['link' => "javascript:void(0)", 'name' => "Layouts"], ['name' => "Layout without menu"]
+            ['link' => 'home', 'name' => 'Home'], ['link' => 'javascript:void(0)', 'name' => 'Layouts'], ['name' => 'Layout without menu'],
         ];
+
         return view('/content/layout-without-menu', ['breadcrumbs' => $breadcrumbs, 'pageConfigs' => $pageConfigs]);
     }
 
     // Empty Layout
     public function layout_empty()
     {
-        $breadcrumbs = [['link' => "home", 'name' => "Home"], ['link' => "javascript:void(0)", 'name' => "Layouts"], ['name' => "Layout Empty"]];
+        $breadcrumbs = [['link' => 'home', 'name' => 'Home'], ['link' => 'javascript:void(0)', 'name' => 'Layouts'], ['name' => 'Layout Empty']];
+
         return view('/content/layout-empty', ['breadcrumbs' => $breadcrumbs]);
     }
+
     // Blank Layout
     public function layout_blank()
     {
         $pageConfigs = ['blankPage' => true];
+
         return view('/content/layout-blank', ['pageConfigs' => $pageConfigs]);
     }
 }

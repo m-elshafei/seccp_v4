@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateWorkOrdersTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -27,7 +26,7 @@ class CreateWorkOrdersTable extends Migration
             $table->foreignId('city_id')->constrained();
             $table->foreignId('district_id')->nullable()->constrained();
             $table->foreignId('parent_id')->nullable()->constrained('work_orders');
-            
+
             $table->string('x_axis')->nullable();
             $table->string('y_axis')->nullable();
             $table->string('street_name')->nullable();
@@ -45,17 +44,16 @@ class CreateWorkOrdersTable extends Migration
             $table->integer('electrical_operations_status')->default(0);
             $table->integer('assay_forms_status')->default(0);
             $table->integer('gis_status')->default(0);
-            
+
             /* for missions */
             $table->integer('is_emergency_mission')->default(0);
             $table->integer('mission_typeـid')->nullable();
-            
+
             // $table->integer('mission_received_employee')->nullable();
             // $table->string('mission_opreation_number')->nullable();
             // $table->string('mission_meter_number')->nullable();
             // $table->integer('shift_number')->nullable();
             // $table->string('electricity_employee_name')->nullable();
-
 
             /*************** */
             $table->text('description')->nullable();

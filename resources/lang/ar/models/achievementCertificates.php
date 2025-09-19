@@ -15,9 +15,9 @@ return [
         'notes' => 'ملاحظات',
         'created_at' => 'Created At',
         'updated_at' => 'Updated At',
-        'fines_amount_percentage'  => 'نسبة الغرامات'
-  ],
+        'fines_amount_percentage' => 'نسبة الغرامات',
+    ],
     'no work order available' => 'لا يوجد طلب عمل مكتمل او مقايسة معتمدة',
     'cannot change approved coc' => 'الشهادة معتمدة ولا يمكن التعديل عليها',
-    'The coc status should be new' => 'يجب ان تكون حالة الشهادة جديدة'
+    'The coc status should be new' => 'يجب ان تكون حالة الشهادة جديدة',
 ];

@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\UnitDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateUnitRequest;
 use App\Http\Requests\UpdateUnitRequest;
 use App\Models\Unit;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class UnitController extends AppBaseController
@@ -16,7 +14,6 @@ class UnitController extends AppBaseController
     /**
      * Display a listing of the Unit.
      *
-     * @param UnitDataTable $unitDataTable
      * @return Response
      */
     public function index(UnitDataTable $unitDataTable)
@@ -37,7 +34,6 @@ class UnitController extends AppBaseController
     /**
      * Store a newly created Unit in storage.
      *
-     * @param CreateUnitRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class UnitController extends AppBaseController
     /**
      * Display the specified Unit.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class UnitController extends AppBaseController
     /**
      * Show the form for editing the specified Unit.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class UnitController extends AppBaseController
     /**
      * Update the specified Unit in storage.
      *
-     * @param  int              $id
-     * @param UpdateUnitRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateUnitRequest $request)
@@ -125,11 +117,10 @@ class UnitController extends AppBaseController
     /**
      * Remove the specified Unit from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

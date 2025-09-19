@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\WorkOrdersPermit;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateWorkOrdersPermitRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,6 +29,7 @@ class CreateWorkOrdersPermitRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
+     *
      * @return string[]
      */
     public function messages()

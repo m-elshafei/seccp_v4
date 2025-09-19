@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Helpers\Helper;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-use App\Helpers\Helper;
-
 
 class DatabaseDelete extends Command
 {
@@ -44,30 +42,30 @@ class DatabaseDelete extends Command
 
         $path = database_path('backups');
         $files = File::glob("$path/*");
-        $today = File::glob("$path/" . date('Y-m-d') . "*");
+        $today = File::glob("$path/".date('Y-m-d').'*');
         $oldFiles = [];
 
         if ($files) {
             foreach ($files as $file) {
-                if (!in_array($file, $today)) {
+                if (! in_array($file, $today)) {
                     File::delete($file);
                     $oldFiles[] = $file;
                 }
             }
         }
 
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             mkdir($path, 0755, true);
         }
 
         if ($oldFiles != null) {
-            $this->info("File\n\n".implode("\n",$oldFiles)."\n\ndeleted Successfully");
-            $message = "File\n\n".implode("\n",$oldFiles)."\n\ndeleted Successfully";
-        }else {
-            $this->info("No files found to delete");
+            $this->info("File\n\n".implode("\n", $oldFiles)."\n\ndeleted Successfully");
+            $message = "File\n\n".implode("\n", $oldFiles)."\n\ndeleted Successfully";
+        } else {
+            $this->info('No files found to delete');
             $message = 'No sql files found to delete';
         }
-    
+
         // Helper::SendTelegramNotifications('databaseDeleted', basename($file),8);
 
     }

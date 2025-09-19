@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use DB;
+use Illuminate\Console\Command;
 use Mail;
 
 class invoiceMonthly extends Command
@@ -39,28 +39,28 @@ class invoiceMonthly extends Command
      */
     public function handle()
     {
-         $today = date('Y-m-d');
-            $notPayed = DB::table('invoice')->where('date_to', '=', $today)->get();
-            if($notPayed){
-                $date_to = date('Y-m-d', strtotime('+1 month'));
-                foreach ($notPayed as $one){
-                    $invoice = array(
+        $today = date('Y-m-d');
+        $notPayed = DB::table('invoice')->where('date_to', '=', $today)->get();
+        if ($notPayed) {
+            $date_to = date('Y-m-d', strtotime('+1 month'));
+            foreach ($notPayed as $one) {
+                $invoice = [
                     'user_id' => $one->user_id,
                     'date_from' => $today,
-                    'date_to' => $date_to
-                    );
-                    DB::table('invoice')->insert($invoice);
-                    if ($one->state == 0){
-                       DB::table('users')
+                    'date_to' => $date_to,
+                ];
+                DB::table('invoice')->insert($invoice);
+                if ($one->state == 0) {
+                    DB::table('users')
                         ->where('id', $one->user_id)->orWhere('subuser', $one->user_id)
                         ->update(['subuser_No' => 0]);
-                    }
-                    $user = DB::table('users')->where('id', '=', $one->user_id)->first();
-                    Mail::send('emails.didntPay', ['user' => $user], function ($m) use ($user) {
-                    //$m->from('info@muqaym.com', 'منصة المقيّم العقاري');
+                }
+                $user = DB::table('users')->where('id', '=', $one->user_id)->first();
+                Mail::send('emails.didntPay', ['user' => $user], function ($m) use ($user) {
+                    // $m->from('info@muqaym.com', 'منصة المقيّم العقاري');
                     $m->to($user->email)->subject('تم إغلاق بعض الخصائص من حسابك, يرجى الإسراع بالسداد');
                 });
             }
-         }
+        }
     }
 }

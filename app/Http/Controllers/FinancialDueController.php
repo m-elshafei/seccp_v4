@@ -2,33 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Helpers\Helper;
-use App\Models\WorkOrder;
-use Laracasts\Flash\Flash;
-use App\Models\FinancialDue;
-use Illuminate\Http\Request;
-use App\Models\FinancialDueType;
-use Illuminate\Support\Facades\DB;
-use App\Models\ElectricityDepartment;
-use App\Models\AchievementCertificate;
-use Illuminate\Support\Facades\Response;
 use App\DataTables\FinancialDueDataTable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\AppBaseController;
+use App\Helpers\Helper;
 use App\Http\Requests\CreateFinancialDueRequest;
 use App\Http\Requests\UpdateFinancialDueRequest;
-
+use App\Models\AchievementCertificate;
+use App\Models\ElectricityDepartment;
+use App\Models\FinancialDue;
+use App\Models\FinancialDueType;
+use App\Models\WorkOrder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+use Laracasts\Flash\Flash;
 
 class FinancialDueController extends AppBaseController
 {
     const STATUS_NEW = 2;
+
     const STATUS_APPROVED = 1;
+
     /**
      * Display a listing of the FinancialDue.
      *
-     * @param FinancialDueDataTable $financialDueDataTable
      * @return Response
      */
     public function index(FinancialDueDataTable $financialDueDataTable)
@@ -43,13 +41,13 @@ class FinancialDueController extends AppBaseController
      */
     public function create()
     {
-        $financialDueTypes =FinancialDueType::pluck('name', 'id');
-        $financialDueTypes->prepend("اختر","");
+        $financialDueTypes = FinancialDueType::pluck('name', 'id');
+        $financialDueTypes->prepend('اختر', '');
 
-        $electricityDepartments =ElectricityDepartment::pluck('name', 'id');
-        $electricityDepartments->prepend("اختر","");
+        $electricityDepartments = ElectricityDepartment::pluck('name', 'id');
+        $electricityDepartments->prepend('اختر', '');
 
-        return view('financial_dues.create',compact(
+        return view('financial_dues.create', compact(
             'financialDueTypes',
             'electricityDepartments'));
     }
@@ -57,7 +55,6 @@ class FinancialDueController extends AppBaseController
     /**
      * Store a newly created FinancialDue in storage.
      *
-     * @param CreateFinancialDueRequest $request
      *
      * @return Response
      */
@@ -71,14 +68,13 @@ class FinancialDueController extends AppBaseController
 
         Flash::success(__('messages.saved', ['model' => __('models/financialDues.singular')]));
 
-        return Helper::redirectAfterSaving($financialDue->id,$request,"financialDues");
+        return Helper::redirectAfterSaving($financialDue->id, $request, 'financialDues');
     }
 
     /**
      * Display the specified FinancialDue.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -101,7 +97,8 @@ class FinancialDueController extends AppBaseController
      * @param $financial_due_id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function deleteWorkOrder($financial_due_id,$work_order_id){
+    public function deleteWorkOrder($financial_due_id, $work_order_id)
+    {
         $financialDue = FinancialDue::find($financial_due_id);
 
         if (empty($financialDue)) {
@@ -109,17 +106,18 @@ class FinancialDueController extends AppBaseController
 
             return redirect(route('financialDues.index'));
         }
-        Flash::info("تم حذف الربط");
+        Flash::info('تم حذف الربط');
         $financialDue->workOrder()->detach($work_order_id);
 
-        $work_order_ids = $financialDue->workOrder()->pluck("work_order_id");
+        $work_order_ids = $financialDue->workOrder()->pluck('work_order_id');
 
-        $achievementCertificate = AchievementCertificate::whereIn('id',$work_order_ids)->get();
-        $financialDue->total_amount = $achievementCertificate->sum("amount");
-        $financialDue->total_fines_amount = $achievementCertificate->sum("fines_amount");
-        $financialDue->total_net_amount = $achievementCertificate->sum("net_amount");
-        $financialDue->total_final_amount= $achievementCertificate->sum("final_amount");
+        $achievementCertificate = AchievementCertificate::whereIn('id', $work_order_ids)->get();
+        $financialDue->total_amount = $achievementCertificate->sum('amount');
+        $financialDue->total_fines_amount = $achievementCertificate->sum('fines_amount');
+        $financialDue->total_net_amount = $achievementCertificate->sum('net_amount');
+        $financialDue->total_final_amount = $achievementCertificate->sum('final_amount');
         $financialDue->save();
+
         return redirect()->back();
     }
 
@@ -129,15 +127,15 @@ class FinancialDueController extends AppBaseController
      * @param $financial_due_id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function storeWorkOrder(Request $request, $financial_due_id){
+    public function storeWorkOrder(Request $request, $financial_due_id)
+    {
         Validator::make($request->all(), [
             'work_order_ids' => [
                 'required',
                 'array',
             ],
         ]);
-        DB::transaction(function() use ($request ,$financial_due_id)
-        {
+        DB::transaction(function () use ($request, $financial_due_id) {
             $financialDue = FinancialDue::find($financial_due_id);
 
             if (empty($financialDue)) {
@@ -146,36 +144,36 @@ class FinancialDueController extends AppBaseController
                 return redirect(route('financialDues.index'));
             }
 
-            $financialDue->workOrder()->syncWithoutDetaching($request->get("work_order_ids"));
-            $work_order_ids = $financialDue->workOrder()->pluck("work_order_id");
+            $financialDue->workOrder()->syncWithoutDetaching($request->get('work_order_ids'));
+            $work_order_ids = $financialDue->workOrder()->pluck('work_order_id');
 
-            $achievementCertificate = AchievementCertificate::whereIn('work_order_id',$work_order_ids)->get();
+            $achievementCertificate = AchievementCertificate::whereIn('work_order_id', $work_order_ids)->get();
 
-            $financialDue->total_amount = $achievementCertificate->sum("amount");
-            $financialDue->total_fines_amount = $achievementCertificate->sum("fines_amount");
-            $financialDue->total_net_amount = $achievementCertificate->sum("net_amount");
-            $financialDue->total_final_amount = $achievementCertificate->sum("final_amount");
+            $financialDue->total_amount = $achievementCertificate->sum('amount');
+            $financialDue->total_fines_amount = $achievementCertificate->sum('fines_amount');
+            $financialDue->total_net_amount = $achievementCertificate->sum('net_amount');
+            $financialDue->total_final_amount = $achievementCertificate->sum('final_amount');
             $financialDue->save();
         });
         Flash::success(__('messages.saved', ['model' => __('models/financialDues.singular')]));
+
         return redirect()->back();
     }
 
     /**
      * Show the form for editing the specified FinancialDue.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
     {
         /** @var FinancialDue $financialDue */
         $financialDue = FinancialDue::with([
-            "workOrder",
-            "workOrder.workType",
-            "workOrder.achievementCertificate",
-            "workOrder.currentDepartment"
+            'workOrder',
+            'workOrder.workType',
+            'workOrder.achievementCertificate',
+            'workOrder.currentDepartment',
         ])->find($id);
 
         if (empty($financialDue)) {
@@ -183,36 +181,35 @@ class FinancialDueController extends AppBaseController
 
             return redirect(route('financialDues.index'));
         }
-        if($financialDue->status == self::STATUS_APPROVED){
+        if ($financialDue->status == self::STATUS_APPROVED) {
             Flash::error(__('models/financialDues.cannot change approved financial Due'));
 
             return redirect(route('financialDues.index'));
         }
-        //dd($financialDue);
+        // dd($financialDue);
 
-        $financialDueTypes =FinancialDueType::pluck('name', 'id');
-        $financialDueTypes->prepend("اختر","");
+        $financialDueTypes = FinancialDueType::pluck('name', 'id');
+        $financialDueTypes->prepend('اختر', '');
 
-        $electricityDepartments =ElectricityDepartment::pluck('name', 'id');
-        $electricityDepartments->prepend("اختر","");
+        $electricityDepartments = ElectricityDepartment::pluck('name', 'id');
+        $electricityDepartments->prepend('اختر', '');
 
-        $workOrder =WorkOrder::whereIn('status',['4','5'])->
+        $workOrder = WorkOrder::whereIn('status', ['4', '5'])->
         whereHas('achievementCertificate', function (Builder $query) {
             $query->where('status', AchievementCertificateController::APPROVED_COC);
         })->
-        doesntHave("financialDue")->
+        doesntHave('financialDue')->
         get()->
         pluck('work_display_number', 'id');
 
-        $missionNumber =WorkOrder::whereIn('status',['4','5'])->
+        $missionNumber = WorkOrder::whereIn('status', ['4', '5'])->
         whereNotNull('mission_number')->
-        doesntHave("financialDue")->
+        doesntHave('financialDue')->
         get()->
         pluck('work_display_number', 'id');
         $workOrders = $workOrder->merge($missionNumber)->unique();
 
-
-        return view('financial_dues.edit' ,compact(
+        return view('financial_dues.edit', compact(
             'financialDue',
             'financialDueTypes',
             'workOrders',
@@ -222,9 +219,7 @@ class FinancialDueController extends AppBaseController
     /**
      * Update the specified FinancialDue in storage.
      *
-     * @param  int              $id
-     * @param UpdateFinancialDueRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateFinancialDueRequest $request)
@@ -238,7 +233,7 @@ class FinancialDueController extends AppBaseController
             return redirect(route('financialDues.index'));
         }
 
-        if($financialDue->status == self::STATUS_APPROVED){
+        if ($financialDue->status == self::STATUS_APPROVED) {
             Flash::error(__('models/financialDues.cannot change approved financial Due'));
 
             return redirect(route('financialDues.index'));
@@ -249,17 +244,16 @@ class FinancialDueController extends AppBaseController
 
         Flash::success(__('messages.updated', ['model' => __('models/financialDues.singular')]));
 
-        return Helper::redirectAfterSaving($id,$request,"financialDues");
+        return Helper::redirectAfterSaving($id, $request, 'financialDues');
     }
 
     /**
      * Remove the specified FinancialDue from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {
@@ -279,9 +273,8 @@ class FinancialDueController extends AppBaseController
         return redirect(route('financialDues.index'));
     }
 
-
-
-    public function approval($id){
+    public function approval($id)
+    {
         $financialDue = FinancialDue::find($id);
 
         if (empty($financialDue)) {
@@ -290,8 +283,9 @@ class FinancialDueController extends AppBaseController
             return redirect(route('financialDues.index'));
         }
 
-        if ($financialDue->status != self::STATUS_NEW){
+        if ($financialDue->status != self::STATUS_NEW) {
             Flash::error(__('models/financialDues.The status should be new'));
+
             return redirect()->back();
         }
 

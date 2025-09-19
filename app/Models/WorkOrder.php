@@ -2,26 +2,21 @@
 
 namespace App\Models;
 
+use App\Enums\WorkOrderPermitStatusEnum;
+use App\Http\Traits\AttachmentTrait;
+use App\Traits\Branchable;
+use App\Traits\CreatedUpdatedBy;
 use App\Traits\CurrentOwner;
 use Carbon\Carbon;
-use App\Traits\Branchable;
-use App\Models\AppBaseModel;
-use App\Models\WorkOrderNote;
-use App\Models\Employee;
-use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
-use App\Models\WorkOrdersPermitNote;
-use App\Http\Traits\AttachmentTrait;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Enums\WorkOrderPermitStatusEnum;
 
 /**
  * Class WorkOrder
- * @package App\Models
+ *
  * @version January 14, 2022, 9:52 pm UTC
  *
  * @property \App\Models\WorkType $workType
@@ -36,43 +31,42 @@ use App\Enums\WorkOrderPermitStatusEnum;
  * @property string $work_order_number
  * @property string $reference_number
  * @property string $received_date
- * @property integer $work_type_id
- * @property integer $branch_id
- * @property integer $city_id
- * @property integer $district_id
+ * @property int $work_type_id
+ * @property int $branch_id
+ * @property int $city_id
+ * @property int $district_id
  * @property string $x_axis
  * @property string $y_axis
  * @property string $street_name
  * @property string $customer_number
  * @property string $customer_name
  * @property string $electrical_station_number
- * @property integer $electrical_stations_type_id
- * @property integer $work_period
- * @property integer $status
- * @property integer $work_orders_stage_id
- * @property integer $electricity_department_id
- * @property integer $current_department_id
- * @property boolean $needs_drilling_operations
- * @property boolean $needs_electrical_work
- * @property boolean $needs_work_orders_permit
- * @property boolean $needs_program
+ * @property int $electrical_stations_type_id
+ * @property int $work_period
+ * @property int $status
+ * @property int $work_orders_stage_id
+ * @property int $electricity_department_id
+ * @property int $current_department_id
+ * @property bool $needs_drilling_operations
+ * @property bool $needs_electrical_work
+ * @property bool $needs_work_orders_permit
+ * @property bool $needs_program
  * @property string $finished_date
- * @property boolean $has_asbuilt
+ * @property bool $has_asbuilt
  * @property string $asbuilt_number
- * @property integer $achievement_certificate_id
- * @property integer $payment_clearance_id
- * @property integer $electricity_company_employee_id
- * @property integer $work_orders_type_id
+ * @property int $achievement_certificate_id
+ * @property int $payment_clearance_id
+ * @property int $electricity_company_employee_id
+ * @property int $work_orders_type_id
  */
 class WorkOrder extends AppBaseModel
 {
-    use SoftDeletes;
-    use Branchable;
     use AttachmentTrait;
-    use LogsActivity;
+    use Branchable;
     use CreatedUpdatedBy;
     use CurrentOwner;
-
+    use LogsActivity;
+    use SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -83,15 +77,12 @@ class WorkOrder extends AppBaseModel
             ->logAll();
     }
 
-
     public $table = 'work_orders';
-
 
     protected $dates = [
         'received_date',
 
     ];
-
 
     public $fillable = [
         'work_order_number',
@@ -137,13 +128,13 @@ class WorkOrder extends AppBaseModel
         'project_stage_id',
 
         'mission_number',
-        //'mission_received_employee',
+        // 'mission_received_employee',
         'mission_typeـid',
         'is_emergency_mission',
         'mission_opreation_number',
-        //'mission_meter_number',
-        //'shift_number',
-        //'electricity_employee_name',
+        // 'mission_meter_number',
+        // 'shift_number',
+        // 'electricity_employee_name',
         'description',
         'consultant_id',
         'electricity_company_employee_id',
@@ -153,7 +144,7 @@ class WorkOrder extends AppBaseModel
         'material_reservation_number',
         'electrical_station_number_2',
         'reservation',
-        'is_assay_form'
+        'is_assay_form',
 
     ];
 
@@ -196,11 +187,11 @@ class WorkOrder extends AppBaseModel
         'work_orders_type_id' => 'integer',
         'created_at' => 'date:Y-m-d',
         'last_action_date_time' => 'date:Y-m-d',
-        'deleted_at'   =>'datetime',
-        'electricity_company_employee_id'   =>'integer',
+        'deleted_at' => 'datetime',
+        'electricity_company_employee_id' => 'integer',
     ];
 
-    protected $appends = ['work_display_number','total_work_period' , 'work_dispaly_number_permit','status_title', 'layer1' , 'layer2' , 'layer3' , 'layer4' , 'layer5' , 'layer6'];
+    protected $appends = ['work_display_number', 'total_work_period', 'work_dispaly_number_permit', 'status_title', 'layer1', 'layer2', 'layer3', 'layer4', 'layer5', 'layer6'];
 
     /**
      * Validation rules
@@ -214,7 +205,7 @@ class WorkOrder extends AppBaseModel
         // 'branch_id' => 'required',
         // 'city_id' => 'required',
         'consultant_id' => 'required',
-        'district_id' => 'required'
+        'district_id' => 'required',
     ];
 
     /**
@@ -223,7 +214,7 @@ class WorkOrder extends AppBaseModel
      * @var array
      */
     public static $rules_update = [
-        'district_id' => 'required'
+        'district_id' => 'required',
     ];
 
     //  /**
@@ -240,7 +231,7 @@ class WorkOrder extends AppBaseModel
     /************************************ */
     public function getDrillingWorkOrders()
     {
-        return $this->where('is_emergency_mission',0)->where("status","<>",1)->where("current_department_id",1)->whereNull('project_id');
+        return $this->where('is_emergency_mission', 0)->where('status', '<>', 1)->where('current_department_id', 1)->whereNull('project_id');
 
         // return $this->where('is_emergency_mission', 0)
         // ->where('current_department_id', '<', 6)
@@ -263,26 +254,27 @@ class WorkOrder extends AppBaseModel
 
     public function getFinishedDrillingWorkOrders()
     {
-        return $this->where('drilling_status',2)->where('is_emergency_mission',0)->where("status","<>",1)->where("owner_department_id",1);
+        return $this->where('drilling_status', 2)->where('is_emergency_mission', 0)->where('status', '<>', 1)->where('owner_department_id', 1);
     }
 
     public function getDrillingProjectWorkOrders()
     {
-        return $this->where('is_emergency_mission',0)->where("status","<>",1)->where("current_department_id",1)->whereNotNull('project_id');
+        return $this->where('is_emergency_mission', 0)->where('status', '<>', 1)->where('current_department_id', 1)->whereNotNull('project_id');
     }
 
     public function getElectricWorkOrders()
     {
-        return $this->newQuery()->where('is_emergency_mission',0)->where("status","<>",1)->where("needs_electrical_work",1)->whereIn("current_department_id",[1,2]);
+        return $this->newQuery()->where('is_emergency_mission', 0)->where('status', '<>', 1)->where('needs_electrical_work', 1)->whereIn('current_department_id', [1, 2]);
     }
 
     public function getElectricTowersWorkOrders()
     {
-        return $this->newQuery()->where('is_emergency_mission',0)->where("status","<>",1)->where("current_department_id",3);
+        return $this->newQuery()->where('is_emergency_mission', 0)->where('status', '<>', 1)->where('current_department_id', 3);
     }
+
     public function getEmergencyWorkOrdersWorkOrderOnly()
     {
-        return $this->where('is_emergency_mission',0);
+        return $this->where('is_emergency_mission', 0);
     }
     /************************************ */
 
@@ -291,8 +283,9 @@ class WorkOrder extends AppBaseModel
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      **/
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\WorkOrder']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\WorkOrder']);
     }
 
     /**
@@ -305,7 +298,7 @@ class WorkOrder extends AppBaseModel
 
     public function electricity_company_employees()
     {
-        return $this->belongsTo(\App\Models\ElectricityCompanyEmployees::class,'electricity_company_employee_id')->withDefault();
+        return $this->belongsTo(\App\Models\ElectricityCompanyEmployees::class, 'electricity_company_employee_id')->withDefault();
     }
 
     /**
@@ -327,7 +320,8 @@ class WorkOrder extends AppBaseModel
     /***
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function achievementCertificate(){
+    public function achievementCertificate()
+    {
         return $this->hasMany(AchievementCertificate::class);
     }
 
@@ -380,12 +374,13 @@ class WorkOrder extends AppBaseModel
     {
         return $this->belongsTo(\App\Models\User::class, 'created_by', 'id');
     }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      **/
     public function meters()
     {
-        return $this->hasMany(\App\Models\ElectricMeter::class, 'work_order_id' , 'id');
+        return $this->hasMany(\App\Models\ElectricMeter::class, 'work_order_id', 'id');
     }
 
     /**
@@ -409,7 +404,7 @@ class WorkOrder extends AppBaseModel
      **/
     public function assay_forms()
     {
-        return $this->hasMany(\App\Models\AssayForm::class,'work_order_id', 'id');
+        return $this->hasMany(\App\Models\AssayForm::class, 'work_order_id', 'id');
     }
 
     /**
@@ -433,7 +428,7 @@ class WorkOrder extends AppBaseModel
      **/
     public function financialDue()
     {
-        return $this->belongsToMany(FinancialDue::class,'work_order_financial_due');
+        return $this->belongsToMany(FinancialDue::class, 'work_order_financial_due');
     }
 
     /**
@@ -441,7 +436,7 @@ class WorkOrder extends AppBaseModel
      **/
     public function landLayers()
     {
-        return $this->hasMany(\App\Models\LandLayer::class , 'work_order_id' , 'id' );
+        return $this->hasMany(\App\Models\LandLayer::class, 'work_order_id', 'id');
     }
 
     /**
@@ -462,7 +457,7 @@ class WorkOrder extends AppBaseModel
      **/
     public function landscape()
     {
-        return $this->hasOne(LandscapeInformation::class, 'work_order_id' , 'id')->withDefault();
+        return $this->hasOne(LandscapeInformation::class, 'work_order_id', 'id')->withDefault();
     }
 
     /**
@@ -470,7 +465,7 @@ class WorkOrder extends AppBaseModel
      **/
     public function electrical_operation()
     {
-        return $this->hasOne(ElectricalOperation::class, 'work_order_id' , 'id')->withDefault();
+        return $this->hasOne(ElectricalOperation::class, 'work_order_id', 'id')->withDefault();
     }
 
     /**
@@ -478,7 +473,7 @@ class WorkOrder extends AppBaseModel
      **/
     public function electricity_tower()
     {
-        return $this->hasOne(ElectricityTower::class, 'work_order_id' , 'id')->withDefault();
+        return $this->hasOne(ElectricityTower::class, 'work_order_id', 'id')->withDefault();
     }
 
     /**
@@ -486,7 +481,7 @@ class WorkOrder extends AppBaseModel
      **/
     public function project()
     {
-        return $this->belongsTo(WorkOrdersProject::class, 'project_id' , 'id');
+        return $this->belongsTo(WorkOrdersProject::class, 'project_id', 'id');
     }
 
     /**
@@ -494,7 +489,7 @@ class WorkOrder extends AppBaseModel
      **/
     public function parent()
     {
-        return $this->belongsTo(WorkOrder::class, 'parent_id' , 'id');
+        return $this->belongsTo(WorkOrder::class, 'parent_id', 'id');
     }
 
     /**
@@ -502,21 +497,18 @@ class WorkOrder extends AppBaseModel
      **/
     public function workOrders()
     {
-        return $this->hasMany(WorkOrder::class, 'parent_id' , 'id');
+        return $this->hasMany(WorkOrder::class, 'parent_id', 'id');
     }
 
     public function emergencyMissionType()
     {
-        return $this->hasOne(MissionType::class,'id','mission_typeـid');
+        return $this->hasOne(MissionType::class, 'id', 'mission_typeـid');
     }
 
-    /* Attributes  */
-
+    /* Attributes */
 
     /**
      * Get the user's first name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     // protected function totalWorkPeriod(): Attribute
     // {
@@ -532,40 +524,39 @@ class WorkOrder extends AppBaseModel
     // }
 
     protected function totalWorkPeriod(): Attribute
-{
-    return Attribute::make(
-        get: function ($value, $attributes) {
-            if (!isset($attributes['work_order_number']) || !isset($attributes['status'])) {
-                return 0;
+    {
+        return Attribute::make(
+            get: function ($value, $attributes) {
+                if (! isset($attributes['work_order_number']) || ! isset($attributes['status'])) {
+                    return 0;
+                }
+
+                $transaction = WorkOrderTransactionsHistory::where('work_order_number', $attributes['work_order_number'])
+                    ->where('new_status', $attributes['status'])->latest()->first();
+
+                $dt1 = ($attributes['status'] > 3 && $transaction) ? $transaction->created_at : Carbon::now();
+
+                $dt2 = isset($attributes['received_date']) ? Carbon::parse($attributes['received_date']) : Carbon::now();
+
+                return $dt2->diffInDays($dt1);
             }
-
-            $transaction = WorkOrderTransactionsHistory::where('work_order_number', $attributes['work_order_number'])
-                                                        ->where('new_status', $attributes['status'])->latest()->first();
-
-            $dt1 = ($attributes['status'] > 3 && $transaction) ? $transaction->created_at : Carbon::now();
-
-            $dt2 = isset($attributes['received_date']) ? Carbon::parse($attributes['received_date']) : Carbon::now();
-
-            return $dt2->diffInDays($dt1);
-        }
-    );
-}
-
+        );
+    }
 
     protected function statusTitle(): Attribute
     {
         return Attribute::make(
             get: function ($value, $attributes) {
-            return config("const.work_order_general_status.".$attributes['status']);
+                return config('const.work_order_general_status.'.$attributes['status']);
             }
         );
     }
 
     protected function getWorkDisplayNumberAttribute()
     {
-        if($this->attributes['work_order_number']){
+        if ($this->attributes['work_order_number']) {
             return $this->attributes['work_order_number'].' / '.$this->workType->full_name;
-        }else{
+        } else {
             return $this->attributes['mission_number'].' / ( مهمة طوارئ ) ';
         }
     }
@@ -573,15 +564,15 @@ class WorkOrder extends AppBaseModel
     public function workDispalyNumberPermit(): Attribute
     {
         return new Attribute(
-            get: function(){
-                if($this->attributes['work_order_number']){
+            get: function () {
+                if ($this->attributes['work_order_number']) {
                     return $this->attributes['work_order_number'].' / '.$this->workType->full_name_to_permit;
-                }else{
+                } else {
                     if ($this->attributes['reference_number']) {
-                        return $this->attributes['mission_number'] .' / ( مهمة طوارئ ) - '.$this->attributes['reference_number'] ;
-                    }else{
+                        return $this->attributes['mission_number'].' / ( مهمة طوارئ ) - '.$this->attributes['reference_number'];
+                    } else {
 
-                        return $this->attributes['mission_number'] .' / ( مهمة طوارئ ) ' ;
+                        return $this->attributes['mission_number'].' / ( مهمة طوارئ ) ';
                     }
                 }
                 // return  $this->attributes['work_order_number'].' / '.$this->workType->full_name_to_permit ;
@@ -591,27 +582,27 @@ class WorkOrder extends AppBaseModel
 
     public function getLayer1Attribute()
     {
-        return $this->landLayers->where('layer_id',1)->first();
+        return $this->landLayers->where('layer_id', 1)->first();
     }
 
     public function getLayer2Attribute()
     {
-        return $this->landLayers->where('layer_id',2)->first();
+        return $this->landLayers->where('layer_id', 2)->first();
     }
 
     public function getLayer3Attribute()
     {
-        return $this->landLayers->where('layer_id',3)->first();
+        return $this->landLayers->where('layer_id', 3)->first();
     }
 
     public function getLayer4Attribute()
     {
-        return $this->landLayers->where('layer_id',4)->first();
+        return $this->landLayers->where('layer_id', 4)->first();
     }
 
     public function getLayer5Attribute()
     {
-        return $this->landLayers->where('layer_id',5)->first();
+        return $this->landLayers->where('layer_id', 5)->first();
     }
 
     public function getLayer6Attribute()

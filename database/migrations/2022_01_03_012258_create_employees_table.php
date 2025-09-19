@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateEmployeesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -16,7 +15,7 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id('id');
-            $table->string('name',250);
+            $table->string('name', 250);
             $table->foreignId('branch_id')->constrained();
             $table->foreignId('department_id')->constrained();
             $table->foreignId('job_id')->constrained();

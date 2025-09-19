@@ -3,24 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ElectricalStationsTypeDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateElectricalStationsTypeRequest;
 use App\Http\Requests\UpdateElectricalStationsTypeRequest;
 use App\Models\ElectricalStationsType;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class ElectricalStationsTypeController extends AppBaseController
 {
     const electricalTypes = [
-        1=> "ضغط عالى" ,
-        2=> "ضغط منخفض" ,
+        1 => 'ضغط عالى',
+        2 => 'ضغط منخفض',
     ];
+
     /**
      * Display a listing of the ElectricalStationsType.
      *
-     * @param ElectricalStationsTypeDataTable $electricalStationsTypeDataTable
      * @return Response
      */
     public function index(ElectricalStationsTypeDataTable $electricalStationsTypeDataTable)
@@ -42,7 +40,6 @@ class ElectricalStationsTypeController extends AppBaseController
     /**
      * Store a newly created ElectricalStationsType in storage.
      *
-     * @param CreateElectricalStationsTypeRequest $request
      *
      * @return Response
      */
@@ -61,8 +58,7 @@ class ElectricalStationsTypeController extends AppBaseController
     /**
      * Display the specified ElectricalStationsType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -78,15 +74,14 @@ class ElectricalStationsTypeController extends AppBaseController
 
         return view('electrical_stations_types.show')->with([
             'electricalStationsType' => $electricalStationsType,
-            'electricalTypes' => self::electricalTypes
+            'electricalTypes' => self::electricalTypes,
         ]);
     }
 
     /**
      * Show the form for editing the specified ElectricalStationsType.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -102,16 +97,14 @@ class ElectricalStationsTypeController extends AppBaseController
 
         return view('electrical_stations_types.edit')->with([
             'electricalStationsType' => $electricalStationsType,
-            'electricalTypes' => self::electricalTypes
+            'electricalTypes' => self::electricalTypes,
         ]);
     }
 
     /**
      * Update the specified ElectricalStationsType in storage.
      *
-     * @param  int              $id
-     * @param UpdateElectricalStationsTypeRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateElectricalStationsTypeRequest $request)
@@ -136,11 +129,10 @@ class ElectricalStationsTypeController extends AppBaseController
     /**
      * Remove the specified ElectricalStationsType from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

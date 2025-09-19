@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateServicesCategoriesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *

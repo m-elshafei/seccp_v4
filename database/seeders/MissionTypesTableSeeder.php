@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Models\MissionType;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class MissionTypesTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -16,24 +15,24 @@ class MissionTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
         $initiationDataPath = config('custom.general.initiationDataFolderName');
-        $missionTypes = config($initiationDataPath . '.missionTypes');
+        $missionTypes = config($initiationDataPath.'.missionTypes');
 
         foreach ($missionTypes as $missionType) {
             $missionTypeData = MissionType::create([
                 'name' => $missionType['name'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'deleted_at' => NULL
+                'deleted_at' => null,
 
             ]);
         }
 
         // \DB::table('mission_types')->delete();
-        
+
         // \DB::table('mission_types')->insert(array (
-        //     0 => 
+        //     0 =>
         //     array (
         //         'id' => 1,
         //         'name' => 'صيانة عدادات',
@@ -41,7 +40,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:01:22',
         //         'deleted_at' => NULL,
         //     ),
-        //     1 => 
+        //     1 =>
         //     array (
         //         'id' => 2,
         //         'name' => 'صيانة الجهد المتوسط هوائي',
@@ -49,7 +48,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:02:38',
         //         'deleted_at' => NULL,
         //     ),
-        //     2 => 
+        //     2 =>
         //     array (
         //         'id' => 3,
         //         'name' => 'صيانة الجهد المنخفض هوائي',
@@ -57,7 +56,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:03:45',
         //         'deleted_at' => NULL,
         //     ),
-        //     3 => 
+        //     3 =>
         //     array (
         //         'id' => 4,
         //         'name' => 'صيانة الجهد المنخفض كايبل',
@@ -65,7 +64,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:04:15',
         //         'deleted_at' => NULL,
         //     ),
-        //     4 => 
+        //     4 =>
         //     array (
         //         'id' => 5,
         //         'name' => 'صيانة الجهد المنخفض شبكة أرضية',
@@ -73,7 +72,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:04:45',
         //         'deleted_at' => NULL,
         //     ),
-        //     5 => 
+        //     5 =>
         //     array (
         //         'id' => 6,
         //         'name' => 'صيانة المحطات هوائي',
@@ -81,7 +80,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:05:28',
         //         'deleted_at' => NULL,
         //     ),
-        //     6 => 
+        //     6 =>
         //     array (
         //         'id' => 7,
         //         'name' => 'الفصل والاعادة',
@@ -89,7 +88,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:06:43',
         //         'deleted_at' => NULL,
         //     ),
-        //     7 => 
+        //     7 =>
         //     array (
         //         'id' => 8,
         //         'name' => 'الكابلات المرنة',
@@ -97,7 +96,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:07:32',
         //         'deleted_at' => NULL,
         //     ),
-        //     8 => 
+        //     8 =>
         //     array (
         //         'id' => 9,
         //         'name' => 'المولدات',
@@ -105,7 +104,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:07:54',
         //         'deleted_at' => NULL,
         //     ),
-        //     9 => 
+        //     9 =>
         //     array (
         //         'id' => 10,
         //         'name' => 'صيانة الجهد المنخفض أرضي',
@@ -113,7 +112,7 @@ class MissionTypesTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 07:07:54',
         //         'deleted_at' => NULL,
         //     ),
-        //     10 => 
+        //     10 =>
         //     array (
         //         'id' => 11,
         //         'name' => 'صيانة الجهد المتوسط أرضي',
@@ -122,7 +121,6 @@ class MissionTypesTableSeeder extends Seeder
         //         'deleted_at' => NULL,
         //     ),
         // ));
-        
-        
+
     }
 }

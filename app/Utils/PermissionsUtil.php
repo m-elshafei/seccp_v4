@@ -3,29 +3,25 @@
 namespace App\Utils;
 
 use App\Models\SystemComponent;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use App\Overrides\Spatie\Permission;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
-
+use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class PermissionsUtil
 {
-    private $nodeObject ;
-    private $defaultMethods =array('index','create','edit','show','delete'/*,'update','store','destroy'*/);
-    private static $permissionNameUseNodeId=false;
-    private static $permissionNameSeparator=".";
+    private $nodeObject;
+
+    private $defaultMethods = ['index', 'create', 'edit', 'show', 'delete'/* ,'update','store','destroy' */];
+
+    private static $permissionNameUseNodeId = false;
+
+    private static $permissionNameSeparator = '.';
 
     public static function clearPermissionCash()
     {
-        return Artisan::call("cache:forget", ['key' => 'spatie.permission.cache']);
+        return Artisan::call('cache:forget', ['key' => 'spatie.permission.cache']);
     }
-
-
-
 
     public static function assignAllPermissionsToDevRole()
     {
@@ -36,28 +32,27 @@ class PermissionsUtil
         static::clearPermissionCash();
     }
 
-
     public function addPermissionsToObject($nodeId)
     {
         $node = SystemComponent::find($nodeId);
-        $this->setNodeObject($node) ;
+        $this->setNodeObject($node);
 
         $actions = collect($this->defaultMethods);
-        $actions->map(function($item, $key) {
-            return static::generatePermToAction($this->getNodeObject() , $item);
+        $actions->map(function ($item, $key) {
+            return static::generatePermToAction($this->getNodeObject(), $item);
         })
-        ->map(function($item, $key) {
-            $input = [
-                'name' => $item,
-                'guard_name' => 'web',
-                'system_component_id' => ($this->getNodeObject())->id
-              ];
-            // Permission::create($input);
-            Permission::updateOrCreate(
-                ['name' => $item],
-                $input
-            );
-        });
+            ->map(function ($item, $key) {
+                $input = [
+                    'name' => $item,
+                    'guard_name' => 'web',
+                    'system_component_id' => ($this->getNodeObject())->id,
+                ];
+                // Permission::create($input);
+                Permission::updateOrCreate(
+                    ['name' => $item],
+                    $input
+                );
+            });
 
         static::clearPermissionCash();
     }
@@ -71,62 +66,63 @@ class PermissionsUtil
         $input = [
             'name' => $generatedPermissionName,
             'guard_name' => 'web',
-            'system_component_id' => $node->id
-            ];
-        $Permission= Permission::create($input);
+            'system_component_id' => $node->id,
+        ];
+        $Permission = Permission::create($input);
 
         static::clearPermissionCash();
-        if($Permission){
+        if ($Permission) {
             return $Permission;
         }
+
         return false;
     }
 
-
-    public static function generatePermToAction($node,$actionName){
-        //$sysName = SystemComponent::GetSystemName($node->id);
+    public static function generatePermToAction($node, $actionName)
+    {
+        // $sysName = SystemComponent::GetSystemName($node->id);
         $permissionNameSeparator = self::$permissionNameSeparator;
-        if($node->comp_type == 4){
-            $permissionName=  "reports.".$node->route_name;
-        }else{
-            $permissionName=  $node->route_name.$permissionNameSeparator.$actionName;
-            if($node->prefix){
-                $permissionName=Str::lower($node->prefix).$permissionNameSeparator.$permissionName;
+        if ($node->comp_type == 4) {
+            $permissionName = 'reports.'.$node->route_name;
+        } else {
+            $permissionName = $node->route_name.$permissionNameSeparator.$actionName;
+            if ($node->prefix) {
+                $permissionName = Str::lower($node->prefix).$permissionNameSeparator.$permissionName;
             }
         }
 
-        if(self::$permissionNameUseNodeId){
-            $permissionName .=  $permissionNameSeparator.$node->id;
+        if (self::$permissionNameUseNodeId) {
+            $permissionName .= $permissionNameSeparator.$node->id;
         }
+
         return $permissionName;
     }
 
-
-    public static function encrypt_base64_simple($string) {
+    public static function encrypt_base64_simple($string)
+    {
         $string = base64_encode($string);
         $encreption = base64_encode($string);
+
         return $encreption;
     }
 
-
-    public static function decrypt_base64_simple($string) {
+    public static function decrypt_base64_simple($string)
+    {
         $string_decode = base64_decode($string);
         $encreption = base64_decode($string_decode);
+
         return $encreption;
     }
-
 
     // public function addObjectPermDev($objectId){
     //     $this->addPermissionsToObject($objectId);
     //     static::assignAllPermissionsToDevRole();
     // }
 
-
     // public function addPermToObjectToDevRole($objectId,$mode='test'){
     //     $this->addPermissionsToObject($objectId);
     //     static::assignAllPermissionsToDevRole();
     // }
-
 
     public static function generatePermLabel($permissionName)
     {
@@ -142,19 +138,16 @@ class PermissionsUtil
             $permLabel = 'حذف';
         } else {
             $permLabel = $permissionName;
-            $arr = explode(".", $permissionName);
+            $arr = explode('.', $permissionName);
             $initiationDataPath = config('custom.general.initiationDataFolderName');
             if (isset($arr[1])) {
-                $permLabel = config($initiationDataPath .'.systemComponents.'.$arr[1].'.comp_name');
+                $permLabel = config($initiationDataPath.'.systemComponents.'.$arr[1].'.comp_name');
             }
 
         }
 
         return $permLabel;
     }
-
-
-
 
     /**
      * Get the value of nodeObject
@@ -167,7 +160,7 @@ class PermissionsUtil
     /**
      * Set the value of nodeObject
      *
-     * @return  self
+     * @return self
      */
     public function setNodeObject($nodeObject)
     {

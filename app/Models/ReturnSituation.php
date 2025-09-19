@@ -2,37 +2,25 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
-use App\Models\LandLayer;
-
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class ReturnSituation
- * @package App\Models
+ *
  * @version March 25, 2022, 6:23 pm UTC
  *
- * @property integer $work_order_number
- * @property integer $work_type_id
+ * @property int $work_order_number
+ * @property int $work_type_id
  */
 class ReturnSituation extends AppBaseModel
 {
     use LogsActivity;
     use SoftDeletes;
 
-
     public $table = 'work_orders';
-    
-
-   
-
-
-
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -58,7 +46,7 @@ class ReturnSituation extends AppBaseModel
         'id' => 'integer',
         'work_order_number' => 'integer',
         'work_type_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -67,13 +55,12 @@ class ReturnSituation extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        
-    ];
 
+    ];
 
     public function landLayers()
     {
-        return $this->hasMany(LandLayer::class , 'work_order_id' , 'id' );
+        return $this->hasMany(LandLayer::class, 'work_order_id', 'id');
     }
 
     /**
@@ -153,7 +140,8 @@ class ReturnSituation extends AppBaseModel
         return $this->belongsToMany(WorkOrdersPermit::class);
     }
 
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\ReturnSituation']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\ReturnSituation']);
     }
 }

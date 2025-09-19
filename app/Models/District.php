@@ -2,37 +2,29 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class District
- * @package App\Models
+ *
  * @version December 26, 2021, 8:21 pm UTC
  *
  * @property \App\Models\City $city
  * @property string $name
- * @property integer $city_id
+ * @property int $city_id
  */
 class District extends AppBaseModel
 {
-    use SoftDeletes,LogsActivity , CreatedUpdatedBy;
-
+    use CreatedUpdatedBy,LogsActivity , SoftDeletes;
 
     public $table = 'districts';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
-        'city_id'
+        'city_id',
     ];
 
     /**
@@ -44,7 +36,7 @@ class District extends AppBaseModel
         'id' => 'integer',
         'name' => 'string',
         'city_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -53,7 +45,7 @@ class District extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
     public function getActivitylogOptions(): LogOptions

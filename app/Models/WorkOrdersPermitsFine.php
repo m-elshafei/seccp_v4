@@ -3,18 +3,13 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
-use App\Enums\WorkOrderPermitStatusEnum;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WorkOrdersPermitsFine extends AppBaseModel
 {
-    use HasFactory , SoftDeletes, Branchable , CreatedUpdatedBy;
-
-
-
+    use Branchable , CreatedUpdatedBy, HasFactory , SoftDeletes;
 
     public $fillable = [
         'work_orders_permit_id',
@@ -24,7 +19,7 @@ class WorkOrdersPermitsFine extends AppBaseModel
         'status',
         'fine_reason',
         'notes',
-        'total_fines_amount'
+        'total_fines_amount',
     ];
 
     /**
@@ -39,7 +34,7 @@ class WorkOrdersPermitsFine extends AppBaseModel
         'sadad_number' => 'integer',
         'amount' => 'decimal:2',
         'status' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -55,10 +50,11 @@ class WorkOrdersPermitsFine extends AppBaseModel
 
     public function workOrdersPermits()
     {
-        return $this->hasOne(\App\Models\WorkOrdersPermit::class,'id','work_orders_permit_id');
+        return $this->hasOne(\App\Models\WorkOrdersPermit::class, 'id', 'work_orders_permit_id');
     }
+
     public function getRestablishWorkOrders()
     {
-        return $this->orderBy('work_orders_permit_id', 'DESC');;
+        return $this->orderBy('work_orders_permit_id', 'DESC');
     }
 }

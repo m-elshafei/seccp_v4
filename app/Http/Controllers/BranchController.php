@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\DataTables\BranchDataTable;
 use App\Http\Requests\CreateBranchRequest;
 use App\Http\Requests\UpdateBranchRequest;
-use App\Repositories\BranchRepository;
 use App\Models\Branch;
+use App\Repositories\BranchRepository;
 use Flash;
 use Response;
 

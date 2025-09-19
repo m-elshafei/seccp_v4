@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\ElectricityDepartment;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use App\Models\ElectricityDepartment;
 
 class ElectricityDepartmentSeeder extends Seeder
 {
@@ -22,10 +22,10 @@ class ElectricityDepartmentSeeder extends Seeder
         //
         foreach ($electricityDepartments as $electricityDepartment) {
             $electricityDepartmentData = ElectricityDepartment::create([
-                'name' => $electricityDepartment['name'] ,
-                'description' => $electricityDepartment['description'] ,
+                'name' => $electricityDepartment['name'],
+                'description' => $electricityDepartment['description'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ]);
 
         }

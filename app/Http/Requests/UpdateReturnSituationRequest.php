@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\ReturnSituation;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateReturnSituationRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateReturnSituationRequest extends FormRequest
     public function rules()
     {
         $rules = ReturnSituation::$rules;
-        
+
         return $rules;
     }
 }

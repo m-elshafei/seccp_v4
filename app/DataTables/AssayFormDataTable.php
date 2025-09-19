@@ -3,14 +3,12 @@
 namespace App\DataTables;
 
 use App\Models\AssayForm;
-use App\DataTables\AppDataTable;
 use Yajra\DataTables\Html\Column;
 
 class AssayFormDataTable extends AppDataTable
 {
-
-
-    function __construct() {
+    public function __construct()
+    {
         $this->dataTableName = 'assay_forms';
         $this->actionViewBlade = 'assay_forms.datatables_actions';
     }
@@ -18,12 +16,11 @@ class AssayFormDataTable extends AppDataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\AssayForm $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(AssayForm $model)
     {
-        return $model->newQuery()->with(['workType','workOrder']);
+        return $model->newQuery()->with(['workType', 'workOrder']);
     }
 
     /**
@@ -33,9 +30,10 @@ class AssayFormDataTable extends AppDataTable
      */
     protected function getColumns()
     {
-        $asssay_form_status= json_encode(config("const.assay_form"));
+        $asssay_form_status = json_encode(config('const.assay_form'));
+
         return [
-            'work_order_id' => new Column(['title' => __('models/assayForms.fields.work_order_id'), 'data' => 'work_order.work_display_number', 'orderable'=>false]),
+            'work_order_id' => new Column(['title' => __('models/assayForms.fields.work_order_id'), 'data' => 'work_order.work_display_number', 'orderable' => false]),
             'work_type_id' => new Column(['title' => __('models/assayForms.fields.work_type_id'),
                 'data' => 'work_type.full_name',
                 'render' => 'function() {
@@ -44,22 +42,21 @@ class AssayFormDataTable extends AppDataTable
                                     }
                                     return data;
                                 }',
-                'orderable'=>false]),
+                'orderable' => false]),
             'amount' => new Column(['title' => __('models/assayForms.fields.amount'), 'data' => 'amount']),
-            'notes' => new Column(['title' => __('models/assayForms.fields.notes'), 'data' => 'notes', 'orderable'=>false]),
+            'notes' => new Column(['title' => __('models/assayForms.fields.notes'), 'data' => 'notes', 'orderable' => false]),
             'status' => new Column([
                 'title' => __('models/assayForms.fields.status'),
                 'data' => 'status',
                 'render' => 'function() {
-                                    var $status =' . $asssay_form_status   .';
+                                    var $status ='.$asssay_form_status.';
                                     if (typeof $status[data] === "undefined") {
                                     return data;
                                     }
                                     return ( \'<span class="badge rounded-pill \' + $status[data].class + \'">\' + $status[data].title + \'</span>\'  );
-                                }'
+                                }',
             ]),
             'created_at' => new Column(['title' => __('models/assayForms.fields.created_at'), 'data' => 'created_at']),
         ];
     }
-
 }

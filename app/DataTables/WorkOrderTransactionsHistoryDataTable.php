@@ -4,11 +4,11 @@ namespace App\DataTables;
 
 use App\Models\WorkOrderTransactionsHistory;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\AppDataTable;
 
 class WorkOrderTransactionsHistoryDataTable extends AppDataTable
 {
-    function __construct() {
+    public function __construct()
+    {
         $this->dataTableName = 'workOrderTransactionsHistories';
         $this->actionViewBlade = 'work_order_transactions_histories.datatables_actions';
     }
@@ -16,14 +16,12 @@ class WorkOrderTransactionsHistoryDataTable extends AppDataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\WorkOrderTransactionsHistory $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(WorkOrderTransactionsHistory $model)
     {
         return $model->newQuery();
     }
-
 
     /**
      * Get columns.
@@ -42,9 +40,7 @@ class WorkOrderTransactionsHistoryDataTable extends AppDataTable
             'new_department' => new Column(['title' => __('models/workOrderTransactionsHistories.fields.new_department'), 'data' => 'new_department']),
             'type' => new Column(['title' => __('models/workOrderTransactionsHistories.fields.type'), 'data' => 'type']),
             'description' => new Column(['title' => __('models/workOrderTransactionsHistories.fields.description'), 'data' => 'description']),
-            'note' => new Column(['title' => __('models/workOrderTransactionsHistories.fields.note'), 'data' => 'note'])
+            'note' => new Column(['title' => __('models/workOrderTransactionsHistories.fields.note'), 'data' => 'note']),
         ];
     }
-
-    
 }

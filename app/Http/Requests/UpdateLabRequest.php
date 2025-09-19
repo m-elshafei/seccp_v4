@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Lab;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateLabRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateLabRequest extends FormRequest
     public function rules()
     {
         $rules = Lab::$rules;
-        
+
         return $rules;
     }
 }

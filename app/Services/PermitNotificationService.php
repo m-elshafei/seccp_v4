@@ -25,20 +25,20 @@ class PermitNotificationService
 
                     if (in_array($remainingDays, [14, 9, 4, 3, 2, 1])) {
                         $title = 'قارب تصريح على الانتهاء';
-                        $message = "متبقي على انتهاء التصريح رقم " . $permit->permit_number . ' - ' . $remainingDays . " يوم ";
+                        $message = 'متبقي على انتهاء التصريح رقم '.$permit->permit_number.' - '.$remainingDays.' يوم ';
 
-                        Helper::SendNotifications($title, $message, $workOrder->current_department_id, 'Department', '/workOrdersManagement/workOrdersPermits/' . $permit->id, 'bg-light-success', 'check');
-                        Helper::SendTelegramNotifications('permitExpiration',$permit->permit_number,8,$remainingDays);
+                        Helper::SendNotifications($title, $message, $workOrder->current_department_id, 'Department', '/workOrdersManagement/workOrdersPermits/'.$permit->id, 'bg-light-success', 'check');
+                        Helper::SendTelegramNotifications('permitExpiration', $permit->permit_number, 8, $remainingDays);
 
                     }
                 }
             }
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
+
             return false;
         }
 
         return true;
     }
-
 }

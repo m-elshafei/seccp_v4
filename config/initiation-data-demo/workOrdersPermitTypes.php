@@ -2,15 +2,15 @@
 
 return [
     '1' => [
-        'name'=> 'تصريح البلدية', 
-        'description'=> ''
+        'name' => 'تصريح البلدية',
+        'description' => '',
     ],
     '2' => [
-        'name'=> 'تصريح المرور', 
-        'description'=> ''
+        'name' => 'تصريح المرور',
+        'description' => '',
     ],
     '3' => [
-        'name'=> 'تصريح الطرق', 
-        'description'=> ''
-    ]
+        'name' => 'تصريح الطرق',
+        'description' => '',
+    ],
 ];

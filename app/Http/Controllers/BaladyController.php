@@ -2,25 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Flash;
-use Response;
-use App\Models\City;
-use App\Http\Requests;
-use App\Models\Balady;
 use App\DataTables\BaladyDataTable;
 use App\Http\Requests\CreateBaladyRequest;
 use App\Http\Requests\UpdateBaladyRequest;
-use App\Http\Controllers\AppBaseController;
+use App\Models\Balady;
 use App\Repositories\BaladyRepository;
+use Flash;
+use Response;
+
 class BaladyController extends AppBaseController
 {
     /**
      * Display a listing of the Balady.
      *
-     * @param BaladyDataTable $baladyDataTable
+     * @param  BaladyDataTable  $baladyDataTable
      * @return Response
      */
-
     public $baladyRepository;
 
     public function __construct(BaladyRepository $baladyRepo)
@@ -42,13 +39,12 @@ class BaladyController extends AppBaseController
     {
         $cities = $this->baladyRepository->getCities();
 
-        return view('baladies.create',compact('cities'));
+        return view('baladies.create', compact('cities'));
     }
 
     /**
      * Store a newly created Balady in storage.
      *
-     * @param CreateBaladyRequest $request
      *
      * @return Response
      */
@@ -67,8 +63,7 @@ class BaladyController extends AppBaseController
     /**
      * Display the specified Balady.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -88,8 +83,7 @@ class BaladyController extends AppBaseController
     /**
      * Show the form for editing the specified Balady.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -106,17 +100,14 @@ class BaladyController extends AppBaseController
         $cities = $this->baladyRepository->getCities();
 
         return view('baladies.edit')
-                    ->with('balady', $balady)
-                    ->with('cities', $cities)
-                    ;
+            ->with('balady', $balady)
+            ->with('cities', $cities);
     }
 
     /**
      * Update the specified Balady in storage.
      *
-     * @param  int              $id
-     * @param UpdateBaladyRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateBaladyRequest $request)
@@ -140,11 +131,10 @@ class BaladyController extends AppBaseController
     /**
      * Remove the specified Balady from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

@@ -12,7 +12,6 @@ class FormRepeater extends Component
      * @var string
      */
     public $name;
- 
 
     /**
      * The options array for data-repeater.
@@ -26,7 +25,7 @@ class FormRepeater extends Component
      *
      * @return void
      */
-    public function __construct($name,$options)
+    public function __construct($name, $options)
     {
         $this->name = $name;
         $this->options = $options;

@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class ActivityLogs extends Component
 {
     public $activities;
+
     /**
      * Create a new component instance.
      *

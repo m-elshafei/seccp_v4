@@ -2,12 +2,10 @@
 
 namespace App\View\Components\Report;
 
+use App\Services\WorkOrders\WorkOrderService;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use App\Services\WorkOrders\WorkOrderService;
-use App\Enums\WorkOrderStatusEnum;
-
 
 class TotalPermitAmountsFilter extends Component
 {

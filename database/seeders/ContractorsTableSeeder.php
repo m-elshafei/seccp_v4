@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Contractor;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class ContractorsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -22,15 +21,15 @@ class ContractorsTableSeeder extends Seeder
 
         foreach ($contractors as $contractor) {
             $consultantData = Contractor::create([
-                'name' => $contractor['name'] ,
-                'company_name' => $contractor['company_name'] ,
-                'contact_name' => $contractor['contact_name'] ,
-                'contact_mobile_number' => $contractor['contact_mobile_number'] ,
-                'notes' => $contractor['notes'] ,
+                'name' => $contractor['name'],
+                'company_name' => $contractor['company_name'],
+                'contact_name' => $contractor['contact_name'],
+                'contact_mobile_number' => $contractor['contact_mobile_number'],
+                'notes' => $contractor['notes'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'deleted_at' => NULL,
-                'branch_id' => $contractor['branch_id'] ,
+                'deleted_at' => null,
+                'branch_id' => $contractor['branch_id'],
 
             ]);
         }
@@ -103,7 +102,6 @@ class ContractorsTableSeeder extends Seeder
         //         'branch_id' => 1,
         //     ),
         // ));
-
 
     }
 }

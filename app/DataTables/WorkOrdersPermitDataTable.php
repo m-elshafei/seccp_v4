@@ -2,15 +2,12 @@
 
 namespace App\DataTables;
 
-use App\DataTables\AppDataTable;
 use App\Models\WorkOrdersPermitV;
 use Yajra\DataTables\Html\Column;
 
 class WorkOrdersPermitDataTable extends AppDataTable
 {
-
-
-    function __construct()
+    public function __construct()
     {
         $this->dataTableName = 'work_orders_permits';
         $this->actionViewBlade = 'work_orders_permits.datatables_actions';
@@ -19,7 +16,7 @@ class WorkOrdersPermitDataTable extends AppDataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\WorkOrdersPermit $model
+     * @param  \App\Models\WorkOrdersPermit  $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(WorkOrdersPermitV $model)
@@ -34,7 +31,8 @@ class WorkOrdersPermitDataTable extends AppDataTable
      */
     protected function getColumns()
     {
-        $work_order_permit_status = json_encode(config("const.work_order_permit_status"));
+        $work_order_permit_status = json_encode(config('const.work_order_permit_status'));
+
         return [
             'index' => $this->getIndexCol(),
             'work_order_number' => new Column(['title' => __('models/workOrdersPermits.fields.work_order_id'), 'data' => 'work_order_number']),
@@ -60,7 +58,7 @@ class WorkOrdersPermitDataTable extends AppDataTable
             ]),
             'period' => new Column([
                 'title' => __('models/workOrdersPermits.fields.period'),
-                'data' => 'period'
+                'data' => 'period',
             ]),
 
             'total_permit_period' => new Column(['title' => __('models/workOrders.fields.total_work_period'), 'data' => 'total_work_period', 'searchable' => false, 'orderable' => false]),
@@ -106,7 +104,7 @@ class WorkOrdersPermitDataTable extends AppDataTable
                     } else {
                         return (\'<span class="badge badge-light-danger">منتهي</span>\');
                     }
-                }'
+                }',
             ]),
             'total_permit_period_day' => new Column([
                 'title' => 'المدة المتبقيه من التصريح',
@@ -129,22 +127,22 @@ class WorkOrdersPermitDataTable extends AppDataTable
                 'title' => __('models/workOrdersPermits.fields.status'),
                 'data' => 'status',
                 'render' => 'function() {
-                                    var $status =' . $work_order_permit_status   . ';
+                                    var $status ='.$work_order_permit_status.';
                                     if (typeof $status[data] === "undefined") {
                                     return data;
                                     }
                                     return ( \'<span class="badge rounded-pill \' + $status[data].class + \'">\' + $status[data].title + \'</span>\'  );
-                                }'
+                                }',
             ]),
             'status_title.title' => new Column([
                 'title' => __('models/workOrdersPermits.fields.status'),
                 'data' => 'status_title.title',
-                'printable'     => true,
-                'visible'     => false,
-                'searchable'     => false,
-                'orderable'     => false,
-                "defaultContent" => ''
-            ])
+                'printable' => true,
+                'visible' => false,
+                'searchable' => false,
+                'orderable' => false,
+                'defaultContent' => '',
+            ]),
         ];
     }
 }

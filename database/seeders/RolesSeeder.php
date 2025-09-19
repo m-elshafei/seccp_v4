@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Overrides\Spatie\Role;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class RolesSeeder extends Seeder
@@ -21,11 +21,11 @@ class RolesSeeder extends Seeder
         //
         foreach ($roles as $role) {
             $roleData = Role::create([
-                'name' => $role['name'] ,
-                'guard_name' => $role['guard_name'] ,
-                'ar_name' => $role['ar_name'] ,
+                'name' => $role['name'],
+                'guard_name' => $role['guard_name'],
+                'ar_name' => $role['ar_name'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ]);
 
         }

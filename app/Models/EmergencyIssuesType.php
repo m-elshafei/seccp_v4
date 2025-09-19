@@ -9,10 +9,9 @@ class EmergencyIssuesType extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
 
     protected $casts = [
@@ -20,7 +19,7 @@ class EmergencyIssuesType extends Model
     ];
 
     public static $rules = [
-        'name'          => 'required',
-        'description'   => 'required',
+        'name' => 'required',
+        'description' => 'required',
     ];
 }

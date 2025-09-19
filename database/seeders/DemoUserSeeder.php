@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Branch;
-use Illuminate\Support\Str;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DemoUserSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class DemoUserSeeder extends Seeder
      */
     public function run()
     {
-        $branchData =  Branch::where("is_main_branch",1)->first();
+        $branchData = Branch::where('is_main_branch', 1)->first();
         // dd($branchData);
         // $demoUser = User::create([
         //     'name' => 'مدير النظام',
@@ -36,26 +36,23 @@ class DemoUserSeeder extends Seeder
         $users = config($initiationDataPath.'.users');
         //
         foreach ($users as $user) {
-            if(isset($user['password']) && $user['password']){
+            if (isset($user['password']) && $user['password']) {
                 $password = Hash::make($user['password']);
-            }else{
-                $password = Hash::make($user['username']."@Alfaseel");
+            } else {
+                $password = Hash::make($user['username'].'@Alfaseel');
             }
             $userData = User::create([
-                'name' => $user['name'] ,
+                'name' => $user['name'],
                 'username' => $user['username'],
                 'email' => $user['email'],
-                'branch_id' => $branchData->id, 
-                'password' =>  $password,
-                'remember_token' => null
+                'branch_id' => $branchData->id,
+                'password' => $password,
+                'remember_token' => null,
             ]);
-            if(isset($user['role']) && $user['role']){
+            if (isset($user['role']) && $user['role']) {
                 $userData->assignRole($user['role']);
             }
         }
 
-
     }
 }
-
-?>

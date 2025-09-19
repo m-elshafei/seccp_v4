@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use App\Utils\GeographicPointUtil;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,32 +23,35 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // return ["id"=> auth()->user()->id, "name"=>"tamer"];
 // });
 Route::post('/user', function (Request $request) {
-    $search = $request->get("search");
-    $users = \App\Models\User::orderby('name','asc')->select('id','name as text');
+    $search = $request->get('search');
+    $users = \App\Models\User::orderby('name', 'asc')->select('id', 'name as text');
     if ($search) {
-        $users = $users->where('name', 'like', '%' . $search . '%')->get();
+        $users = $users->where('name', 'like', '%'.$search.'%')->get();
     }
+
     return $users;
 })->name('users.api');
 
 Route::post('/coord/utm', function (Request $request) {
-    $easting = $request->get("easting");
-    $northing = $request->get("northing");
+    $easting = $request->get('easting');
+    $northing = $request->get('northing');
 
     if ($easting && $northing) {
-        $result = GeographicPointUtil::createXYPoint($easting,$northing);
+        $result = GeographicPointUtil::createXYPoint($easting, $northing);
     }
+
     return $result;
 
 })->name('coord.GetUTM');
 
-Route::get('/coord/utm/{easting}/{northing}', function ($easting , $northing) {
+Route::get('/coord/utm/{easting}/{northing}', function ($easting, $northing) {
     // $easting = $request->get("easting");
     // $northing = $request->get("northing");
 
     if ($easting && $northing) {
-        $result = GeographicPointUtil::createXYPoint($easting,$northing);
+        $result = GeographicPointUtil::createXYPoint($easting, $northing);
     }
+
     return $result;
 
 })->name('coord.utm');

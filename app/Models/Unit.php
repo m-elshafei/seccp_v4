@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class Unit
- * @package App\Models
+ *
  * @version January 14, 2022, 6:06 pm UTC
  *
  * @property string $name
@@ -20,19 +18,13 @@ class Unit extends AppBaseModel
 {
     use SoftDeletes;
 
-
     public $table = 'units';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
         'code',
         'name_ar',
-        'description'
+        'description',
     ];
 
     /**
@@ -46,7 +38,7 @@ class Unit extends AppBaseModel
         'code' => 'string',
         'name_ar' => 'string',
         'description' => 'string',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -56,8 +48,6 @@ class Unit extends AppBaseModel
      */
     public static $rules = [
         'name' => 'required',
-        'code' => 'required'
+        'code' => 'required',
     ];
-
-    
 }

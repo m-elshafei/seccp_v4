@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Models\Department;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class DepartmentsSeeder extends Seeder
@@ -22,11 +22,11 @@ class DepartmentsSeeder extends Seeder
         //
         foreach ($departments as $department) {
             $departmentData = Department::create([
-                'name' => $department['name'] ,
-                'branch_id' => $department['branch_id'] ,
-                'description' => $department['description'] ,
+                'name' => $department['name'],
+                'branch_id' => $department['branch_id'],
+                'description' => $department['description'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ]);
         }
     }

@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class Item
- * @package App\Models
+ *
  * @version January 14, 2022, 7:36 pm UTC
  *
  * @property \App\Models\ItemsCategory $itemsCategory
@@ -17,20 +15,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $name
  * @property string $name_ar
  * @property string $description
- * @property integer $unit_id
- * @property integer $items_category_id
+ * @property int $unit_id
+ * @property int $items_category_id
  */
 class Item extends AppBaseModel
 {
     use SoftDeletes;
 
-
     public $table = 'items';
-    
-
-   
-
-
 
     public $fillable = [
         'code',
@@ -38,7 +30,7 @@ class Item extends AppBaseModel
         'name_ar',
         'description',
         'unit_id',
-        'items_category_id'
+        'items_category_id',
     ];
 
     /**
@@ -54,7 +46,7 @@ class Item extends AppBaseModel
         'description' => 'string',
         'unit_id' => 'integer',
         'items_category_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -64,7 +56,7 @@ class Item extends AppBaseModel
      */
     public static $rules = [
         'code' => 'required',
-        'name' => 'required'
+        'name' => 'required',
     ];
 
     /**
@@ -72,7 +64,7 @@ class Item extends AppBaseModel
      **/
     public function category()
     {
-        return $this->belongsTo(\App\Models\ItemsCategory::class,'items_category_id','id')->withDefault();
+        return $this->belongsTo(\App\Models\ItemsCategory::class, 'items_category_id', 'id')->withDefault();
     }
 
     /**
@@ -80,6 +72,6 @@ class Item extends AppBaseModel
      **/
     public function unit()
     {
-        return $this->belongsTo(\App\Models\Unit::class,'unit_id','id')->withDefault();
+        return $this->belongsTo(\App\Models\Unit::class, 'unit_id', 'id')->withDefault();
     }
 }

@@ -5,24 +5,40 @@ namespace App\Enums;
 class StatusMessages
 {
     const CONVERT_DEPARTMENT = 'convertDepartment';
-    const RESTABLISH_WORK_IN_PROGRESS = 'restablishWorkInProgress';
-    const RESTABLISH_WORK_FINISHED = 'restablishWorkFinished';
-    const DRILL_IN_PROGRESS = 'drillInProgress';
-    const DRILL_FINISHED = 'drillFinished';
-    const UPDATE_STATUS_TO_START = 'updateStatusToStart';
-    const TEMPORARY_STOPPED = 'temporaryStopped';
-    const PERMANENT_STOPPED = 'permanentStopped';
-    const REOPEN_DRILLING_WORK_ORDER = 'reOpenDrillingWorkOrder';
-    const ELECTRICITY_IN_PROGRESS = 'electricityInProgress';
-    const ELECTRICAL_OPERATIONS_FINISHED = 'electricalOperationsFinished';
-    const ELECTRICAL_CONVERT_DEPARTMENT = 'electricalConvertDepartment';
-    const TO_GENERAL = 'toGeneral';
-    const IN_PROGRESS_STILL_PROGRAM = 'inProgressStillProgram';
-    const DATABASE_DUMP = 'databaseDump';
-    const INITIAL_DELIVERY = 'initialDelivery';
-    const DATABASE_DELETED = 'databaseDeleted';
-    const PERMIT_EXPIRATION = 'permitExpiration';
 
+    const RESTABLISH_WORK_IN_PROGRESS = 'restablishWorkInProgress';
+
+    const RESTABLISH_WORK_FINISHED = 'restablishWorkFinished';
+
+    const DRILL_IN_PROGRESS = 'drillInProgress';
+
+    const DRILL_FINISHED = 'drillFinished';
+
+    const UPDATE_STATUS_TO_START = 'updateStatusToStart';
+
+    const TEMPORARY_STOPPED = 'temporaryStopped';
+
+    const PERMANENT_STOPPED = 'permanentStopped';
+
+    const REOPEN_DRILLING_WORK_ORDER = 'reOpenDrillingWorkOrder';
+
+    const ELECTRICITY_IN_PROGRESS = 'electricityInProgress';
+
+    const ELECTRICAL_OPERATIONS_FINISHED = 'electricalOperationsFinished';
+
+    const ELECTRICAL_CONVERT_DEPARTMENT = 'electricalConvertDepartment';
+
+    const TO_GENERAL = 'toGeneral';
+
+    const IN_PROGRESS_STILL_PROGRAM = 'inProgressStillProgram';
+
+    const DATABASE_DUMP = 'databaseDump';
+
+    const INITIAL_DELIVERY = 'initialDelivery';
+
+    const DATABASE_DELETED = 'databaseDeleted';
+
+    const PERMIT_EXPIRATION = 'permitExpiration';
 
     // Store the messages in a private static array
     private static array $messages = [
@@ -43,19 +59,17 @@ class StatusMessages
         self::DATABASE_DUMP => ' تم انشاء نسخه بيانات احتياطيه جديده باسم %s',
         self::INITIAL_DELIVERY => 'تم تحويل %s الي تم التسليم',
         self::DATABASE_DELETED => ' تم حذف نسخه بيانات سابقه باسم %s',
-        self::PERMIT_EXPIRATION => "متبقي على انتهاء التصريح رقم %s - %s يوم",
+        self::PERMIT_EXPIRATION => 'متبقي على انتهاء التصريح رقم %s - %s يوم',
     ];
 
     /**
      * Get the formatted status message.
      *
-     * @param string $statusKey
-     * @param mixed ...$replacements
-     * @return string
+     * @param  mixed  ...$replacements
      */
     public static function getMessage(string $statusKey, ...$replacements): string
     {
-        $template = self::$messages[$statusKey] ?? "Status not found: " . $statusKey;
+        $template = self::$messages[$statusKey] ?? 'Status not found: '.$statusKey;
 
         if (str_contains($template, '%s')) {
             return sprintf($template, ...$replacements);

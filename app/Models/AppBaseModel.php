@@ -1,30 +1,31 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Support\Facades\View;
+
 use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class AppBaseModel
- * @package App\Models
  */
 class AppBaseModel extends Model
 {
-    public function scopeFilter($q,$sessionFilterName=""){
-        if ($sessionFilterName && session($sessionFilterName)){
+    public function scopeFilter($q, $sessionFilterName = '')
+    {
+        if ($sessionFilterName && session($sessionFilterName)) {
             $filterArray = session($sessionFilterName);
             // dd($filterArray);
             foreach ($filterArray as $key => $value) {
-                if($value){
+                if ($value) {
                     // if (str_contains($key,"||")){
                     //     $arr =explode("||",$key);
                     //     $key =$arr[0];
                     // }
-                    if (str_contains($key,"from_")){
-                        $q = $q->where(str_replace("from_","",$key),">=",$value);
-                    }elseif(str_contains($key,"to_")){
-                        $q = $q->where(str_replace("to_","",$key),"<=",$value);
-                    }else{
-                        $q = $q->where($key,$value);
+                    if (str_contains($key, 'from_')) {
+                        $q = $q->where(str_replace('from_', '', $key), '>=', $value);
+                    } elseif (str_contains($key, 'to_')) {
+                        $q = $q->where(str_replace('to_', '', $key), '<=', $value);
+                    } else {
+                        $q = $q->where($key, $value);
                     }
                 }
             }
@@ -40,6 +41,4 @@ class AppBaseModel extends Model
 
         return $q;
     }
-
-
 }

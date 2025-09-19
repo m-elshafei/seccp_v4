@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Models\Consultant;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class ConsultantsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -16,24 +15,24 @@ class ConsultantsTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
         $initiationDataPath = config('custom.general.initiationDataFolderName');
         $consultants = config($initiationDataPath.'.consultants');
 
         foreach ($consultants as $consultant) {
             $consultantData = Consultant::create([
-                'name' => $consultant['name'] ,
+                'name' => $consultant['name'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'deleted_at' => NULL
+                'deleted_at' => null,
 
             ]);
         }
 
         // \DB::table('consultants')->delete();
-        
+
         // \DB::table('consultants')->insert(array (
-        //     0 => 
+        //     0 =>
         //     array (
         //         'id' => 1,
         //         'name' => 'شركة الاتحاد الهندسي السعودية',
@@ -41,7 +40,7 @@ class ConsultantsTableSeeder extends Seeder
         //         'updated_at' => '2023-01-03 06:58:00',
         //         'deleted_at' => NULL,
         //     ),
-        //     1 => 
+        //     1 =>
         //     array (
         //         'id' => 2,
         //         'name' => 'شركة الخدمات الاستشارية السعودية',
@@ -50,7 +49,6 @@ class ConsultantsTableSeeder extends Seeder
         //         'deleted_at' => NULL,
         //     ),
         // ));
-        
-        
+
     }
 }

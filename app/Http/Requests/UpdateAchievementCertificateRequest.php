@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\AchievementCertificate;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAchievementCertificateRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,7 @@ class UpdateAchievementCertificateRequest extends FormRequest
     public function rules()
     {
         $rules = AchievementCertificate::$rules;
-        
+
         return $rules;
     }
 }

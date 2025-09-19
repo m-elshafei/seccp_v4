@@ -15,8 +15,8 @@ class CreateAttachmentTypesTable extends Migration
     {
         Schema::create('attachment_types', function (Blueprint $table) {
             $table->id();
-            $table->string("title",150);
-            $table->text("description")->nullable();
+            $table->string('title', 150);
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

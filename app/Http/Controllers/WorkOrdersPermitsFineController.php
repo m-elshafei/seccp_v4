@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\WorkOrdersPermit;
 use App\Models\WorkOrdersPermitsFine;
+use Illuminate\Http\Request;
 
 class WorkOrdersPermitsFineController extends Controller
 {
@@ -18,73 +18,73 @@ class WorkOrdersPermitsFineController extends Controller
         ]);
 
         $input = $request->all();
-        
+
         $work_orders_permit_id = $input['work_orders_permit_id'];
         $WorkOrdersPermit = WorkOrdersPermit::find($work_orders_permit_id);
-        
+
         $inputDetail = [
-                        new WorkOrdersPermitsFine($input)
-                       ];
+            new WorkOrdersPermitsFine($input),
+        ];
 
         $result = $WorkOrdersPermit->workOrdersPermitsFine()->saveMany($inputDetail);
-        
+
         return $result;
     }
 
-    
     public function show($id)
     {
-      $workOrdersPermitsFine = WorkOrdersPermitsFine::find($id);
-      if (empty($workOrdersPermitsFine)) {
-          Flash::error('workOrdersPermitsFine not found');
-          return redirect(route('workOrdersPermits.index'));
-      }
-      return $workOrdersPermitsFine;
+        $workOrdersPermitsFine = WorkOrdersPermitsFine::find($id);
+        if (empty($workOrdersPermitsFine)) {
+            Flash::error('workOrdersPermitsFine not found');
+
+            return redirect(route('workOrdersPermits.index'));
+        }
+
+        return $workOrdersPermitsFine;
 
     }
-
 
     public function edit($id)
     {
-      $workOrdersPermitsFine = WorkOrdersPermitsFine::find($id);
+        $workOrdersPermitsFine = WorkOrdersPermitsFine::find($id);
 
-      if (empty($workOrdersPermitsFine)) {
-          Flash::error('workOrdersPermitsFine not found');
-          return redirect(route('workOrdersPermits.index'));
-      }
+        if (empty($workOrdersPermitsFine)) {
+            Flash::error('workOrdersPermitsFine not found');
 
-      return $workOrdersPermitsFine;
+            return redirect(route('workOrdersPermits.index'));
+        }
+
+        return $workOrdersPermitsFine;
     }
-
 
     public function update(Request $request, $id)
     {
-      $workOrdersPermitsFine = WorkOrdersPermitsFine::find($id);
+        $workOrdersPermitsFine = WorkOrdersPermitsFine::find($id);
 
-      if(empty($workOrdersPermitsFine)){
-          Flash::error('workOrdersPermitsFine is not found');
-          return redirect(route('workOrdersPermits.index'));
-      }
+        if (empty($workOrdersPermitsFine)) {
+            Flash::error('workOrdersPermitsFine is not found');
 
-      $input = $request->all();
-        
-      $workOrdersPermitsFine->fill($input);
-      $workOrdersPermitsFine->save();
+            return redirect(route('workOrdersPermits.index'));
+        }
 
-      return $workOrdersPermitsFine;
+        $input = $request->all();
+
+        $workOrdersPermitsFine->fill($input);
+        $workOrdersPermitsFine->save();
+
+        return $workOrdersPermitsFine;
     }
 
-    
     public function destroy($id)
     {
-      $workOrdersPermitsFine = WorkOrdersPermitsFine::find($id);
+        $workOrdersPermitsFine = WorkOrdersPermitsFine::find($id);
 
-      if (empty($workOrdersPermitsFine)) {
-          Flash::error('workOrdersPermitsFine is not found');
-          return redirect(route('workOrdersPermits.index'));
-      }
+        if (empty($workOrdersPermitsFine)) {
+            Flash::error('workOrdersPermitsFine is not found');
 
-      $workOrdersPermitsFineDel = $workOrdersPermitsFine->delete();
+            return redirect(route('workOrdersPermits.index'));
+        }
+
+        $workOrdersPermitsFineDel = $workOrdersPermitsFine->delete();
     }
-
 }

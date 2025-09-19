@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\WorkOrdersPermitType;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use App\Models\WorkOrdersPermitType;
 
 class workOrdersPermitTypesSeeder extends Seeder
 {
@@ -21,10 +21,10 @@ class workOrdersPermitTypesSeeder extends Seeder
         //
         foreach ($workOrdersPermitTypes as $workOrdersPermitType) {
             $workOrdersPermitTypeData = WorkOrdersPermitType::create([
-                'name' => $workOrdersPermitType['name'] ,
-                'description' => $workOrdersPermitType['description'] ,
+                'name' => $workOrdersPermitType['name'],
+                'description' => $workOrdersPermitType['description'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ]);
         }
     }

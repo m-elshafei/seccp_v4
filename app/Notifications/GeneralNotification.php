@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -12,9 +11,13 @@ class GeneralNotification extends Notification
     use Queueable;
 
     private $message;
+
     private $class_bg;
+
     private $class_icon;
+
     private $title;
+
     private $link;
 
     /**
@@ -22,7 +25,7 @@ class GeneralNotification extends Notification
      *
      * @return void
      */
-    public function __construct($tilte, $message, $link=null, $class_bg='bg-light-success', $class_icon='check')
+    public function __construct($tilte, $message, $link = null, $class_bg = 'bg-light-success', $class_icon = 'check')
     {
         $this->title = $tilte;
         $this->message = $message;
@@ -51,9 +54,9 @@ class GeneralNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**

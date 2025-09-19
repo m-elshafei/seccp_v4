@@ -17,7 +17,7 @@ class CreateWorkOrdersPermitsFinesTable extends Migration
             $table->id();
             $table->foreignId('work_orders_permit_id')->constrained('work_orders_permits');
             $table->date('issue_date');
-            $table->string('sadad_number',150);
+            $table->string('sadad_number', 150);
             $table->decimal('amount');
             $table->longText('fine_reason')->nullable();
             $table->longText('notes')->nullable();

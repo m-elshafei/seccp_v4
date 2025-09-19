@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class ElectricityDepartment
- * @package App\Models
+ *
  * @version January 6, 2022, 9:48 am UTC
  *
  * @property string $name
@@ -18,17 +16,11 @@ class ElectricityDepartment extends AppBaseModel
 {
     use SoftDeletes;
 
-
     public $table = 'electricity_departments';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
-        'description'
+        'description',
     ];
 
     /**
@@ -40,7 +32,7 @@ class ElectricityDepartment extends AppBaseModel
         'id' => 'integer',
         'name' => 'string',
         'description' => 'string',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -49,8 +41,6 @@ class ElectricityDepartment extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
-
-    
 }

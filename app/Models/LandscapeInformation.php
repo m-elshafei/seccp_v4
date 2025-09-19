@@ -2,23 +2,19 @@
 
 namespace App\Models;
 
-use App\Models\Employee;
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class LandscapeInformation extends AppBaseModel
 {
-    use SoftDeletes;
-    use LogsActivity;
     use Branchable;
     use CreatedUpdatedBy;
-
+    use LogsActivity;
+    use SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -29,15 +25,11 @@ class LandscapeInformation extends AppBaseModel
             ->logAll();
     }
 
-
     public $table = 'landscape_information';
 
-
     protected $casts = [
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
-
-
 
     public $fillable = [
         'work_order_id',
@@ -69,21 +61,23 @@ class LandscapeInformation extends AppBaseModel
         'cabel_length_lv70',
         'cabel_length_lv185',
         'cabel_length_lv300',
-        'note'
+        'note',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      **/
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\LandscapeInformation']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\LandscapeInformation']);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      **/
-    public function workOrder(){
-        return $this->belongsTo(WorkOrder::class,'work_order_id','id');
+    public function workOrder()
+    {
+        return $this->belongsTo(WorkOrder::class, 'work_order_id', 'id');
     }
 
     public function drillingEmployee()

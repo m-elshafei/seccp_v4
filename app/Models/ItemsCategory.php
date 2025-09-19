@@ -2,36 +2,27 @@
 
 namespace App\Models;
 
-
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class ItemsCategory
- * @package App\Models
+ *
  * @version January 14, 2022, 6:36 pm UTC
  *
  * @property string $name
- * @property integer $name_ar
- * @property integer $parent_id
+ * @property int $name_ar
+ * @property int $parent_id
  */
 class ItemsCategory extends AppBaseModel
 {
     use SoftDeletes;
 
-
     public $table = 'items_categories';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
         'name_ar',
-        'parent_id'
+        'parent_id',
     ];
 
     /**
@@ -44,7 +35,7 @@ class ItemsCategory extends AppBaseModel
         'name' => 'string',
         'name_ar' => 'string',
         'parent_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -53,20 +44,16 @@ class ItemsCategory extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
-
-
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
     public function category()
     {
-        return $this->belongsTo(\App\Models\ItemsCategory::class,'parent_id','id')->withDefault([
-            'name'=>''
+        return $this->belongsTo(\App\Models\ItemsCategory::class, 'parent_id', 'id')->withDefault([
+            'name' => '',
         ]);
     }
-
-    
 }

@@ -2,61 +2,62 @@
 
 namespace App\Http\Controllers;
 
-
 use App\DataTables\WorkOrderDailyFollowDataTable;
-use PDF;
-use Flash;
-use Response;
-use Carbon\Carbon;
-use App\Models\Layer;
-//use App\Http\Requests;
-use App\Helpers\Helper;
-use App\Models\District;
-use App\Models\Employee;
-use App\Models\WorkType;
-use App\Models\Contractor;
-use App\Utils\SessionUtil;
-use App\Models\WorkOrderFollow;
-use App\Enums\WorkOrderStatusEnum;
-use App\Enums\WorkOrderPermitStatusEnum;
-use App\Http\Controllers\AppBaseController;
 use App\DataTables\WorkOrderFollowDataTable;
 use App\Enums\WorkOrderOperationsStatusEnum;
-use App\Services\WorkOrders\WorkOrderService;
+use App\Enums\WorkOrderPermitStatusEnum;
+use App\Enums\WorkOrderStatusEnum;
+use App\Helpers\Helper;
+// use App\Http\Requests;
 use App\Http\Requests\CreateWorkOrderFollowRequest;
 use App\Http\Requests\UpdateWorkOrderFollowRequest;
-use Illuminate\Http\Request;
+use App\Models\Contractor;
+use App\Models\District;
+use App\Models\Employee;
+use App\Models\Layer;
+use App\Models\WorkOrderFollow;
+use App\Models\WorkType;
 use App\Services\Notifications\NotificationService;
+use App\Services\WorkOrders\WorkOrderService;
+use App\Utils\SessionUtil;
+use Carbon\Carbon;
+use Flash;
+use Illuminate\Http\Request;
+use PDF;
+use Response;
 
 class WorkOrderFollowController extends AppBaseController
 {
     private $workOrderService;
+
     private $notificationService;
 
-    function __construct(WorkOrderService $workOrderService,NotificationService $notificationService) {
+    public function __construct(WorkOrderService $workOrderService, NotificationService $notificationService)
+    {
         $this->workOrderService = $workOrderService;
         $this->notificationService = $notificationService;
     }
+
     /**
      * Display a listing of the WorkOrderFollow.
      *
-     * @param WorkOrderFollowDataTable $workOrderFollowDataTable
      * @return Response
      */
-    public function index(WorkOrderFollowDataTable $workOrderFollowDataTable ,$type = '')
+    public function index(WorkOrderFollowDataTable $workOrderFollowDataTable, $type = '')
     {
 
-        $workOrderStatus=$this->workOrderService->getStausFromConfig('work_order_general_status');
-        $workOrderPermitStatus=$this->workOrderService->getStausFromConfig('work_order_permit_status');
-        $workTypes = WorkType::all()->map->only('id', 'full_name')->pluck('full_name', 'id')->prepend("اختر","");
-        $city_id =SessionUtil::getCurrentCityByBranch();
-        $districts = District::where("city_id",$city_id)->pluck('name', 'id')->prepend("اختر","");
-        if ($type == 'notFinished'){
-            $WorkOrderDailyFollowDataTable = new WorkOrderDailyFollowDataTable();
-            return $WorkOrderDailyFollowDataTable->render('work_orders_follows.index',compact('workTypes','districts','workOrderStatus','workOrderPermitStatus'));
-        }else{
+        $workOrderStatus = $this->workOrderService->getStausFromConfig('work_order_general_status');
+        $workOrderPermitStatus = $this->workOrderService->getStausFromConfig('work_order_permit_status');
+        $workTypes = WorkType::all()->map->only('id', 'full_name')->pluck('full_name', 'id')->prepend('اختر', '');
+        $city_id = SessionUtil::getCurrentCityByBranch();
+        $districts = District::where('city_id', $city_id)->pluck('name', 'id')->prepend('اختر', '');
+        if ($type == 'notFinished') {
+            $WorkOrderDailyFollowDataTable = new WorkOrderDailyFollowDataTable;
 
-            return $workOrderFollowDataTable->render('work_orders_follows.index',compact('workTypes','districts','workOrderStatus','workOrderPermitStatus'));
+            return $WorkOrderDailyFollowDataTable->render('work_orders_follows.index', compact('workTypes', 'districts', 'workOrderStatus', 'workOrderPermitStatus'));
+        } else {
+
+            return $workOrderFollowDataTable->render('work_orders_follows.index', compact('workTypes', 'districts', 'workOrderStatus', 'workOrderPermitStatus'));
         }
 
     }
@@ -74,7 +75,6 @@ class WorkOrderFollowController extends AppBaseController
     /**
      * Store a newly created WorkOrderFollow in storage.
      *
-     * @param CreateWorkOrderFollowRequest $request
      *
      * @return Response
      */
@@ -87,14 +87,13 @@ class WorkOrderFollowController extends AppBaseController
 
         Flash::success(__('messages.saved', ['model' => __('models/workOrderFollows.singular')]));
 
-        return Helper::redirectAfterSaving($workOrderFollow->id,$request,"workOrderFollows");
+        return Helper::redirectAfterSaving($workOrderFollow->id, $request, 'workOrderFollows');
     }
 
     /**
      * Display the specified WorkOrderFollow.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -107,49 +106,48 @@ class WorkOrderFollowController extends AppBaseController
 
             return redirect(route('workOrderFollows.index'));
         }
-        $labResultStatusList = config("const.lab_result_status_list") ;
+        $labResultStatusList = config('const.lab_result_status_list');
 
         return view('work_orders_follows.show')->with([
-            'workOrderFollow'=> $workOrderFollow,
-            'labResultStatusList'=> $labResultStatusList,
+            'workOrderFollow' => $workOrderFollow,
+            'labResultStatusList' => $labResultStatusList,
         ]);
     }
 
     /**
      * Show the form for editing the specified WorkOrderFollow.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
     {
         /** @var WorkOrderFollow $workOrderFollow */
-        $workOrderFollow = WorkOrderFollow::with(['landLayersHistory',"workOrders","workOrders.district"])->find($id);
+        $workOrderFollow = WorkOrderFollow::with(['landLayersHistory', 'workOrders', 'workOrders.district'])->find($id);
         if (empty($workOrderFollow)) {
             Flash::error(__('messages.not_found', ['model' => __('models/workOrderFollows.singular')]));
 
             return redirect(route('workOrderFollows.index'));
         }
-        $workOrder=$workOrderFollow->workOrders()->first() ;
+        $workOrder = $workOrderFollow->workOrders()->first();
         $landLayers = $workOrderFollow->landLayers()->get();
 
-        $layerWorkerTypeList = config("const.layer_worker_type_list") ;
-        $layerWorkerTypeList['']='اختر';
+        $layerWorkerTypeList = config('const.layer_worker_type_list');
+        $layerWorkerTypeList[''] = 'اختر';
 
-        $layerStatusList = config("const.return_situation_layer_status_list") ;
+        $layerStatusList = config('const.return_situation_layer_status_list');
 
-        $labResultStatusList = config("const.lab_result_status_list") ;
-        $labResultStatusList['']='اختر';
+        $labResultStatusList = config('const.lab_result_status_list');
+        $labResultStatusList[''] = 'اختر';
 
-        $layersList =Layer::pluck('name', 'id');
-        $layersList->prepend("اختر","");
+        $layersList = Layer::pluck('name', 'id');
+        $layersList->prepend('اختر', '');
 
-        $employeesList = Employee::pluck('name','id');
-        $employeesList->prepend("اختر","");
+        $employeesList = Employee::pluck('name', 'id');
+        $employeesList->prepend('اختر', '');
 
-        $contractorsList = Contractor::pluck('name','id');
-        $contractorsList->prepend("اختر","");
+        $contractorsList = Contractor::pluck('name', 'id');
+        $contractorsList->prepend('اختر', '');
 
         $layer_worker_type_list = config('const.layer_worker_type_list');
 
@@ -157,24 +155,21 @@ class WorkOrderFollowController extends AppBaseController
             ->with([
                 'workOrderFollow' => $workOrderFollow,
                 'workOrder' => $workOrder,
-                'landLayers' => $landLayers ,
+                'landLayers' => $landLayers,
                 'layerWorkerTypeList' => $layerWorkerTypeList,
                 'layerStatusList' => $layerStatusList,
                 'labResultStatusList' => $labResultStatusList,
                 'layersList' => $layersList,
                 'employeesList' => $employeesList,
                 'contractorsList' => $contractorsList,
-                'layer_worker_type_list' => $layer_worker_type_list
-            ])
-            ;
+                'layer_worker_type_list' => $layer_worker_type_list,
+            ]);
     }
 
     /**
      * Update the specified WorkOrderFollow in storage.
      *
-     * @param  int              $id
-     * @param UpdateWorkOrderFollowRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateWorkOrderFollowRequest $request)
@@ -193,16 +188,16 @@ class WorkOrderFollowController extends AppBaseController
 
         Flash::success(__('messages.updated', ['model' => __('models/workOrderFollows.singular')]));
 
-        return Helper::redirectAfterSaving($id,$request,"workOrderFollows");
+        return Helper::redirectAfterSaving($id, $request, 'workOrderFollows');
     }
-
 
     public function updatePermit(Request $request, $id)
     {
         try {
             $workOrder = WorkOrderFollow::find($id);
-            if (!$workOrder) {
+            if (! $workOrder) {
                 Flash::error(__('messages.not_found', ['model' => __('models/workOrderFollows.singular')]));
+
                 return response()->json(['success' => false, 'error' => __('messages.not_found', ['model' => __('models/workOrderFollows.singular')])]);
             }
 
@@ -211,28 +206,24 @@ class WorkOrderFollowController extends AppBaseController
 
             $workOrder->save();
 
-            $message = 'تم تحويل التصريح رقم ' . $workOrder->id . ' الي اعاده الوضع';
+            $message = 'تم تحويل التصريح رقم '.$workOrder->id.' الي اعاده الوضع';
 
             Flash::success(__('messages.updated', ['model' => __('models/workOrders.singular')]));
+
             return response()->json(['success' => true]);
 
         } catch (\Exception $e) {
             Flash::error(__('messages.error', ['model' => 'حدث خطأ اثناء تحويل التصريح']));
+
             return response()->json(['success' => false, 'error' => 'حدث خطأ اثناء تحويل التصريح']);
         }
     }
 
-
-
-
-
-
-
-    public function updateStatus($statusKey,$id,$redirectTo="")
+    public function updateStatus($statusKey, $id, $redirectTo = '')
     {
         // dd($statusKey,$id,$redirectTo);
-        if(!$redirectTo){
-            $redirectTo='WorkOrderFollows';
+        if (! $redirectTo) {
+            $redirectTo = 'WorkOrderFollows';
         }
         /** @var WorkOrder $workOrder */
         $workOrderFollow = WorkOrderFollow::with('workOrders')->find($id);
@@ -241,13 +232,13 @@ class WorkOrderFollowController extends AppBaseController
 
             return redirect(route($redirectTo.'.index'));
         }
-        $workOrder=$workOrderFollow->workOrders()->first() ;
+        $workOrder = $workOrderFollow->workOrders()->first();
         // $workTypeData = WorkType::find($workOrder->work_type_id);
         // if($workTypeData){
         //     $inputWorkOrder['current_department_id'] = $workTypeData->default_department_id;
         // }
-        $inputWorkOrder=[];
-        $inputWorkOrderFollow=[];
+        $inputWorkOrder = [];
+        $inputWorkOrderFollow = [];
         $redirectAction = 'edit';
         // if ($status=="drillInProgress"){
         //     $inputWorkOrder['status']=3;//جارى التنفيذ
@@ -272,78 +263,76 @@ class WorkOrderFollowController extends AppBaseController
         //     $redirectAction = 'index';
         // }
         /**Validation */
-        if ($statusKey=="restablishWorkFinished"){
+        if ($statusKey == 'restablishWorkFinished') {
             $lastLayer = $workOrderFollow->landLayers()->latest()->first();
-            if(!$lastLayer || $lastLayer->lab_result_status !=1){
-                Flash::error("لا يمكن انهاء العمل و نتيجة اختبار اخر طبقة لم تنجح");
+            if (! $lastLayer || $lastLayer->lab_result_status != 1) {
+                Flash::error('لا يمكن انهاء العمل و نتيجة اختبار اخر طبقة لم تنجح');
 
-                return redirect(route($redirectTo.'.'.$redirectAction,$workOrderFollow->id));
+                return redirect(route($redirectTo.'.'.$redirectAction, $workOrderFollow->id));
             }
-            if(!$lastLayer->layer()->first()->is_final){
-                Flash::error("لا يمكن انهاء العمل الا أن تكون أخر طبقة ناجحة هي الطبقة النهائية");
+            if (! $lastLayer->layer()->first()->is_final) {
+                Flash::error('لا يمكن انهاء العمل الا أن تكون أخر طبقة ناجحة هي الطبقة النهائية');
 
-                return redirect(route($redirectTo.'.'.$redirectAction,$workOrderFollow->id));
+                return redirect(route($redirectTo.'.'.$redirectAction, $workOrderFollow->id));
             }
             // dd($lastLayer);
             // dd($lastLayer->layer()->first()->is_final);
             // dd("i am here");
         }
 
-        if ($statusKey=="restablishWorkInProgress"){
+        if ($statusKey == 'restablishWorkInProgress') {
             $workOrderFollow->status = WorkOrderPermitStatusEnum::UnderWay->value;
             $workOrderFollow->save();
             // $inputWorkOrder['status']=4;//تم التسليم
-        }else if ($statusKey=="restablishWorkFinished"){
+        } elseif ($statusKey == 'restablishWorkFinished') {
             $workOrderFollow->status = WorkOrderPermitStatusEnum::UnderDelivery->value;
             $workOrderFollow->save();
-            $inputWorkOrder['status']=4;//تم التنفيذ
-        }else if ($statusKey=="initialDelivery"){
+            $inputWorkOrder['status'] = 4; // تم التنفيذ
+        } elseif ($statusKey == 'initialDelivery') {
             $workOrderFollow->status = WorkOrderPermitStatusEnum::InitialDelivery->value;
             $workOrderFollow->save();
-            $inputWorkOrder['status']=5;//تم التسليم
+            $inputWorkOrder['status'] = 5; // تم التسليم
             // $inputWorkOrder['current_department_id']=4;//قسم المستخلصات
-        }else if ($statusKey=="finalDelivery"){
+        } elseif ($statusKey == 'finalDelivery') {
             $workOrderFollow->status = WorkOrderPermitStatusEnum::FinalDelivery->value;
             $workOrderFollow->save();
-            $inputWorkOrder['status']=5;//تم التسليم
-            $redirectAction="index";
+            $inputWorkOrder['status'] = 5; // تم التسليم
+            $redirectAction = 'index';
             // $inputWorkOrder['current_department_id']=6;//قسم المستخلصات
-        }else if ($statusKey=="restablishConvertDepartment"){
-            $inputWorkOrder['status']=5;//تم التسليم
-            $inputWorkOrder['current_department_id']=6;//قسم المستخلصات
-        }else if ($statusKey=="returnWorkOrderToDrilling"){
-            $inputWorkOrder['status']=WorkOrderStatusEnum::WorkingInProgress->value;
-            $inputWorkOrder['current_department_id']=1;
-            $inputWorkOrder['drilling_status']=WorkOrderOperationsStatusEnum::WorkingInProgress->value;
-            $redirectAction="index";
+        } elseif ($statusKey == 'restablishConvertDepartment') {
+            $inputWorkOrder['status'] = 5; // تم التسليم
+            $inputWorkOrder['current_department_id'] = 6; // قسم المستخلصات
+        } elseif ($statusKey == 'returnWorkOrderToDrilling') {
+            $inputWorkOrder['status'] = WorkOrderStatusEnum::WorkingInProgress->value;
+            $inputWorkOrder['current_department_id'] = 1;
+            $inputWorkOrder['drilling_status'] = WorkOrderOperationsStatusEnum::WorkingInProgress->value;
+            $redirectAction = 'index';
         }
 
         $this->notificationService->sendTelegramNotification($statusKey, $workOrder, $workOrderFollow->workOrders[0]->current_department_id);
 
-        if($inputWorkOrder){
+        if ($inputWorkOrder) {
             $workOrder->fill($inputWorkOrder);
             $workOrder->save();
         }
 
-        if($inputWorkOrderFollow){
+        if ($inputWorkOrderFollow) {
             $workOrder->fill($inputWorkOrderFollow);
             $workOrder->save();
         }
 
-
         Flash::success(__('messages.updated', ['model' => __('models/workOrders.singular')]));
 
-        return redirect(route($redirectTo.'.'.$redirectAction,$workOrderFollow->id));
+        return redirect(route($redirectTo.'.'.$redirectAction, $workOrderFollow->id));
     }
 
     /**
      * Remove the specified WorkOrderFollow from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {
@@ -376,18 +365,19 @@ class WorkOrderFollowController extends AppBaseController
             return redirect(route('assayForms.index'));
         }
         $report = [
-            'font_name'=>'calibri',
-            'font_size'=>'18',
-            'title_background_color'=>'4CAF50'
-            ];
+            'font_name' => 'calibri',
+            'font_size' => '18',
+            'title_background_color' => '4CAF50',
+        ];
 
         $data = [
-            'data'=>$workOrderFollow,
-            'dateTime'=>Carbon::now()->format('h:i Y-m-d'),
-            'report'=>$report
+            'data' => $workOrderFollow,
+            'dateTime' => Carbon::now()->format('h:i Y-m-d'),
+            'report' => $report,
 
         ];
         $pdf = PDF::loadView('work_orders_follows.print-work-order-follow', $data);
+
         return $pdf->stream($id.'.pdf');
     }
 }

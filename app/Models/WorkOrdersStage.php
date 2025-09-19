@@ -2,36 +2,28 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class WorkOrdersStage
- * @package App\Models
+ *
  * @version January 14, 2022, 2:45 pm UTC
  *
  * @property \Illuminate\Database\Eloquent\Collection $departments
- * @property integer $name
- * @property integer $default_next_stage_id
- * @property integer $parent_id
+ * @property int $name
+ * @property int $default_next_stage_id
+ * @property int $parent_id
  */
 class WorkOrdersStage extends AppBaseModel
 {
     use SoftDeletes;
 
-
     public $table = 'work_orders_stages';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
         'default_next_stage_id',
-        'parent_id'
+        'parent_id',
     ];
 
     /**
@@ -44,7 +36,7 @@ class WorkOrdersStage extends AppBaseModel
         'name' => 'integer',
         'default_next_stage_id' => 'integer',
         'parent_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -53,7 +45,7 @@ class WorkOrdersStage extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
     /**

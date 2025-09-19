@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\LabDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateLabRequest;
 use App\Http\Requests\UpdateLabRequest;
 use App\Models\Lab;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class LabController extends AppBaseController
@@ -16,7 +14,6 @@ class LabController extends AppBaseController
     /**
      * Display a listing of the Lab.
      *
-     * @param LabDataTable $labDataTable
      * @return Response
      */
     public function index(LabDataTable $labDataTable)
@@ -37,7 +34,6 @@ class LabController extends AppBaseController
     /**
      * Store a newly created Lab in storage.
      *
-     * @param CreateLabRequest $request
      *
      * @return Response
      */
@@ -56,8 +52,7 @@ class LabController extends AppBaseController
     /**
      * Display the specified Lab.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -77,8 +72,7 @@ class LabController extends AppBaseController
     /**
      * Show the form for editing the specified Lab.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -98,9 +92,7 @@ class LabController extends AppBaseController
     /**
      * Update the specified Lab in storage.
      *
-     * @param  int              $id
-     * @param UpdateLabRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateLabRequest $request)
@@ -125,11 +117,10 @@ class LabController extends AppBaseController
     /**
      * Remove the specified Lab from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

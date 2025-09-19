@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Helpers\Helper;
+use Illuminate\Console\Command;
 
 class DatabaseDump extends Command
 {
@@ -47,15 +47,15 @@ class DatabaseDump extends Command
 
         $ts = time();
 
-        //$path = database_path() . $ds . 'backups' . $ds . date('Y', $ts) . $ds . date('m', $ts) . $ds . date('d', $ts) . $ds;
-        $path = database_path() . $ds . 'backups' . $ds;
-        $file = date('Y-m-d-His', $ts) . '-dump-' . $database . '.sql';
-        $command = sprintf('mysqldump -h %s -u %s -p\'%s\' %s > %s', $host, $username, $password, $database, $path . $file);
+        // $path = database_path() . $ds . 'backups' . $ds . date('Y', $ts) . $ds . date('m', $ts) . $ds . date('d', $ts) . $ds;
+        $path = database_path().$ds.'backups'.$ds;
+        $file = date('Y-m-d-His', $ts).'-dump-'.$database.'.sql';
+        $command = sprintf('mysqldump -h %s -u %s -p\'%s\' %s > %s', $host, $username, $password, $database, $path.$file);
 
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             mkdir($path, 0755, true);
         }
-        $this->info("Start Run:- MySql Dump Tool");
+        $this->info('Start Run:- MySql Dump Tool');
         exec($command);
         $this->info("File $file Created Successfully");
         $message = "File $file Created Successfully";

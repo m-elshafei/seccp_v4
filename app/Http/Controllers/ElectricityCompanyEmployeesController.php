@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Flash;
-use App\Models\ElectricityCompanyEmployees;
-use Illuminate\Http\Request;
-use App\Http\Requests\UpdateElectricityCompanyEmployeesRequest;
-use App\Http\Requests\CreateElectricityCompanyEmployeesRequest;
 use App\DataTables\ElectricityCompanyEmployeeDataTable;
+use App\Http\Requests\CreateElectricityCompanyEmployeesRequest;
+use App\Http\Requests\UpdateElectricityCompanyEmployeesRequest;
+use App\Models\ElectricityCompanyEmployees;
+use Flash;
 
 class ElectricityCompanyEmployeesController extends Controller
 {

@@ -14,8 +14,8 @@ class CreateWorkOrdersPermitWorkOrderTable extends Migration
     public function up()
     {
         Schema::create('work_order_work_orders_permit', function (Blueprint $table) {
-            $table->foreignId('work_order_id')->constrained('work_orders')->onDelete('cascade');;
-            $table->foreignId('work_orders_permit_id')->constrained('work_orders_permits')->onDelete('cascade');;
+            $table->foreignId('work_order_id')->constrained('work_orders')->onDelete('cascade');
+            $table->foreignId('work_orders_permit_id')->constrained('work_orders_permits')->onDelete('cascade');
         });
     }
 

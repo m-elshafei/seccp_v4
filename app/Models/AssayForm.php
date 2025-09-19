@@ -2,31 +2,29 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class AssayForm
- * @package App\Models
+ *
  * @version March 12, 2022, 2:54 pm UTC
  *
- * @property integer $work_order_id
- * @property integer $district_id
- * @property integer $work_type_id
+ * @property int $work_order_id
+ * @property int $district_id
+ * @property int $work_type_id
  * @property string $customer_name
  * @property string $notes
- * @property integer $status
+ * @property int $status
  */
 class AssayForm extends AppBaseModel
 {
-    use SoftDeletes, LogsActivity,Branchable , CreatedUpdatedBy;
+    use Branchable, CreatedUpdatedBy,LogsActivity , SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -37,13 +35,7 @@ class AssayForm extends AppBaseModel
             ->logAll();
     }
 
-
     public $table = 'assay_forms';
-    
-
-   
-
-
 
     public $fillable = [
         'work_order_id',
@@ -51,7 +43,7 @@ class AssayForm extends AppBaseModel
         'work_type_id',
         'notes',
         'amount',
-        'status'
+        'status',
     ];
 
     /**
@@ -65,7 +57,7 @@ class AssayForm extends AppBaseModel
         'work_type_id' => 'integer',
         'notes' => 'string',
         'status' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -74,21 +66,22 @@ class AssayForm extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'is_mission'    => 'required|in:0,1',
+        'is_mission' => 'required|in:0,1',
         'work_order_id' => 'required_if:is_mission,0',
-        'mission_id'    => 'required_if:is_mission,1',
-        //'status' => 'required|in:1,2'
+        'mission_id' => 'required_if:is_mission,1',
+        // 'status' => 'required|in:1,2'
     ];
 
     public static $updateRules = [
         'work_order_id' => 'required_if:is_mission,0',
-        'mission_id'    => 'required_if:is_mission,1',
+        'mission_id' => 'required_if:is_mission,1',
     ];
-    
+
     protected $appends = ['status_name'];
 
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\AssayForm']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\AssayForm']);
     }
 
     public function assayService()
@@ -106,7 +99,7 @@ class AssayForm extends AppBaseModel
      **/
     public function workType()
     {
-        return $this->belongsTo(\App\Models\WorkType::class,'work_type_id','id');
+        return $this->belongsTo(\App\Models\WorkType::class, 'work_type_id', 'id');
     }
 
     /**
@@ -114,7 +107,7 @@ class AssayForm extends AppBaseModel
      **/
     public function workOrder()
     {
-        return $this->belongsTo(\App\Models\WorkOrder::class,'work_order_id','id');
+        return $this->belongsTo(\App\Models\WorkOrder::class, 'work_order_id', 'id');
     }
 
     public function getCreatedAtAttribute()
@@ -124,8 +117,6 @@ class AssayForm extends AppBaseModel
 
     public function getStatusNameAttribute()
     {
-        return $this->attributes['status']==1? 'جديد' : 'معتمد';
+        return $this->attributes['status'] == 1 ? 'جديد' : 'معتمد';
     }
-
-
 }

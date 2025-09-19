@@ -12,9 +12,9 @@ class AssayImport implements ToCollection
     {
         // dd($rows[4] );
         // dd($rows[5] );
-        dd($rows[61] );
-        dd($rows[62] );
-        // foreach ($rows as $row) 
+        dd($rows[61]);
+        dd($rows[62]);
+        // foreach ($rows as $row)
         // {
         //     User::create([
         //         'name' => $row[0],

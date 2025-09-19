@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ReturnSituationDataTable;
-use App\Http\Requests;
 use App\Http\Requests\CreateReturnSituationRequest;
 use App\Http\Requests\UpdateReturnSituationRequest;
-use App\Models\ReturnSituation;
-use Flash;
-use App\Http\Controllers\AppBaseController;
 use App\Models\Contractor;
 use App\Models\Employee;
 use App\Models\Layer;
+use App\Models\ReturnSituation;
+use Flash;
 use Response;
 
 class ReturnSituationController extends AppBaseController
@@ -19,7 +17,6 @@ class ReturnSituationController extends AppBaseController
     /**
      * Display a listing of the ReturnSituation.
      *
-     * @param ReturnSituationDataTable $returnSituationDataTable
      * @return Response
      */
     public function index(ReturnSituationDataTable $returnSituationDataTable)
@@ -34,13 +31,12 @@ class ReturnSituationController extends AppBaseController
      */
     public function create()
     {
-        return view('return_situations.create')->with('formMode','create');
+        return view('return_situations.create')->with('formMode', 'create');
     }
 
     /**
      * Store a newly created ReturnSituation in storage.
      *
-     * @param CreateReturnSituationRequest $request
      *
      * @return Response
      */
@@ -59,8 +55,7 @@ class ReturnSituationController extends AppBaseController
     /**
      * Display the specified ReturnSituation.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -80,8 +75,7 @@ class ReturnSituationController extends AppBaseController
     /**
      * Show the form for editing the specified ReturnSituation.
      *
-     * @param  int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -94,43 +88,41 @@ class ReturnSituationController extends AppBaseController
 
             return redirect(route('returnSituations.index'));
         }
-        
+
         $landLayers = $returnSituation->landLayers()->get();
-        
-        $layerWorkerTypeList = config("const.layer_worker_type_list") ; 
-        $layerWorkerTypeList['']='اختر';
-        
-        $layerStatusList = config("const.return_situation_layer_status_list") ; 
-        
-        $labResultStatusList = config("const.lab_result_status_list") ; 
-        $labResultStatusList['']='اختر';
 
-        $layersList =Layer::pluck('name', 'id');
-        $layersList->prepend("اختر","");
+        $layerWorkerTypeList = config('const.layer_worker_type_list');
+        $layerWorkerTypeList[''] = 'اختر';
 
-        $employeesList = Employee::pluck('name','id');
-        $employeesList->prepend("اختر","");
+        $layerStatusList = config('const.return_situation_layer_status_list');
 
-        $contractorsList = Contractor::pluck('name','id');
-        $contractorsList->prepend("اختر","");
+        $labResultStatusList = config('const.lab_result_status_list');
+        $labResultStatusList[''] = 'اختر';
+
+        $layersList = Layer::pluck('name', 'id');
+        $layersList->prepend('اختر', '');
+
+        $employeesList = Employee::pluck('name', 'id');
+        $employeesList->prepend('اختر', '');
+
+        $contractorsList = Contractor::pluck('name', 'id');
+        $contractorsList->prepend('اختر', '');
 
         $layer_worker_type_list = config('const.layer_worker_type_list');
 
-        return view('return_situations.edit' , compact('returnSituation','landLayers' , 
-                                                        'layerWorkerTypeList', 'layerStatusList', 
-                                                        'labResultStatusList' , 'layersList',
-                                                        'employeesList' , 'contractorsList' ,
-                                                        'layer_worker_type_list'
-                                                        )
-                                                    )->with('formMode','edit');
+        return view('return_situations.edit', compact('returnSituation', 'landLayers',
+            'layerWorkerTypeList', 'layerStatusList',
+            'labResultStatusList', 'layersList',
+            'employeesList', 'contractorsList',
+            'layer_worker_type_list'
+        )
+        )->with('formMode', 'edit');
     }
 
     /**
      * Update the specified ReturnSituation in storage.
      *
-     * @param  int              $id
-     * @param UpdateReturnSituationRequest $request
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update($id, UpdateReturnSituationRequest $request)
@@ -155,11 +147,10 @@ class ReturnSituationController extends AppBaseController
     /**
      * Remove the specified ReturnSituation from storage.
      *
-     * @param  int $id
+     * @param  int  $id
+     * @return Response
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {

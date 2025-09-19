@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateWorkOrdersProjectsTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -24,7 +23,7 @@ class CreateWorkOrdersProjectsTable extends Migration
             $table->integer('stages_count')->nullable();
             $table->foreignId('branch_id')->constrained();
             $table->string('closed_work_order_number')->nullable();
-            $table->foreignId('copy_from_work_order_id')->nullable()->constrained('work_orders');;
+            $table->foreignId('copy_from_work_order_id')->nullable()->constrained('work_orders');
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('created_by')->constrained('users');

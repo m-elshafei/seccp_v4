@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-use Flash;
-use App\Models\EmergencyIssuesType;
-use Illuminate\Http\Request;
-use App\Http\Requests\UpdateEmergencyIssuesTypeRequest;
-use App\Http\Requests\CreateEmergencyIssuesTypeRequest;
+
 use App\DataTables\EmergencyIssuesTypeDataTable;
+use App\Http\Requests\CreateEmergencyIssuesTypeRequest;
+use App\Http\Requests\UpdateEmergencyIssuesTypeRequest;
+use App\Models\EmergencyIssuesType;
+use Flash;
 
 class EmergencyIssuesTypeController extends Controller
 {
     /**
      * Display a listing of the District.
      *
-     * @param EmergencyIssuesTypeDataTable $districtDataTable
+     * @param  EmergencyIssuesTypeDataTable  $districtDataTable
      * @return Response
      */
     public function index(EmergencyIssuesTypeDataTable $EmergencyIssuesTypeDataTable)
@@ -81,7 +81,7 @@ class EmergencyIssuesTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, UpdateEmergencyIssuesTypeRequest $request )
+    public function update($id, UpdateEmergencyIssuesTypeRequest $request)
     {
         /** @var EmergencyIssuesType $EmergencyIssuesType */
         $emergencyIssuesType = EmergencyIssuesType::find($id);

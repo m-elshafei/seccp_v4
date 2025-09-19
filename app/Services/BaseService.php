@@ -2,10 +2,7 @@
 
 namespace App\Services;
 
-
-class BaseService 
+class BaseService
 {
-    function __construct() {
-
-    }
+    public function __construct() {}
 }

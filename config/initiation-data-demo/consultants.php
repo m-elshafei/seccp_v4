@@ -5,12 +5,12 @@ return [
         'name' => 'الشركة الاستشارية الاولي',
         'created_at' => '2023-01-03 06:58:00',
         'updated_at' => '2023-01-03 06:58:00',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '2' => [
         'name' => 'الشركة الاستشارية الثانيه',
         'created_at' => '2023-01-03 06:58:00',
         'updated_at' => '2023-01-03 06:58:00',
-        'deleted_at' => NULL
-    ]
+        'deleted_at' => null,
+    ],
 ];

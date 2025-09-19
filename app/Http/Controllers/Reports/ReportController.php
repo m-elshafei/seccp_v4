@@ -2,56 +2,59 @@
 
 namespace App\Http\Controllers\Reports;
 
-use PDF;
-use Carbon\Carbon;
-use Laracasts\Flash\Flash;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Models\SystemComponent;
 use App\Http\Controllers\Controller;
+use App\Models\SystemComponent;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Laracasts\Flash\Flash;
+use PDF;
 
 class ReportController extends Controller
 {
-
-    public function show($reportRouteName,Request $request)
+    public function show($reportRouteName, Request $request)
     {
-        $report = SystemComponent::where('route_name',$reportRouteName)->first();
-        if(!$report){
+        $report = SystemComponent::where('route_name', $reportRouteName)->first();
+        if (! $report) {
             Flash::error(__('messages.not_found', ['model' => __('models/workOrders.singular')]));
+
             return redirect(route('home'));
         }
         $where = $request->except(['_token']);
-        $sessionName='reports.'.$reportRouteName.'.filter' ;
-        if(!empty($where)){
+        $sessionName = 'reports.'.$reportRouteName.'.filter';
+        if (! empty($where)) {
             session([$sessionName => $where]);
-        }else{
+        } else {
             session()->forget($sessionName);
         }
 
-        return view('pdf.show',compact("report","reportRouteName"));
+        return view('pdf.show', compact('report', 'reportRouteName'));
     }
 
-    function getPDF($reportName,$reportData)  {
-        $reportComponent = SystemComponent::where('route_name',$reportName)->first();
+    public function getPDF($reportName, $reportData)
+    {
+        $reportComponent = SystemComponent::where('route_name', $reportName)->first();
         $config = $reportComponent->getConfig();
         $reportNumber = $reportComponent->getReportNumber();
         $data = [
-            'data'=>$reportData,
-            'dateTime'=>Carbon::now()->format('h:i Y-m-d'),
-            'reportSettings'=>$config,
-            'comp_name'=>$reportComponent->comp_name,
-            'reportTitle'=>($reportComponent->description)?$reportComponent->description:$reportComponent->comp_ar_label,
-            'reportNumber'=>$reportNumber
+            'data' => $reportData,
+            'dateTime' => Carbon::now()->format('h:i Y-m-d'),
+            'reportSettings' => $config,
+            'comp_name' => $reportComponent->comp_name,
+            'reportTitle' => ($reportComponent->description) ? $reportComponent->description : $reportComponent->comp_ar_label,
+            'reportNumber' => $reportNumber,
         ];
-        $pdf = PDF::loadView($reportComponent->getReportTemplateName() ,$data,[],[
-            'title' => $reportComponent->comp_ar_label,//'تقرير أوامر العمل',
-            'orientation' => $config["orientation"] ?? 'P' // 'L' or 'P'
+        $pdf = PDF::loadView($reportComponent->getReportTemplateName(), $data, [], [
+            'title' => $reportComponent->comp_ar_label, // 'تقرير أوامر العمل',
+            'orientation' => $config['orientation'] ?? 'P', // 'L' or 'P'
         ]);
+
         return $pdf;
     }
 
-    function handlePDF($request,$pdf,$fileName = "")  {
+    public function handlePDF($request, $pdf, $fileName = '')
+    {
         if ($request->has('preview')) {
             return $pdf->stream(); // return view($reportTemplate,$data);
         }
@@ -61,15 +64,16 @@ class ReportController extends Controller
         }
 
         if ($request->has('save')) {
-            $reportFileName= Str::uuid().'.pdf';// 'WorkOrder'.time().$request->id.'.pdf';
-            $pdf->save(Storage::path($reportFileName));// $pdf->save(storage_path($reportName));
+            $reportFileName = Str::uuid().'.pdf'; // 'WorkOrder'.time().$request->id.'.pdf';
+            $pdf->save(Storage::path($reportFileName)); // $pdf->save(storage_path($reportName));
+
             return redirect(url($reportFileName));
         }
 
         if ($request->has('download')) {
-            if ($fileName ){
+            if ($fileName) {
                 return $pdf->download($fileName.'.pdf');
-            }else{
+            } else {
                 return $pdf->download(Str::uuid().'.pdf');
             }
 
@@ -78,21 +82,22 @@ class ReportController extends Controller
         return $pdf->stream();
     }
 
-    function setSession($routeName,$field)  {
-        $input= session('reports.'.$routeName.'.filter');
-        if (!$input) {
-            if($routeName == 'emergencyMissionsDailyReport'){
+    public function setSession($routeName, $field)
+    {
+        $input = session('reports.'.$routeName.'.filter');
+        if (! $input) {
+            if ($routeName == 'emergencyMissionsDailyReport') {
                 session([
                     'reports.'.$routeName.'.filter.from_'.$field => Carbon::now()->subDays(10)->format('Y-m-d'),
                     'reports.'.$routeName.'.filter.to_'.$field => Carbon::now()->format('Y-m-d'),
                 ]);
-            }else {
+            } else {
                 session([
                     'reports.'.$routeName.'.filter.from_'.$field => Carbon::now()->subDays(30)->format('Y-m-d'),
                     'reports.'.$routeName.'.filter.to_'.$field => Carbon::now()->format('Y-m-d'),
-                ]);            }
+                ]);
+            }
 
         }
     }
-
 }

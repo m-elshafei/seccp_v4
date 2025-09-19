@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateLayersTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -17,7 +16,7 @@ class CreateLayersTable extends Migration
         Schema::create('layers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedInteger("order")->default(1);
+            $table->unsignedInteger('order')->default(1);
             $table->boolean('is_final');
             $table->timestamps();
             $table->softDeletes();

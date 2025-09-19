@@ -3,27 +3,21 @@
 namespace App\Models;
 
 use App\Traits\Branchable;
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WorkOrdersPermitNote extends AppBaseModel
 {
-    use HasFactory;
     use Branchable;
-    use LogsActivity;
     use CreatedUpdatedBy;
-
+    use HasFactory;
+    use LogsActivity;
     use SoftDeletes;
 
-
     public $table = 'work_order_permits_notes';
-
-
-
 
     public $fillable = [
         'permit_number',
@@ -32,7 +26,7 @@ class WorkOrdersPermitNote extends AppBaseModel
         'work_orders_permits_id',
         'user_id',
         'work_order_id',
-        'branch_id'
+        'branch_id',
     ];
 
     protected $casts = [
@@ -42,7 +36,7 @@ class WorkOrdersPermitNote extends AppBaseModel
         'note' => 'string',
         'work_orders_permits_status' => 'integer',
         'user_id' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     public static $rules = [
@@ -63,7 +57,6 @@ class WorkOrdersPermitNote extends AppBaseModel
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
-
     public function user()
     {
         return $this->belongsTo(User::class)->withDefault();

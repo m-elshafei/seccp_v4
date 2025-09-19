@@ -6,9 +6,10 @@ use Illuminate\View\Component;
 
 class FormToolbar extends Component
 {
-    
     public $actionname;
+
     public $screenname;
+
     public $key;
 
     /**
@@ -16,15 +17,15 @@ class FormToolbar extends Component
      *
      * @return void
      */
-    public function __construct($actionname, $screenname,$key="")
+    public function __construct($actionname, $screenname, $key = '')
     {
-        $this->actionname=$actionname;
-        //TODO: need another better way
-        if($screenname == "workOrdersGeneral"){
-            $screenname= "workOrders";
+        $this->actionname = $actionname;
+        // TODO: need another better way
+        if ($screenname == 'workOrdersGeneral') {
+            $screenname = 'workOrders';
         }
-        $this->screenname=$screenname;
-        $this->key=$key;
+        $this->screenname = $screenname;
+        $this->key = $key;
     }
 
     /**

@@ -5,66 +5,66 @@ return [
         'name' => 'صيانة عدادات',
         'created_at' => '2023-01-03 07:01:22',
         'updated_at' => '2023-01-03 07:01:22',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '2' => [
         'name' => 'صيانة الجهد المتوسط هوائي',
         'created_at' => '2023-01-03 07:02:38',
         'updated_at' => '2023-01-03 07:02:38',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '3' => [
         'name' => 'صيانة الجهد المنخفض هوائي',
         'created_at' => '2023-01-03 07:03:45',
         'updated_at' => '2023-01-03 07:03:45',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '4' => [
         'name' => 'صيانة الجهد المنخفض كايبل',
         'created_at' => '2023-01-03 07:04:15',
         'updated_at' => '2023-01-03 07:04:15',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '5' => [
         'name' => 'صيانة الجهد المنخفض شبكة أرضية',
         'created_at' => '2023-01-03 07:04:45',
         'updated_at' => '2023-01-03 07:04:45',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '6' => [
         'name' => 'صيانة المحطات هوائي',
         'created_at' => '2023-01-03 07:05:28',
         'updated_at' => '2023-01-03 07:05:28',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '7' => [
         'name' => 'الفصل والاعادة',
         'created_at' => '2023-01-03 07:06:43',
         'updated_at' => '2023-01-03 07:06:43',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '8' => [
         'name' => 'الكابلات المرنة',
         'created_at' => '2023-01-03 07:07:32',
         'updated_at' => '2023-01-03 07:07:32',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '9' => [
         'name' => 'المولدات',
         'created_at' => '2023-01-03 07:07:54',
         'updated_at' => '2023-01-03 07:07:54',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '10' => [
         'name' => 'صيانة الجهد المنخفض أرضي',
         'created_at' => '2023-01-03 07:07:54',
         'updated_at' => '2023-01-03 07:07:54',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '11' => [
         'name' => 'صيانة الجهد المتوسط أرضي',
         'created_at' => '2023-01-03 07:07:54',
         'updated_at' => '2023-01-03 07:07:54',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
 ];

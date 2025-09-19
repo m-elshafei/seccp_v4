@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAssayFormsTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -20,7 +19,7 @@ class CreateAssayFormsTable extends Migration
             $table->foreignId('work_type_id')->constrained();
             $table->boolean('is_mission')->default(false);
             $table->text('notes')->nullable();
-            $table->integer('status')->comment("1= new, 2= approved, 3= Moved")->default(1);
+            $table->integer('status')->comment('1= new, 2= approved, 3= Moved')->default(1);
             $table->double('amount')->default(0);
             $table->foreignId('branch_id')->constrained();
             $table->timestamps();

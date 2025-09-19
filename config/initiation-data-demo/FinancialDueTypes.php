@@ -5,30 +5,30 @@ return [
         'name' => 'مستخلصات قسم التمديدات والحفر',
         'created_at' => '2022-08-05 10:50:42',
         'updated_at' => '2022-08-05 10:50:42',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '2' => [
         'name' => 'مستخلصات قسم الكهرباء',
         'created_at' => '2022-08-05 10:50:57',
         'updated_at' => '2022-08-05 10:50:57',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '3' => [
         'name' => 'مستخلصات قسم الهوائى',
         'created_at' => '2022-08-05 10:51:08',
         'updated_at' => '2022-08-05 10:51:08',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '4' => [
         'name' => 'مستخلصات المشاريع',
         'created_at' => '2022-08-05 10:51:38',
         'updated_at' => '2022-08-05 10:53:43',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
     '5' => [
         'name' => 'مستخلصات قسم الطوارئ والعمليات',
         'created_at' => '2022-08-05 10:51:59',
         'updated_at' => '2022-08-05 10:51:59',
-        'deleted_at' => NULL
+        'deleted_at' => null,
     ],
 ];

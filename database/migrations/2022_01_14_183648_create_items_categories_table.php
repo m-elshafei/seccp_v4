@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateItemsCategoriesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -16,7 +15,7 @@ class CreateItemsCategoriesTable extends Migration
     {
         Schema::create('items_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name',250);
+            $table->string('name', 250);
             $table->string('name_ar')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('items_categories');
             $table->timestamps();

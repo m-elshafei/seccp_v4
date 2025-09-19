@@ -2,26 +2,23 @@
 
 namespace App\Services\WorkOrders;
 
-use App\Models\ElectricMeter;
 use App\Models\ElectricalOperation;
-use App\Services\WorkOrders\BaseWorkOrderService;
+use App\Models\ElectricMeter;
 
-
-class ElectricWorkOrderService  extends BaseWorkOrderService
+class ElectricWorkOrderService extends BaseWorkOrderService
 {
-
-    public function  updateWorkOrder($request, $workOrder)
+    public function updateWorkOrder($request, $workOrder)
     {
         ElectricMeter::where('work_order_id', $workOrder->id)->delete();
         $total_electrical_counters = 0;
         $subscription_no = $request->get('subscription_no');
 
-        if($request->get('meter_no')){
+        if ($request->get('meter_no')) {
             $reading = $request->get('reading');
             $approved_capacity = $request->get('approved_capacity');
             $previous_capacity = $request->get('previous_capacity');
-            foreach ($request->get('meter_no') as $i=>$meter_no){
-                if (empty($meter_no) || empty($subscription_no[$i])){
+            foreach ($request->get('meter_no') as $i => $meter_no) {
+                if (empty($meter_no) || empty($subscription_no[$i])) {
                     continue;
                 }
                 ElectricMeter::create([
@@ -31,14 +28,13 @@ class ElectricWorkOrderService  extends BaseWorkOrderService
                     'subscription_no' => $subscription_no[$i],
                     'approved_capacity' => $approved_capacity[$i],
                     'previous_capacity' => $previous_capacity[$i],
-                    'user_id' => auth()->id()
+                    'user_id' => auth()->id(),
                 ]);
                 $total_electrical_counters++;
             }
         }
-        
 
-        $total_electrical_counters = $total_electrical_counters==0? $request->get('total_electrical_counters') : $total_electrical_counters;
+        $total_electrical_counters = $total_electrical_counters == 0 ? $request->get('total_electrical_counters') : $total_electrical_counters;
 
         $operation = [
             'user_id' => auth()->id(),
@@ -60,8 +56,7 @@ class ElectricWorkOrderService  extends BaseWorkOrderService
         ElectricalOperation::updateOrCreate(['work_order_id' => $workOrder->id], $operation);
 
         // $workOrder = parent::updateWorkOrder($request, $workOrder);
-        
+
         return $workOrder;
     }
-    
 }

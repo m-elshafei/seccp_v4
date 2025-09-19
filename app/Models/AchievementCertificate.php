@@ -2,25 +2,21 @@
 
 namespace App\Models;
 
-use App\Models\WorkOrder;
 use App\Traits\Branchable;
-
-
-use App\Models\AppBaseModel;
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class AchievementCertificate
- * @package App\Models
+ *
  * @version May 15, 2022, 5:41 pm UTC
  *
- * @property integer $work_order_id
- * @property integer $cert_date
- * @property integer $status
+ * @property int $work_order_id
+ * @property int $cert_date
+ * @property int $status
  * @property number $amount
  * @property number $fines_amount
  * @property number $net_amount
@@ -28,20 +24,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class AchievementCertificate extends AppBaseModel
 {
-    use LogsActivity;
-    use SoftDeletes;
     use Branchable;
     use CreatedUpdatedBy;
-
-
+    use LogsActivity;
+    use SoftDeletes;
 
     public $table = 'achievement_certificates';
-    
-
-   
-
-
-
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -60,7 +48,7 @@ class AchievementCertificate extends AppBaseModel
         'fines_amount',
         'net_amount',
         'final_amount',
-        'notes'
+        'notes',
     ];
 
     /**
@@ -77,7 +65,7 @@ class AchievementCertificate extends AppBaseModel
         'fines_amount' => 'decimal:2',
         'net_amount' => 'decimal:2',
         'final_amount' => 'decimal:2',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -87,20 +75,19 @@ class AchievementCertificate extends AppBaseModel
      */
     public static $rules = [
         'work_order_id' => 'required|numeric',
-        //'amount' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+        // 'amount' => 'required|regex:/^\d+(\.\d{1,2})?$/',
         'fines_amount' => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
         'net_amount' => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
         'cert_date' => 'required|date',
     ];
 
-    
     public function workOrder()
     {
         return $this->belongsTo(WorkOrder::class);
     }
-    
 
-    public function activities(){
-        return $this->hasMany(Activity::class,'subject_id','id')->where(['subject_type'=>'App\Models\AchievementCertificate']);
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id')->where(['subject_type' => 'App\Models\AchievementCertificate']);
     }
 }

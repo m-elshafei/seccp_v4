@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateLabsTable extends Migration
 {
-
     /**
      * Run the migrations.
      *

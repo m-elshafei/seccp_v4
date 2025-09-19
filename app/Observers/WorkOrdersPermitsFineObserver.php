@@ -10,7 +10,6 @@ class WorkOrdersPermitsFineObserver
     /**
      * Handle the WorkOrdersPermitsFine "created" event.
      *
-     * @param  \App\Models\WorkOrdersPermitsFine  $workOrdersPermitsFine
      * @return void
      */
     public function created(WorkOrdersPermitsFine $workOrdersPermitsFine)
@@ -21,7 +20,6 @@ class WorkOrdersPermitsFineObserver
     /**
      * Handle the WorkOrdersPermitsFine "updated" event.
      *
-     * @param  \App\Models\WorkOrdersPermitsFine  $workOrdersPermitsFine
      * @return void
      */
     public function updated(WorkOrdersPermitsFine $workOrdersPermitsFine)
@@ -32,7 +30,6 @@ class WorkOrdersPermitsFineObserver
     /**
      * Handle the WorkOrdersPermitsFine "deleted" event.
      *
-     * @param  \App\Models\WorkOrdersPermitsFine  $workOrdersPermitsFine
      * @return void
      */
     public function deleted(WorkOrdersPermitsFine $workOrdersPermitsFine)
@@ -43,7 +40,6 @@ class WorkOrdersPermitsFineObserver
     /**
      * Handle the WorkOrdersPermitsFine "restored" event.
      *
-     * @param  \App\Models\WorkOrdersPermitsFine  $workOrdersPermitsFine
      * @return void
      */
     public function restored(WorkOrdersPermitsFine $workOrdersPermitsFine)
@@ -54,7 +50,6 @@ class WorkOrdersPermitsFineObserver
     /**
      * Handle the WorkOrdersPermitsFine "force deleted" event.
      *
-     * @param  \App\Models\WorkOrdersPermitsFine  $workOrdersPermitsFine
      * @return void
      */
     public function forceDeleted(WorkOrdersPermitsFine $workOrdersPermitsFine)
@@ -62,17 +57,18 @@ class WorkOrdersPermitsFineObserver
         //
     }
 
-    public function calcTotalAmount(WorkOrdersPermitsFine $workOrdersPermitsFine){
+    public function calcTotalAmount(WorkOrdersPermitsFine $workOrdersPermitsFine)
+    {
         $workOrdersPermit = WorkOrdersPermit::find($workOrdersPermitsFine->work_orders_permit_id);
 
         $sum = $workOrdersPermit->withSum('workOrdersPermitsFine', 'amount')
-                                ->pluck('work_orders_permits_fine_sum_amount') ; 
+            ->pluck('work_orders_permits_fine_sum_amount');
 
         $input = [
-           'total_fines_amount' => $sum[0]
+            'total_fines_amount' => $sum[0],
         ];
 
         $workOrdersPermit->fill($input);
-        $workOrdersPermit->save();        
+        $workOrdersPermit->save();
     }
 }

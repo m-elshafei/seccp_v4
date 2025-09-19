@@ -3,14 +3,12 @@
 namespace App\DataTables;
 
 use App\Models\ServicesCategory;
-use App\DataTables\AppDataTable;
 use Yajra\DataTables\Html\Column;
 
 class ServicesCategoryDataTable extends AppDataTable
 {
-
-
-    function __construct() {
+    public function __construct()
+    {
         $this->dataTableName = 'services_categories';
         $this->actionViewBlade = 'services_categories.datatables_actions';
     }
@@ -18,7 +16,6 @@ class ServicesCategoryDataTable extends AppDataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\ServicesCategory $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(ServicesCategory $model)
@@ -35,8 +32,7 @@ class ServicesCategoryDataTable extends AppDataTable
     {
         return [
             'name' => new Column(['title' => __('models/servicesCategories.fields.name'), 'data' => 'name']),
-            'name_ar' => new Column(['title' => __('models/servicesCategories.fields.name_ar'), 'data' => 'name_ar'])
+            'name_ar' => new Column(['title' => __('models/servicesCategories.fields.name_ar'), 'data' => 'name_ar']),
         ];
     }
-
 }

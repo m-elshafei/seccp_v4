@@ -2,13 +2,11 @@
 
 namespace App\View\Components\Report;
 
+use App\Models\WorkType;
+use App\Services\WorkOrders\WorkOrderService;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use App\Models\WorkType;
-use App\Enums\WorkOrderStatusEnum;
-use App\Models\ElectricityDepartment;
-use App\Services\WorkOrders\WorkOrderService;
 
 class ElectricityCountersFilter extends Component
 {
@@ -27,17 +25,20 @@ class ElectricityCountersFilter extends Component
      */
     public function render(): View|Closure|string
     {
-        $workOrdersType = $this->handleFilterListArray(WorkType::pluck('name', 'id')->prepend("اختر","")->toArray());
-        return view('components.report.electricity-counters-filter',compact('workOrdersType'));
+        $workOrdersType = $this->handleFilterListArray(WorkType::pluck('name', 'id')->prepend('اختر', '')->toArray());
+
+        return view('components.report.electricity-counters-filter', compact('workOrdersType'));
     }
 
-    function handleFilterListArray($myArray)  {
+    public function handleFilterListArray($myArray)
+    {
         return $result = array_combine(
             array_map(function ($key, $value) {
-                if($value !='اختر')
-                return $key ."||". $value;
-        }, array_keys($myArray), $myArray),
-        array_values($myArray)
-    );
+                if ($value != 'اختر') {
+                    return $key.'||'.$value;
+                }
+            }, array_keys($myArray), $myArray),
+            array_values($myArray)
+        );
     }
 }

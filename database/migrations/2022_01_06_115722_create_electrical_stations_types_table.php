@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateElectricalStationsTypesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -16,8 +15,8 @@ class CreateElectricalStationsTypesTable extends Migration
     {
         Schema::create('electrical_stations_types', function (Blueprint $table) {
             $table->id('id');
-            $table->string('code',25);
-            $table->string('name',250);
+            $table->string('code', 25);
+            $table->string('name', 250);
             $table->smallInteger('electrical_type')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();

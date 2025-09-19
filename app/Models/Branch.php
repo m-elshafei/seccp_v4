@@ -2,37 +2,29 @@
 
 namespace App\Models;
 
-use App\Models\AppBaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class Branch
- * @package App\Models
+ *
  * @version December 31, 2021, 11:04 pm UTC
  *
  * @property string $name
- * @property integer $city_id
- * @property integer $district_id
- * @property integer $is_main_branch
+ * @property int $city_id
+ * @property int $district_id
+ * @property int $is_main_branch
  */
 class Branch extends AppBaseModel
 {
     use SoftDeletes;
 
-
     public $table = 'branches';
-    
-
-   
-
-
 
     public $fillable = [
         'name',
         'city_id',
         'district_id',
-        'is_main_branch'
+        'is_main_branch',
     ];
 
     /**
@@ -46,7 +38,7 @@ class Branch extends AppBaseModel
         'city_id' => 'integer',
         'district_id' => 'integer',
         'is_main_branch' => 'integer',
-        'deleted_at'   =>'datetime'
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -55,7 +47,7 @@ class Branch extends AppBaseModel
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
     /**
@@ -73,6 +65,4 @@ class Branch extends AppBaseModel
     {
         return $this->belongsTo(\App\Models\District::class);
     }
-
-    
 }

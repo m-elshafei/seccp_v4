@@ -4,11 +4,10 @@ namespace App\Observers;
 
 use App\Models\WorkOrdersPermit;
 use App\Models\WorkOrdersPermitsExtension;
-use App\Models\WorkOrdersPermitsFine;
 
 class WorkOrdersPermitObserver
 {
-      /**
+    /**
      * Handle the WorkOrdersPermitsExtension "created" event.
      */
     public function created(WorkOrdersPermit $workOrdersPermit): void
@@ -55,7 +54,6 @@ class WorkOrdersPermitObserver
         $this->totalPeriod($workOrdersPermit);
     }
 
-
     public function saved(WorkOrdersPermit $workOrdersPermit): void
     {
         $this->totalPeriod($workOrdersPermit);
@@ -63,7 +61,8 @@ class WorkOrdersPermitObserver
         $this->calcTotalAmount($workOrdersPermit);
     }
 
-    public function calcTotalAmount(WorkOrdersPermit $workOrdersPermit){
+    public function calcTotalAmount(WorkOrdersPermit $workOrdersPermit)
+    {
         // $workOrdersPermit = WorkOrdersPermit::find($workOrdersPermit->id);
 
         // $sum = $workOrdersPermit->total_extend_amount + $workOrdersPermit->total_fines_amount;
@@ -75,7 +74,9 @@ class WorkOrdersPermitObserver
         // $workOrdersPermit->fill($input);
         // $workOrdersPermit->save();
     }
-    public function totalExtendPeriod(WorkOrdersPermit $workOrdersPermit){
+
+    public function totalExtendPeriod(WorkOrdersPermit $workOrdersPermit)
+    {
         // $workOrdersPermit = WorkOrdersPermit::find($workOrdersPermit->id);
 
         // $sum = $workOrdersPermit->withSum('workOrdersPermitsExtension', 'period')
@@ -88,7 +89,9 @@ class WorkOrdersPermitObserver
         // $workOrdersPermit->fill($input);
         // $workOrdersPermit->save();
     }
-    public function totalPeriod(WorkOrdersPermit $workOrdersPermit){
+
+    public function totalPeriod(WorkOrdersPermit $workOrdersPermit)
+    {
         // $workOrdersPermit = WorkOrdersPermit::find($workOrdersPermit->id);
 
         // $sum = $workOrdersPermit->period + $workOrdersPermit->total_extend_period;

@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\City;
 use App\Models\Branch;
+use App\Models\City;
 
 class BranchRepository
 {

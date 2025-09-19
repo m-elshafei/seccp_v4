@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateDistrictsTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -16,12 +15,12 @@ class CreateDistrictsTable extends Migration
     {
         Schema::create('districts', function (Blueprint $table) {
             $table->id('id');
-            $table->string('name',150);
+            $table->string('name', 150);
             $table->foreignId('city_id')->references('id')->on('cities');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('created_by')->constrained('users');//->constrained('users');
-            $table->foreignId('updated_by')->constrained('users');//->constrained('users');
+            $table->foreignId('created_by')->constrained('users'); // ->constrained('users');
+            $table->foreignId('updated_by')->constrained('users'); // ->constrained('users');
         });
     }
 
