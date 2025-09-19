@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Flash;
-use App\Services\NotificationService;
+use App\Services\Notifications\NotificationService;
 use App\DataObjects\NotificationData;
 use Exception;
 

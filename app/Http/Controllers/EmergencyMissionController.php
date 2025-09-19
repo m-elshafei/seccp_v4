@@ -38,7 +38,7 @@ use App\Http\Requests\CreateAttachmentRequest;
 use App\Http\Requests\CreateEmergencyMissionRequest;
 use App\Http\Requests\UpdateEmergencyMissionRequest;
 use App\Http\Requests\CreateEmergencyWorkOrderRequest;
-use App\Services\NotificationService;
+use App\Services\Notifications\NotificationService;
 
 class EmergencyMissionController extends AppBaseController
 {

@@ -7,7 +7,7 @@ use App\Contracts\UserRepositoryInterface;
 use App\Repositories\UserRepository;
 use App\Contracts\NotificationSenderInterface;
 use App\Services\NotificationSender;
-use App\Services\NotificationService;
+use App\Services\Notifications\NotificationService;
 
 class NotificationServiceProvider extends ServiceProvider
 {

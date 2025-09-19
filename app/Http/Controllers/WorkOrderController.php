@@ -33,7 +33,7 @@ use App\Http\Requests\CreateWorkOrderRequest;
 use App\Http\Requests\UpdateWorkOrderRequest;
 use App\Services\WorkOrders\WorkOrderService;
 use App\Http\Requests\CreateAttachmentRequest;
-use App\Services\NotificationService;
+use App\Services\Notifications\NotificationService;
 
 class WorkOrderController extends AppBaseController
 {

@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Contracts\NotificationSenderInterface;
-use Illuminate\Database\Eloquent\Collection;
 use App\DataObjects\NotificationData;
-use InvalidArgumentException;
 use App\Notifications\GeneralNotification;
-use App\Models\Notification;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Notification;
+use InvalidArgumentException;
 
 class NotificationSender implements NotificationSenderInterface
 {

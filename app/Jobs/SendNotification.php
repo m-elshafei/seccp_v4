@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Models\WorkOrdersPermit;
 use App\Models\WorkOrder;
-use App\Services\NotificationService; // Import the new class
+use App\Services\Notifications\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

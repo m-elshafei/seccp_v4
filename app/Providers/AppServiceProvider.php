@@ -13,7 +13,7 @@ use App\Models\WorkOrdersPermitsExtension;
 use App\Observers\WorkOrdersPermitObserver;
 use App\Observers\WorkOrdersPermitsFineObserver;
 use App\Observers\WorkOrdersPermitsExtensionObserver;
-use App\Services\NotificationService;
+use App\Services\Notifications\NotificationService;
 use App\Jobs\SendNotification;
 use App\Contracts\UserRepositoryInterface;
 use App\Repositories\UserRepository;
