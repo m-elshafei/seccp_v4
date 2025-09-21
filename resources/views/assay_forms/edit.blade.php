@@ -23,7 +23,7 @@
                 <h4 class="card-title">{{  __('models/assayForms.plural') }} - @lang('crud.edit')  </h4>
                 @include('layouts.partials.form_toolbar', ['screen_name' => 'assayForms','action_name' => 'edit'])
                 <div class="demo-inline-spacing">
-                    @if($assayForm->status == \App\Http\Controllers\AssayFormController::NEW_ASSAY)
+                    @if($assayForm->status == \App\Enums\AssayFormEnum::NEW_ASSAY)
                         <a class="btn btn-primary float-end" href="{{route("assayForms.approval",['id'=>$assayForm->id])}}">
                             إعتماد المقايسة
                         </a>

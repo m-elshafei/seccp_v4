@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\AssayFormDataTable;
+use App\Enums\AssayFormEnum;
 use App\Helpers\Helper;
 use App\Http\Requests\CreateAssayFormRequest;
 use App\Http\Requests\UpdateAssayFormRequest;
@@ -14,25 +15,31 @@ use App\Models\Item;
 use App\Models\WorkOrder;
 use App\Models\WorkOrderService;
 use App\Models\WorkOrdersProject;
+use App\Services\AssayFormService;
 use Carbon\Carbon;
 use Flash;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use PhpParser\Builder\Function_;
 use Response;
 
 class AssayFormController extends AppBaseController
 {
-    const NEW_ASSAY = 1;
 
-    const APPROVED_ASSAY = 2;
-
-    const MOVED_ASSAY = 3;
+    private $assayFormService;
 
     /**
      * Display a listing of the AssayForm.
      *
      * @return Response
      */
+
+    public function __construct(AssayFormService $assayFormService)
+    {
+        $this->assayFormService = $assayFormService;
+    }
+
+
     public function index(AssayFormDataTable $assayFormDataTable)
     {
         return $assayFormDataTable->render('assay_forms.index');
@@ -71,25 +78,18 @@ class AssayFormController extends AppBaseController
     {
         $input = $request->all();
 
-        $input['work_order_id'] = ($input['is_mission'] == 0) ? $input['work_order_id'] : $input['mission_id'];
+        $assayForm = $this->assayFormService->create($input);
 
-        $workOrders = WorkOrder::find($input['work_order_id']);
-        $input['work_type_id'] = $workOrders->work_type_id ?? 0;
-        $input['status'] = self::NEW_ASSAY;
-        $assayForm_count = AssayForm::where('work_order_id', $input['work_order_id'])->count();
-        if ($assayForm_count != 0) {
-            flash('امر العمل الذي تم اختياره له مقايسة')->error();
-
+        if (!$assayForm) {
+            Flash::error('امر العمل الذي تم اختياره له مقايسة');
             return redirect()->route('assayForms.index');
         }
-        $assayForm = AssayForm::create($input);
-        $workOrders->assay_forms_status = 1;
-        $workOrders->save();
 
         Flash::success(__('messages.saved', ['model' => __('models/assayForms.singular')]));
 
         return Helper::redirectAfterSaving($assayForm->id, $request, 'assayForms');
     }
+
 
     /**
      * Display the specified AssayForm.
@@ -173,13 +173,13 @@ class AssayFormController extends AppBaseController
             return redirect(route('assayForms.index'));
         }
 
-        if ($assayForm->status == self::APPROVED_ASSAY) {
+        if ($assayForm->status == AssayFormEnum::APPROVED_ASSAY) {
             Flash::error('المقايسة تم اعتمادها من قبل');
 
             return redirect(route('assayForms.index'));
         }
 
-        if ($assayForm->status == self::MOVED_ASSAY) {
+        if ($assayForm->status == AssayFormEnum::MOVED_ASSAY) {
             Flash::error('المقايسة تم نقلها الي مشروع');
 
             return redirect(route('assayForms.index'));

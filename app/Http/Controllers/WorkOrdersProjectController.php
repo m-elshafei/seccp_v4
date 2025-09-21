@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\WorkOrdersProjectDataTable;
+use App\Enums\AssayFormEnum;
 use App\Enums\WorkOrderStatusEnum;
 use App\Http\Requests\CreateWorkOrdersProjectRequest;
 use App\Http\Requests\UpdateWorkOrdersProjectRequest;
@@ -252,7 +253,7 @@ class WorkOrdersProjectController extends AppBaseController
                     'work_type_id' => $parent->work_type_id,
                     'notes' => $notes,
                     'amount' => collect($services)->sum('price'),
-                    'status' => AssayFormController::NEW_ASSAY,
+                    'status' => AssayFormEnum::NEW_ASSAY,
                 ]);
                 foreach ($items as $item) {
                     AssayItem::create([
