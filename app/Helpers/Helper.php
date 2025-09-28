@@ -201,10 +201,15 @@ class Helper
         // self::SendTelegramNotifications('databaseDump',$file,8);
     }
 
-    public static function dateFormat($value, $format = 'Y-m-d')
+    public static function dateFormat(string|\DateTimeInterface $value, string $format = 'Y-m-d'): ?string
     {
-        return Carbon::parse($value)->format($format);
+        try {
+            return Carbon::parse($value)->format($format);
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
+    
 
     public static function formatBytes($size, $precision = 2)
     {
