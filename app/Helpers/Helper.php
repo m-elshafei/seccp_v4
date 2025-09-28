@@ -156,18 +156,16 @@ class Helper
     }
     
 
-    public static function checkCurrentRouteName($route_name = null)
+    public static function checkCurrentRouteName(?string $routeName): bool
     {
-        if (strpos(Route::currentRouteName(), $route_name.'.') !== false) {
-            return true;
+        if ($routeName === null) {
+            return false;
         }
-        if (strpos(Route::currentRouteName(), $route_name) !== false) {
-            return true;
-        }
-
-        // Helper::checkCurrentRouteName($pageConfigs)
-        // dd(Route::currentRouteName());
-        return false;
+    
+        $currentRoute = Route::currentRouteName();
+    
+        return str_contains($currentRoute, "{$routeName}.") 
+            || str_contains($currentRoute, $routeName);
     }
 
     public static function SendNotifications($title, $message, $ids, $type = 'User', $link = null, $class_bg = 'bg-light-success', $class_icon = 'check')
