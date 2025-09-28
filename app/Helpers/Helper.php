@@ -139,17 +139,22 @@ class Helper
         return $layoutClasses;
     }
 
-    public static function updatePageConfig($pageConfigs)
+    public static function updatePageConfig(array $pageConfigs, string $namespace = 'custom'): void
     {
-        $demo = 'custom';
-        if (isset($pageConfigs)) {
-            if (count($pageConfigs) > 0) {
-                foreach ($pageConfigs as $config => $val) {
-                    Config::set('custom.'.$demo.'.'.$config, $val);
-                }
-            }
+        if (empty($pageConfigs)) {
+            return;
+        }
+    
+        foreach ($pageConfigs as $config => $value) {
+            self::setConfig($namespace, $config, $value);
         }
     }
+    
+    private static function setConfig(string $namespace, string $key, mixed $value): void
+    {
+        Config::set("custom.{$namespace}.{$key}", $value);
+    }
+    
 
     public static function checkCurrentRouteName($route_name = null)
     {
