@@ -69,20 +69,34 @@ class UserPermissions
      * @param [bool] $permissiowithPrefixnName
      * @return @var routeName
      */
-    public static function getCurrentRouteName($withPrefix = false, $removeMethodName = false)
-    {
-        $prefixName = str_replace('/', '', Route::current()->getPrefix());
-        $routeName = Route::current()->getName();
+
+    public static function getCurrentRouteName(bool $withPrefix = false,
+        bool $removeMethodName = false
+    ): ?string {
+        $prefix   = self::normalizePrefix(Route::current()->getPrefix());
+        $route    = Route::current()->getName();
+
+        if (! $route) {
+            return null;
+        }
+
         if ($removeMethodName) {
-            $arr = explode('.', $routeName);
-            $routeName = $arr[0];
+            $route = self::removeMethodFromRoute($route);
         }
 
-        if ($prefixName && $withPrefix) {
-            $routeName = $prefixName.'.'.$routeName;
-        }
+        return $withPrefix && $prefix
+            ? $prefix . '.' . $route
+            : $route;
+    }
 
-        return $routeName;
+    private static function normalizePrefix(?string $prefix): ?string
+    {
+        return $prefix ? str_replace('/', '', $prefix) : null;
+    }
+
+    private static function removeMethodFromRoute(string $routeName): string
+    {
+        return explode('.', $routeName)[0];
     }
 
     public static function getPrefixName()
