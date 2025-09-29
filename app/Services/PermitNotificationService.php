@@ -2,13 +2,24 @@
 
 namespace App\Services;
 
-use App\Helpers\Helper;
 use App\Models\WorkOrder;
 use App\Models\WorkOrdersPermit;
 use Carbon\Carbon;
+use App\Services\Notifications\NotificationService;
+use App\Services\Notifications\NotificationSystemService;
 
 class PermitNotificationService
 {
+
+    private NotificationService $notificationService;
+    private NotificationSystemService $notificationSystemService;
+
+    public function __construct(NotificationService $notificationService, NotificationSystemService $notificationSystemService)
+    {
+        $this->notificationService = $notificationService;
+        $this->notificationSystemService = $notificationSystemService;
+    }
+
     public function sendPermitExpirationNotifications()
     {
         try {
@@ -27,8 +38,8 @@ class PermitNotificationService
                         $title = 'قارب تصريح على الانتهاء';
                         $message = 'متبقي على انتهاء التصريح رقم '.$permit->permit_number.' - '.$remainingDays.' يوم ';
 
-                        Helper::SendNotifications($title, $message, $workOrder->current_department_id, 'Department', '/workOrdersManagement/workOrdersPermits/'.$permit->id, 'bg-light-success', 'check');
-                        Helper::SendTelegramNotifications('permitExpiration', $permit->permit_number, 8, $remainingDays);
+                        $this->notificationSystemService->sendNotifications($title, $message, $workOrder->current_department_id, 'Department', '/workOrdersManagement/workOrdersPermits/'.$permit->id, 'bg-light-success', 'check');
+                        $this->notificationService->sendTelegramNotification('permitExpiration', $permit->permit_number, 8, $remainingDays);
 
                     }
                 }

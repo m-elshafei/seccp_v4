@@ -168,38 +168,7 @@ class Helper
             || str_contains($currentRoute, $routeName);
     }
 
-    public static function SendNotifications($title, $message, $ids, $type = 'User', $link = null, $class_bg = 'bg-light-success', $class_icon = 'check')
-    {
-        // TODO: make try catch here
-        // Check if the type is 'Department'
-        if ($type == 'Department') {
-            if (! is_array($ids)) {
-                $ids = [$ids];
-            }
-            // Find users by department
-            $users = Employee::whereIn('department_id', $ids)
-                ->whereNotNull('user_id')
-                ->with('user')
-                ->get();
-
-            // Get user objects
-            $usersList = $users->pluck('user');
-        } else {
-            // Check if the type is 'User'
-            if (! is_array($ids)) {
-                $ids = [$ids];
-            }
-            // Find users directly if given user IDs
-            $users = User::whereIn('id', $ids)->get();
-            $usersList = $users;
-        }
-
-        // Send notifications
-        Notification::send($usersList, new GeneralNotification($title, $message, $link, $class_bg, $class_icon));
-
-        // self::SendTelegramNotifications($message,$ids);
-        // self::SendTelegramNotifications('databaseDump',$file,8);
-    }
+ 
 
     public static function dateFormat(string|\DateTimeInterface $value, string $format = 'Y-m-d'): ?string
     {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataObjects\NotificationData;
 use App\Services\Notifications\NotificationService;
+use App\Services\Notifications\NotificationSystemService;
 use Exception;
 use Flash;
 use Illuminate\Http\Request;
@@ -11,10 +12,12 @@ use Illuminate\Http\Request;
 class NotificationController extends AppBaseController
 {
     private NotificationService $notificationService;
+    private NotificationSystemService $notificationSystemService;
 
-    public function __construct(NotificationService $notificationService)
+    public function __construct(NotificationService $notificationService,NotificationSystemService $notificationSystemService)
     {
         $this->notificationService = $notificationService;
+        $this->notificationSystemService = $notificationSystemService;
     }
 
     public function markAsReadNotificationAll()
@@ -55,11 +58,8 @@ class NotificationController extends AppBaseController
                 iconClass: $request->input('icon_class', 'check')
             );
 
-            $this->notificationService->sendNotifications(
-                notificationData: $notificationData,
-                recipientIds: $request->input('user_ids'),
-                recipientType: 'User'
-            );
+         
+            $this->notificationSystemService->sendNotifications(title:$notificationData->title,message:$notificationData->message,ids:$request->input('user_ids'),type:'User',link:$notificationData->link,classBg:$notificationData->backgroundClass,classIcon:$notificationData->iconClass);
 
             return response()->json(['success' => true, 'message' => 'Notifications sent successfully']);
 

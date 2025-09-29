@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Laracasts\Flash\Flash;
 use Telegram\Bot\Laravel\Facades\Telegram;
+use App\Services\Notifications\NotificationSystemService;
 
 class WorkOrderService extends BaseWorkOrderService
 {
@@ -58,6 +59,8 @@ class WorkOrderService extends BaseWorkOrderService
 
     private $notificationSender;
 
+    private $notificationSystemService;
+
     public function __construct(
         DrillingWorkOrderService $drillingWorkOrderService,
         ElectricWorkOrderService $electricWorkOrderService,
@@ -65,7 +68,8 @@ class WorkOrderService extends BaseWorkOrderService
         WorkOrderNotesService $workOrderNotesService,
         UserRepository $userRepository,
         NotificationSender $notificationSender,
-        NotificationService $notificationService
+        NotificationService $notificationService,
+        NotificationSystemService $notificationSystemService
     ) {
         $routeArr = explode('.', Route::currentRouteName());
         $this->routeName = $routeArr[0];
@@ -78,6 +82,7 @@ class WorkOrderService extends BaseWorkOrderService
         $this->userRepository = $userRepository;
         $this->notificationSender = $notificationSender;
         $this->notificationService = $notificationService;
+        $this->notificationSystemService = $notificationSystemService;
     }
 
     public function getWorkOrderDataTable()
@@ -272,8 +277,8 @@ class WorkOrderService extends BaseWorkOrderService
                 }
                 $title = 'استلام أمر عمل جديد';
                 $message = 'تم تحويل أمر العمل رقم '.$workOrder->work_order_number ?? $workOrder->mission_number.' الى الادارة الخاصة بك';
-                Helper::SendNotifications($title, $message, 7, 'Department', '/workOrdersManagement/workOrders/'.$workOrder->id, 'bg-light-success', 'check');
-                Helper::SendNotifications($title, $message, $input['current_department_id'], 'Department', '/workOrdersManagement/workOrders/'.$workOrder->id, 'bg-light-success', 'check');
+                $this->notificationSystemService->sendNotifications($title, $message, 7, 'Department', '/workOrdersManagement/workOrders/'.$workOrder->id, 'bg-light-success', 'check');
+                $this->notificationSystemService->sendNotifications($title, $message, $input['current_department_id'], 'Department', '/workOrdersManagement/workOrders/'.$workOrder->id, 'bg-light-success', 'check');
 
             }
             $input['status'] = 2;
@@ -287,7 +292,7 @@ class WorkOrderService extends BaseWorkOrderService
             $this->permitsNotTransferred($workOrder);
             $title = 'استلام أمر عمل جديد';
             $message = 'تم تحويل أمر العمل رقم '.$workOrder->work_order_number.'  الى الادارة الخاصة بك'.' مع كل التصاريح المرتبطة';
-            Helper::SendNotifications($title, $message, 4, 'Department', '/workOrdersManagement/workOrders/'.$workOrder->id, 'bg-light-success', 'check');
+            $this->notificationSystemService->sendNotifications($title, $message, 4, 'Department', '/workOrdersManagement/workOrders/'.$workOrder->id, 'bg-light-success', 'check');
 
         } elseif ($statusKey == 'temporaryStopped') {
             $input['stop_note'] = request('stop_note');
@@ -449,9 +454,9 @@ class WorkOrderService extends BaseWorkOrderService
             }
 
             // Send notifications
-            Helper::SendNotifications($title, $message, 7, 'Department', "/workOrdersManagement/workOrders/{$workOrder->id}", 'bg-light-success', 'check');
-            Helper::SendNotifications($title, $message, 8, 'Department', "/workOrdersManagement/workOrders/{$workOrder->id}", 'bg-light-success', 'check');
-            Helper::SendNotifications($title, $message, $input['current_department_id'] ?? 4, 'Department', "/workOrdersManagement/workOrders/{$workOrder->id}", 'bg-light-success', 'check');
+            $this->notificationSystemService->sendNotifications($title, $message, 7, 'Department', "/workOrdersManagement/workOrders/{$workOrder->id}", 'bg-light-success', 'check');
+            $this->notificationSystemService->sendNotifications($title, $message, 8, 'Department', "/workOrdersManagement/workOrders/{$workOrder->id}", 'bg-light-success', 'check');
+            $this->notificationSystemService->sendNotifications($title, $message, $input['current_department_id'] ?? 4, 'Department', "/workOrdersManagement/workOrders/{$workOrder->id}", 'bg-light-success', 'check');
 
             // Send Telegram message
             // $messageTelegram = "تم تحويل أمر العمل رقم <a href='{$telegramUrl}'>{$workOrder->work_order_number}</a> إلى " . $workOrder->currentDepartment->name;
