@@ -6,7 +6,6 @@ use App\Enums\AssayFormEnum;
 use App\Models\AssayForm;
 use App\Repositories\AssayFormRepository;
 
-
 class AssayFormService
 {
     private $assayFormRepository;
@@ -15,7 +14,6 @@ class AssayFormService
     {
         $this->assayFormRepository = $assayFormRepository;
     }
-
 
     public function create($input)
     {
@@ -35,14 +33,12 @@ class AssayFormService
         return $assayForm;
     }
 
-
     private function resolveWorkOrderId(array $data): int
     {
         return ($data['is_mission'] == 0)
             ? $data['work_order_id']
             : $data['mission_id'];
     }
-
 
     private function ensureNoDuplicateAssayForm(int $workOrderId): bool
     {

@@ -5,13 +5,10 @@
 namespace App\Helpers;
 
 use App\Models\Employee;
-use App\Models\User;
-use App\Notifications\GeneralNotification;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
 use Config;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 
 // use App\Helpers\Telegram;
@@ -144,31 +141,28 @@ class Helper
         if (empty($pageConfigs)) {
             return;
         }
-    
+
         foreach ($pageConfigs as $config => $value) {
             self::setConfig($namespace, $config, $value);
         }
     }
-    
+
     private static function setConfig(string $namespace, string $key, mixed $value): void
     {
         Config::set("custom.{$namespace}.{$key}", $value);
     }
-    
 
     public static function checkCurrentRouteName(?string $routeName): bool
     {
         if ($routeName === null) {
             return false;
         }
-    
+
         $currentRoute = Route::currentRouteName();
-    
-        return str_contains($currentRoute, "{$routeName}.") 
+
+        return str_contains($currentRoute, "{$routeName}.")
             || str_contains($currentRoute, $routeName);
     }
-
- 
 
     public static function dateFormat(string|\DateTimeInterface $value, string $format = 'Y-m-d'): ?string
     {
@@ -178,7 +172,6 @@ class Helper
             return null;
         }
     }
-    
 
     public static function formatBytes($size, $precision = 2)
     {

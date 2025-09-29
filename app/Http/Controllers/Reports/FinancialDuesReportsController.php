@@ -100,6 +100,6 @@ class FinancialDuesReportsController extends ReportController
         })->sum();
         $pdf = $this->getPDF($reportName, $workOrders);
 
-        return $this->handlePDF($request,$pdf);
+        return $this->handlePDF($request, $pdf);
     }
 }

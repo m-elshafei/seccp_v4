@@ -5,7 +5,6 @@ namespace App\Services\Notifications;
 use App\Models\Employee;
 use App\Models\User;
 use App\Notifications\GeneralNotification;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
@@ -27,6 +26,7 @@ class NotificationSystemService
 
             if ($recipients->isEmpty()) {
                 self::logNoRecipients($ids, $type);
+
                 return;
             }
 
@@ -46,8 +46,8 @@ class NotificationSystemService
     {
         return match ($type) {
             'Department' => self::getUsersByDepartment($ids),
-            'User'       => self::getUsersByIds($ids),
-            default      => collect(),
+            'User' => self::getUsersByIds($ids),
+            default => collect(),
         };
     }
 
@@ -82,7 +82,7 @@ class NotificationSystemService
     private static function logNoRecipients(array $ids, string $type): void
     {
         Log::warning('No recipients found for notification', [
-            'ids'  => $ids,
+            'ids' => $ids,
             'type' => $type,
         ]);
     }
@@ -91,10 +91,8 @@ class NotificationSystemService
     {
         Log::error('Notification sending failed', [
             'error' => $e->getMessage(),
-            'type'  => $type,
-            'ids'   => $ids,
+            'type' => $type,
+            'ids' => $ids,
         ]);
     }
 }
-
-

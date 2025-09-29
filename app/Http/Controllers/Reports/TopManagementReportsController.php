@@ -80,6 +80,6 @@ class TopManagementReportsController extends ReportController
         })->sum();
         $pdf = $this->getPDF($reportName, $workOrderFollow);
 
-        return $this->handlePDF($request,$pdf);
+        return $this->handlePDF($request, $pdf);
     }
 }

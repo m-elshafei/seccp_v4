@@ -179,8 +179,8 @@ class WorkOrdersReportsController extends ReportController
                 ? $workOrder->landscape->length_total_before
                 : $workOrder->landscape->length_total;
         })->sum();
-        $pdf = $this->getPDF($reportName,$workOrders);
+        $pdf = $this->getPDF($reportName, $workOrders);
 
-        return $this->handlePDF($request,$pdf);
+        return $this->handlePDF($request, $pdf);
     }
 }

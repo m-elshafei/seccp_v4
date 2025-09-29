@@ -10,4 +10,3 @@ enum AssayFormEnum: int
 
     const MOVED_ASSAY = 3;
 }
-

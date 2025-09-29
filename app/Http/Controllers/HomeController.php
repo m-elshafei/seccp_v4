@@ -168,7 +168,7 @@ class HomeController extends Controller
         // return view('pdf.testDisplayReport',compact("pdf"));
 
         // return view('pdf.report-preview',compact("pdf"));
-        return view('pdf.report-example',compact('pdf'));
+        return view('pdf.report-example', compact('pdf'));
 
     }
 }

@@ -607,6 +607,6 @@ class WorkOrder extends AppBaseModel
 
     public function getLayer6Attribute()
     {
-        return $this->landLayers->where('layer_id',6)->first();
+        return $this->landLayers->where('layer_id', 6)->first();
     }
 }

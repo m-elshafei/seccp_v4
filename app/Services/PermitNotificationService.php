@@ -4,14 +4,14 @@ namespace App\Services;
 
 use App\Models\WorkOrder;
 use App\Models\WorkOrdersPermit;
-use Carbon\Carbon;
 use App\Services\Notifications\NotificationService;
 use App\Services\Notifications\NotificationSystemService;
+use Carbon\Carbon;
 
 class PermitNotificationService
 {
-
     private NotificationService $notificationService;
+
     private NotificationSystemService $notificationSystemService;
 
     public function __construct(NotificationService $notificationService, NotificationSystemService $notificationSystemService)

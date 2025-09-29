@@ -20,12 +20,10 @@ use Carbon\Carbon;
 use Flash;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
-use PhpParser\Builder\Function_;
 use Response;
 
 class AssayFormController extends AppBaseController
 {
-
     private $assayFormService;
 
     /**
@@ -33,12 +31,10 @@ class AssayFormController extends AppBaseController
      *
      * @return Response
      */
-
     public function __construct(AssayFormService $assayFormService)
     {
         $this->assayFormService = $assayFormService;
     }
-
 
     public function index(AssayFormDataTable $assayFormDataTable)
     {
@@ -80,8 +76,9 @@ class AssayFormController extends AppBaseController
 
         $assayForm = $this->assayFormService->create($input);
 
-        if (!$assayForm) {
+        if (! $assayForm) {
             Flash::error('امر العمل الذي تم اختياره له مقايسة');
+
             return redirect()->route('assayForms.index');
         }
 
@@ -89,7 +86,6 @@ class AssayFormController extends AppBaseController
 
         return Helper::redirectAfterSaving($assayForm->id, $request, 'assayForms');
     }
-
 
     /**
      * Display the specified AssayForm.
