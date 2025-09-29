@@ -1,9 +1,9 @@
 @php
-    $configData = Helper::applClasses();
+    $configData = LayoutHelper::applClasses();
 @endphp
 
 <!DOCTYPE html>
-@php $configData = Helper::applClasses(); @endphp
+@php $configData = LayoutHelper::applClasses(); @endphp
 
 <html class="loading {{ ($configData['theme'] === 'light') ? '' : $configData['layoutTheme'] }}"
     lang="@if(session()->has('locale')){{session()->get('locale')}}@else{{$configData['defaultLanguage']}}@endif"

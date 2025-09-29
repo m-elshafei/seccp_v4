@@ -1,5 +1,5 @@
 @php
-    $configData = Helper::applClasses();
+    $configData = LayoutHelper::applClasses();
 @endphp
 @extends('layouts/fullLayoutMaster')
 

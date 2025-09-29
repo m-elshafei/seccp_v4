@@ -1,5 +1,5 @@
 @php
-$configData = Helper::applClasses();
+$configData = LayoutHelper::applClasses();
 @endphp
 {{-- Horizontal Menu --}}
 <div class="horizontal-menu-wrapper">

@@ -234,7 +234,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Helper' => App\Helpers\Helper::class,
-
+        'LayoutHelper' => App\Helpers\LayoutHelper::class,  
         'Flash' => Laracasts\Flash\Flash::class,
 
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
