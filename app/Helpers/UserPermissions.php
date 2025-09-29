@@ -11,16 +11,15 @@ class UserPermissions
 {
     public static $systemName;
 
-    public static function hasAccessTo($permissionName)
+    public static function hasAccessTo(string $permissionName): bool
     {
         $user = Auth::user();
-        if ($user != null) {
-            if ($user->hasRole('admin') || $user->can($permissionName)) {
-                return true;
-            }
+
+        if (! $user) {
+            return false;
         }
 
-        return false;
+        return $user->hasRole('admin') || $user->can($permissionName);
     }
 
     public static function hasAccessToAction($actionName)
