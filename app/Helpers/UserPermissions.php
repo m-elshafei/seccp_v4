@@ -22,17 +22,30 @@ class UserPermissions
         return $user->hasRole('admin') || $user->can($permissionName);
     }
 
-    public static function hasAccessToAction($actionName)
+
+    public static function hasAccessToAction(string $actionName): bool
     {
         $user = Auth::user();
-        if ($user != null) {
-            if ($user->hasRole('admin') || $user->can(self::getPermissionName($actionName))) {
-                return true;
-            }
+
+        if (! $user) {
+            return false;
         }
 
-        return false;
+        $permission = self::getPermissionName($actionName);
+
+        return self::isAdmin($user) || self::hasPermission($user, $permission);
     }
+
+    private static function isAdmin($user): bool
+    {
+        return $user->hasRole('admin');
+    }
+
+    private static function hasPermission($user, string $permission): bool
+    {
+        return $user->can($permission);
+    }
+ 
 
     /**
      * get permissionName string from route prefix & name
