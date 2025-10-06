@@ -208,60 +208,17 @@ class WorkOrderController extends AppBaseController
         return Helper::redirectAfterSaving($id, $request, $this->workOrderService->routeName);
     }
 
-    public function updateStatus($statusKey, $id, $redirectTo = '')
+    public function updateStatus($statusKey, $id, $redirectTo = 'workOrders')
     {
-        if (! $redirectTo) {
-            $redirectTo = 'workOrders';
-        }
-        /** @var WorkOrder $workOrder */
-        $workOrder = WorkOrder::find($id);
-        if (empty($workOrder)) {
-            Flash::error(__('messages.not_found', ['model' => __('models/workOrders.singular')]));
+        [$success, $redirectAction, $workOrder] = $this->workOrderService->updateStatus($statusKey, $id);
 
-            return Redirect::back();
+        if (! $success) {
+            return $redirectAction;
         }
 
-        if (empty($workOrder->owner_department_id)) {
-            Flash::error('برجاء ادخال الاداره التى سيتم التحويل اليها أمر العمل ثم القيام بعمليه الحفظ');
-
-            return Redirect::back();
-        }
-
-        /****start validation updateStatus of work order****** */
-        if (! $this->workOrderService->validateWorkOrderToUpdateStatus($workOrder, $statusKey)) {
-            return Redirect::back();
-        }
-        /****end validation updateStatus of work order****** */
-        DB::beginTransaction();
-        $input = $this->workOrderService->getUpdatedData($statusKey, $workOrder);
-        $redirectAction = $this->workOrderService->GetUpdateStatusRedirectAction($statusKey);
-        $this->workOrderService->createStopNote($statusKey, $workOrder);
-        $this->workOrderService->updateElectricalOperationStatus($statusKey, $workOrder);
-        // $this->workOrderService->sendNotificationBasedOnStatus($statusKey,$workOrder,$input);
-        $departmentIds = null;
-        if (isset($input['current_department_id'])) {
-            $departmentIds = $input['current_department_id'];
-        }
-
-        // NotificationService::sendTelegramNotification($statusKey, $workOrder, $departmentIds);
-        $this->notificationService->sendTelegramNotification($statusKey, $workOrder, $departmentIds);
-
-        if ($input) {
-            $workOrder->fill($input);
-            $result = $workOrder->save();
-            if (! $result) {
-                DB::rollBack();
-                Flash::error(__('messages.not_found', ['model' => __('models/workOrders.singular')]));
-
-                return Redirect::back();
-            } else {
-                DB::commit();
-                Flash::success(__('messages.updated', ['model' => __('models/workOrders.singular')]));
-            }
-        }
-
-        return redirect(route($redirectTo.'.'.$redirectAction, $workOrder->id));
+        return redirect()->route($redirectTo . '.' . $redirectAction, $workOrder->id);
     }
+
 
     public function update_attachment($id, CreateAttachmentRequest $request)
     {

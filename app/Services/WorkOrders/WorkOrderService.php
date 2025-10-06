@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Laracasts\Flash\Flash;
 use Telegram\Bot\Laravel\Facades\Telegram;
-
+use App\Repositories\WorkOrderRepository;
 class WorkOrderService extends BaseWorkOrderService
 {
     public $mode;
@@ -60,6 +60,7 @@ class WorkOrderService extends BaseWorkOrderService
     private $notificationSender;
 
     private $notificationSystemService;
+    private $workOrderRepository;
 
     public function __construct(
         DrillingWorkOrderService $drillingWorkOrderService,
@@ -69,12 +70,12 @@ class WorkOrderService extends BaseWorkOrderService
         UserRepository $userRepository,
         NotificationSender $notificationSender,
         NotificationService $notificationService,
-        NotificationSystemService $notificationSystemService
+        NotificationSystemService $notificationSystemService,
+        WorkOrderRepository $workOrderRepository
     ) {
         $routeArr = explode('.', Route::currentRouteName());
         $this->routeName = $routeArr[0];
         $this->mode = $this->getModeName($this->routeName);
-
         $this->electricWorkOrderService = $electricWorkOrderService;
         $this->drillingWorkOrderService = $drillingWorkOrderService;
         $this->electricTowerWorkOrderService = $electricTowerWorkOrderService;
@@ -83,6 +84,7 @@ class WorkOrderService extends BaseWorkOrderService
         $this->notificationSender = $notificationSender;
         $this->notificationService = $notificationService;
         $this->notificationSystemService = $notificationSystemService;
+        $this->workOrderRepository = $workOrderRepository;
     }
 
     public function getWorkOrderDataTable()
@@ -536,5 +538,73 @@ class WorkOrderService extends BaseWorkOrderService
         }
 
         return false;
+    }
+
+    public function updateStatus($statusKey, $id)
+    {
+        $workOrder = $this->workOrderRepository->find($id);
+        if (! $this->isValidWorkOrder($workOrder)) {
+            return [false, redirect()->back()];
+        }
+
+        if (! $this->validateWorkOrderToUpdateStatus($workOrder, $statusKey)) {
+            return [false, redirect()->back()];
+        }
+
+        return $this->processStatusUpdate($statusKey, $workOrder);
+    }
+
+
+    private function isValidWorkOrder($workOrder): bool
+    {
+        if (empty($workOrder)) {
+            Flash::error(__('messages.not_found', ['model' => __('models/workOrders.singular')]));
+            return false;
+        }
+
+        if (empty($workOrder->owner_department_id)) {
+            Flash::error('برجاء ادخال الاداره التى سيتم التحويل اليها أمر العمل ثم القيام بعمليه الحفظ');
+            return false;
+        }
+
+        return true;
+    }
+
+    private function processStatusUpdate($statusKey, $workOrder)
+    {
+        DB::beginTransaction();
+
+        try {
+            $input = $this->getUpdatedData($statusKey, $workOrder);
+            $redirectAction = $this->GetUpdateStatusRedirectAction($statusKey);
+
+            $this->createStopNote($statusKey, $workOrder);
+            $this->updateElectricalOperationStatus($statusKey, $workOrder);
+
+            $departmentIds = $input['current_department_id'] ?? null;
+            $this->notificationService->sendTelegramNotification($statusKey, $workOrder, $departmentIds);
+
+            if (! $this->saveWorkOrder($workOrder, $input)) {
+                DB::rollBack();
+                Flash::error(__('messages.not_found', ['model' => __('models/workOrders.singular')]));
+                return [false, redirect()->back()];
+            }
+
+            DB::commit();
+            Flash::success(__('messages.updated', ['model' => __('models/workOrders.singular')]));
+
+            return [true, $redirectAction, $workOrder];
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            report($e);
+            Flash::error('حدث خطأ أثناء تحديث حالة أمر العمل.');
+            return [false, redirect()->back()];
+        }
+    }
+
+    private function saveWorkOrder($workOrder, array $input): bool
+    {
+        return $this->workOrderRepository->update($workOrder, $input);
     }
 }
