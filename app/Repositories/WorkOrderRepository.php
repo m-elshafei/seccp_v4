@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\AssayFormEnum;
 use App\Models\WorkOrder;
 
 class WorkOrderRepository
@@ -24,5 +25,12 @@ class WorkOrderRepository
     {
         $workOrder->fill($data);
         return $workOrder->save();
+    }
+
+    public function getApprovedWorkOrdersForDropdown()
+    {
+        return WorkOrder::whereHas('assay_forms', function ($query) {
+            $query->where('status', AssayFormEnum::APPROVED_ASSAY);
+        })->get()->pluck('work_dispaly_number_permit', 'id');
     }
 }

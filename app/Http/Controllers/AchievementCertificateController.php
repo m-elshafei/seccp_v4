@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\AchievementCertificateDataTable;
+use App\Enums\AssayFormEnum;
 use App\Helpers\Helper;
 use App\Http\Requests\CreateAchievementCertificateRequest;
 use App\Http\Requests\UpdateAchievementCertificateRequest;
 use App\Models\AchievementCertificate;
 use App\Models\AssayForm;
 use App\Models\WorkOrder;
+use App\Services\AchievementCertificateService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Response;
 use Laracasts\Flash\Flash;
@@ -16,8 +18,18 @@ use Laracasts\Flash\Flash;
 class AchievementCertificateController extends AppBaseController
 {
     const NEW_COC = 2;
-
     const APPROVED_COC = 1;
+    protected $achievementCertificateService;
+    protected $certificateService;
+
+
+    public function __construct(AchievementCertificateService $achievementCertificateService, AchievementCertificateService $certificateService)
+    {
+        $this->achievementCertificateService = $achievementCertificateService;
+        $this->certificateService = $certificateService;
+
+    }
+
 
     /**
      * Display a listing of the AchievementCertificate.
@@ -36,29 +48,13 @@ class AchievementCertificateController extends AppBaseController
      */
     public function create()
     {
-        // "تم التسليم"
-        // $workOrders = WorkOrder::where('status','5')->
-        //     whereHas('assay_forms', function (Builder $query) {
-        //         $query->where('status', AssayFormController::APPROVED_ASSAY);
-        //     })->
-        // get()->
-        // pluck('work_dispaly_number_permit', 'id');
-        // TODO: musr review this condition
-        $workOrders = WorkOrder::whereHas('assay_forms', function (Builder $query) {
-            $query->where('status', AssayFormController::APPROVED_ASSAY);
-        })->
-        get()->
-        pluck('work_dispaly_number_permit', 'id');
-        /**$_workOrders =WorkOrder::with('assay_forms')->
-        get();
-        dd($workOrders, $_workOrders);**/
-        // dd($workOrders, $workOrders->isEmpty());
-        if ($workOrders->isEmpty()) {
+        $workOrders = $this->achievementCertificateService->getWorkOrdersForCreationView();
+
+        if (is_null($workOrders)) {
             flash(__('models/achievementCertificates.no work order available'))->error();
 
             return redirect()->back();
         }
-        $workOrders->prepend('اختر', '');
 
         return view('achievement_certificates.create', compact('workOrders'));
     }
@@ -72,66 +68,36 @@ class AchievementCertificateController extends AppBaseController
     public function store(CreateAchievementCertificateRequest $request)
     {
         $input = $request->all();
-        $assayForm = AssayForm::where([
-            'work_order_id' => $input['work_order_id'],
-            'status' => AssayFormController::APPROVED_ASSAY,
-        ])->first();
-        if (empty($assayForm)) {
-            flash(__('models/achievementCertificates.no work order available'))->error();
 
-            return redirect()->back();
+        $result = $this->certificateService->createCertificate($input);
+
+        if (is_string($result)) {
+            if ($result === 'models/achievementCertificates.no work order available') {
+                Flash::error(__($result));
+                return redirect()->back();
+            }
+            
+            return redirect()->back()->withErrors($result)->withInput();
         }
 
-        $input['status'] = self::NEW_COC;
-        $input['amount'] = $assayForm->amount;
-
-        $input['net_amount'] = $this->calcNetAmount($input);
-        $input['final_amount'] = $input['net_amount'];
-        if (! $input['fines_amount']) {
-            $input['fines_amount'] = 0;
-        }
-
-        $_count = AchievementCertificate::where('work_order_id', $input['work_order_id'])->count();
-        if ($_count != 0) {
-            return redirect()->back()->withErrors('أمر العمل هذا له شهادة انجاز من قبل')->withInput();
-        }
-        /** @var AchievementCertificate $achievementCertificate */
-        $achievementCertificate = AchievementCertificate::create($input);
+        $achievementCertificate = $result;
 
         Flash::success(__('messages.saved', ['model' => __('models/achievementCertificates.singular')]));
 
         return Helper::redirectAfterSaving($achievementCertificate->id, $request, 'achievementCertificates');
     }
 
-    /**
-     * Display the specified AchievementCertificate.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function show($id)
     {
-        /** @var AchievementCertificate $achievementCertificate */
-        $achievementCertificate = AchievementCertificate::with('workOrder')->find($id);
+        $viewData = $this->certificateService->getShowViewData($id);
 
-        if (empty($achievementCertificate)) {
+        if (is_null($viewData)) {
             Flash::error(__('models/achievementCertificates.singular').' '.__('messages.not_found'));
 
             return redirect(route('achievementCertificates.index'));
         }
 
-        $status = config('const.achievement_cert_status_list')[$achievementCertificate->status];
-
-        $assayForm = AssayForm::where([
-            'work_order_id' => $achievementCertificate->work_order_id,
-            'status' => AssayFormController::APPROVED_ASSAY,
-        ])->with(['assayService', 'assayService.service'])->first();
-
-        return view('achievement_certificates.show')->with([
-            'achievementCertificate' => $achievementCertificate,
-            'status' => $status,
-            'assayForm' => $assayForm,
-        ]);
+        return view('achievement_certificates.show')->with($viewData);
     }
 
     /**
@@ -140,40 +106,24 @@ class AchievementCertificateController extends AppBaseController
      * @param  int  $id
      * @return Response
      */
+
     public function edit($id)
     {
-        /** @var AchievementCertificate $achievementCertificate */
-        $achievementCertificate = AchievementCertificate::with('workOrder')->find($id);
+        $viewData = $this->certificateService->getEditViewData($id);
 
-        if (empty($achievementCertificate)) {
+        if ($viewData === 'not_found') {
             Flash::error(__('messages.not_found', ['model' => __('models/achievementCertificates.singular')]));
+            
+            return redirect(route('achievementCertificates.index'));
+        }
+
+        if ($viewData === 'cannot_edit') {
+            Flash::error(__('models/achievementCertificates.cannot change approved coc'));
 
             return redirect(route('achievementCertificates.index'));
         }
-        // TODO: Activate this condition
-        // if($achievementCertificate->status == self::APPROVED_COC){
-        //     Flash::error(__('models/achievementCertificates.cannot change approved coc'));
 
-        //     return redirect(route('achievementCertificates.index'));
-        // }
-
-        $assayForm = AssayForm::where([
-            'work_order_id' => $achievementCertificate->work_order_id,
-            'status' => AssayFormController::APPROVED_ASSAY,
-        ])->first();
-
-        //        $workOrders =WorkOrder::where('status','5')->
-        //        whereHas('assay_forms', function (Builder $query) {
-        //            $query->where('status', AssayFormController::APPROVED_ASSAY);
-        //        })->
-        //        get()->
-        //        pluck('work_order_number', 'id');
-        //        $workOrders->prepend("اختر","");
-
-        return view('achievement_certificates.edit', compact(
-            'achievementCertificate',
-            // 'workOrders',
-            'assayForm'));
+        return view('achievement_certificates.edit', $viewData);
     }
 
     /**
@@ -182,54 +132,22 @@ class AchievementCertificateController extends AppBaseController
      * @param  int  $id
      * @return Response
      */
+
     public function update($id, UpdateAchievementCertificateRequest $request)
     {
-        /** @var AchievementCertificate $achievementCertificate */
-        $achievementCertificate = AchievementCertificate::find($id);
-        // TODO: Activate this condition
-
-        // if($achievementCertificate->status == self::APPROVED_COC){
-        //     Flash::error(__('models/achievementCertificates.cannot change approved coc'));
-
-        //     return redirect(route('achievementCertificates.index'));
-        // }
-
         $input = $request->all();
 
-        if (empty($achievementCertificate)) {
-            Flash::error(__('messages.not_found', ['model' => __('models/achievementCertificates.singular')]));
+        $result = $this->certificateService->updateCertificate($id, $input);
 
-            return redirect(route('achievementCertificates.index'));
+        if (is_string($result)) {
+            return $this->certificateService->handleUpdateError($result);
         }
-        $assayForm = AssayForm::where([
-            'work_order_id' => $input['work_order_id'],
-            'status' => AssayFormController::APPROVED_ASSAY,
-        ])->first();
-
-        if (empty($assayForm)) {
-            flash(__('models/achievementCertificates.no work order available'))->error();
-
-            return redirect()->back();
-        }
-
-        $input['amount'] = $assayForm->amount;
-        $input['net_amount'] = $this->calcNetAmount($input);
-        if (! $input['final_amount']) {
-            $input['final_amount'] = $input['net_amount'];
-        }
-
-        $_count = AchievementCertificate::where('id', '<>', $id)->where('work_order_id', $input['work_order_id'])->count();
-        if ($_count != 0) {
-            return redirect()->back()->withErrors('أمر العمل هذا له شهادة انجاز من قبل')->withInput();
-        }
-
-        $achievementCertificate->fill($input);
-        $achievementCertificate->save();
 
         Flash::success(__('messages.updated', ['model' => __('models/achievementCertificates.singular')]));
 
         return Helper::redirectAfterSaving($id, $request, 'achievementCertificates');
     }
+
 
     /**
      * Remove the specified AchievementCertificate from storage.
@@ -241,48 +159,17 @@ class AchievementCertificateController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var AchievementCertificate $achievementCertificate */
-        $achievementCertificate = AchievementCertificate::find($id);
+        $result = $this->certificateService->deleteCertificate($id);
 
-        if (empty($achievementCertificate)) {
+        if ($result === AchievementCertificateService::ERROR_NOT_FOUND) {
             Flash::error(__('messages.not_found', ['model' => __('models/achievementCertificates.singular')]));
-
+            
             return redirect(route('achievementCertificates.index'));
         }
-
-        $achievementCertificate->delete();
 
         Flash::success(__('messages.deleted', ['model' => __('models/achievementCertificates.singular')]));
 
         return redirect(route('achievementCertificates.index'));
     }
 
-    public function calcNetAmount($input)
-    {
-        return floatval($input['amount']) - floatval($input['fines_amount']);
-    }
-
-    public function approval($id)
-    {
-        $achievementCertificate = AchievementCertificate::find($id);
-
-        if (empty($achievementCertificate)) {
-            Flash::error(__('messages.not_found', ['model' => __('models/achievementCertificates.singular')]));
-
-            return redirect(route('achievementCertificates.index'));
-        }
-
-        if ($achievementCertificate->status != self::NEW_COC) {
-            Flash::error(__('models/achievementCertificates.The coc status should be new'));
-
-            return redirect()->back();
-        }
-
-        $achievementCertificate->status = self::APPROVED_COC;
-        $achievementCertificate->save();
-
-        Flash::success(__('messages.updated', ['model' => __('models/achievementCertificates.singular')]));
-
-        return redirect(route('achievementCertificates.index'));
-    }
 }

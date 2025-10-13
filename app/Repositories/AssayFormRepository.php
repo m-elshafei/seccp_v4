@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\AssayFormEnum;
 use App\Models\AssayForm;
 use App\Models\WorkOrder;
 
@@ -41,4 +42,15 @@ class AssayFormRepository
 
         return $workOrders;
     }
+
+    public function getApprovedFormByWorkOrderId(int $workOrderId): ?AssayForm
+    {
+        return AssayForm::where([
+            'work_order_id' => $workOrderId,
+            'status' => AssayFormEnum::APPROVED_ASSAY,
+        ])->first();
+    }
+
+ 
+
 }
