@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AssayItem;
-use Flash;
 use Illuminate\Http\Request;
+use laracasts\Flash\Flash;
 
 class AssayItemController extends AppBaseController
 {

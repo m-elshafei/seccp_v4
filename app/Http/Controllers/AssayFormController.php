@@ -17,10 +17,11 @@ use App\Models\WorkOrderService;
 use App\Models\WorkOrdersProject;
 use App\Services\AssayFormService;
 use Carbon\Carbon;
-use Flash;
+use Exception;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 use Response;
+use laracasts\Flash\Flash;
 
 class AssayFormController extends AppBaseController
 {
@@ -48,20 +49,9 @@ class AssayFormController extends AppBaseController
      */
     public function create()
     {
+        $data = $this->assayFormService->getCreateViewData();
 
-        //        $workOrders = WorkOrder::whereIn('status',[2,3,4,5])->get();
-        //        $workOrders = $workOrders->pluck('work_display_number', 'id');
-        //        $workOrders->prepend("اختر","");
-        $workOrders = WorkOrder::whereIn('status', [2, 3, 4, 5])->whereNull('mission_number')->get()->pluck('work_dispaly_number_permit', 'id'); // status -> //لم يبدأ التنفيذ , جارى التنفيذ , تم التنفيذ
-        $workOrders->prepend('اختر', '');
-        // whereIn('status',[2,3,4])->
-        $missions = WorkOrder::whereNotNull('mission_number')->get()->pluck('work_dispaly_number_permit', 'id'); // status -> //لم يبدأ التنفيذ , جارى التنفيذ , تم التنفيذ
-        $missions->prepend('اختر', '');
-
-        return view('assay_forms.create', [
-            'workOrders' => $workOrders,
-            'missions' => $missions,
-        ]);
+        return view('assay_forms.create', $data);
     }
 
     /**
@@ -93,118 +83,53 @@ class AssayFormController extends AppBaseController
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+       public function show($id)
     {
-        /** @var AssayForm $assayForm */
-        $assayForm = AssayForm::find($id);
+        try {
+            $assayForm = $this->assayFormService->getAssayFormById($id);
+            return view('assay_forms.show')->with('assayForm', $assayForm);
 
-        if (empty($assayForm)) {
+        } catch (Exception $e) {
+         
             Flash::error(__('models/assayForms.singular').' '.__('messages.not_found'));
 
             return redirect(route('assayForms.index'));
         }
-
-        return view('assay_forms.show')->with('assayForm', $assayForm);
     }
 
-    public function print_assay($id)
+ public function print_assay($id)
     {
-        // $this->importAssay();//example for import
+        try {
 
-        /** @var AssayForm $assayForm */
-        $assayForm = AssayForm::with('assayItem.item.unit', 'assayService.service', 'workType', 'workOrder.consultant')->find($id);
-        // $assayForm = AssayForm::find($id);
+            $pdf = $this->assayFormService->generateAssayPrintPdf((int)$id);
+            
+            return $pdf->stream($id.'.pdf');
 
-        if (empty($assayForm)) {
+        } catch (Exception $e) {
+
             Flash::error(__('models/assayForms.singular').' '.__('messages.not_found'));
 
             return redirect(route('assayForms.index'));
         }
-        $report = [
-            'font_name' => 'calibri',
-            'font_size' => '18',
-            'title_background_color' => '4CAF50',
-        ];
-
-        $data = [
-            'data' => $assayForm,
-            'dateTime' => Carbon::now()->format('h:i Y-m-d'),
-            // 'total'=>$assayForm->assayService->sum('price'),
-            // 'assayItems'=>$assayForm->assayItem,
-            // 'assayServices'=>$assayForm->assayService,
-            'report' => $report,
-
-        ];
-        // dd($data );
-        // return view('assay_forms.print_assay')->with('assayForm', $assayForm);
-        $pdf = PDF::loadView('assay_forms.print_assay-2', $data);
-
-        return $pdf->stream($id.'.pdf');
     }
 
-    public function importAssay()
+   public function edit($id)
     {
-        $import = new AssayImport;
-        // $import->onlySheets('Sheet2');
+        try {
+            $data = $this->assayFormService->getEditViewData((int)$id);
 
-        Excel::import($import, 'test_assay2.xlsx');
+            return view('assay_forms.edit', $data);
 
-        // Excel::import(new AssayImport, 'test_assay.xlsx');
-        dd('i am here');
-    }
-
-    /**
-     * Show the form for editing the specified AssayForm.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        /** @var AssayForm $assayForm */
-        $assayForm = AssayForm::find($id);
-        if (empty($assayForm)) {
+        } catch (Exception $e) {
             Flash::error(__('messages.not_found', ['model' => __('models/assayForms.singular')]));
 
             return redirect(route('assayForms.index'));
-        }
 
-        if ($assayForm->status == AssayFormEnum::APPROVED_ASSAY) {
-            Flash::error('المقايسة تم اعتمادها من قبل');
-
-            return redirect(route('assayForms.index'));
-        }
-
-        if ($assayForm->status == AssayFormEnum::MOVED_ASSAY) {
-            Flash::error('المقايسة تم نقلها الي مشروع');
+        } catch (Exception $e) {
+            Flash::error($e->getMessage());
 
             return redirect(route('assayForms.index'));
         }
-
-        $items = ['' => 'إختار من القائمة'];
-        Item::with('category')->get()->map(function ($item) use (&$items) {
-            $items[$item->category->name][$item->id] = $item->name.' - ['.$item->code.']';
-        });
-
-        $services = ['' => 'إختار من القائمة'];
-        WorkOrderService::with('servicesCategory')->get()->map(function ($item) use (&$services) {
-            $services[$item->servicesCategory->name][$item->id] = $item->name.' - ['.$item->code.']';
-        });
-
-        $assaysServices = AssayService::where('assay_form_id', $assayForm->id)->with('service')->get();
-        $assaysItems = AssayItem::where('assay_form_id', $assayForm->id)->with('item')->get();
-
-        // $workOrders = WorkOrder::get();
-        // $workOrders = $workOrders->pluck('work_display_number', 'id');
-
-        return view('assay_forms.edit', [
-            'assaysServices' => $assaysServices,
-            'assaysItems' => $assaysItems,
-            // 'workOrders'     => $workOrders,
-            'assayForm' => $assayForm,
-            'items' => $items,
-            'services' => $services,
-        ]);
     }
 
     /**
@@ -215,21 +140,22 @@ class AssayFormController extends AppBaseController
      */
     public function update($id, UpdateAssayFormRequest $request)
     {
-        /** @var AssayForm $assayForm */
-        $assayForm = AssayForm::find($id);
+        try {
 
-        if (empty($assayForm)) {
+            $assayForm = $this->assayFormService->updateAssayForm((int)$id, $request->validated());
+
+
+            Flash::success(__('messages.updated', ['model' => __('models/assayForms.singular')]));
+
+
+            return Helper::redirectAfterSaving($assayForm->id, $request, 'assayForms');
+            
+        } catch (Exception $e) {
+
             Flash::error(__('messages.not_found', ['model' => __('models/assayForms.singular')]));
 
             return redirect(route('assayForms.index'));
         }
-
-        $assayForm->fill($request->all());
-        $assayForm->save();
-
-        Flash::success(__('messages.updated', ['model' => __('models/assayForms.singular')]));
-
-        return Helper::redirectAfterSaving($id, $request, 'assayForms');
     }
 
     /**
@@ -242,60 +168,38 @@ class AssayFormController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var AssayForm $assayForm */
-        $assayForm = AssayForm::find($id);
+        try {
+            $this->assayFormService->deleteAssayForm((int)$id);
 
-        if (empty($assayForm)) {
+            Flash::success(__('messages.deleted', ['model' => __('models/assayForms.singular')]));
+
+            return redirect(route('assayForms.index'));
+
+        } catch (Exception $e) {
             Flash::error(__('messages.not_found', ['model' => __('models/assayForms.singular')]));
 
             return redirect(route('assayForms.index'));
         }
-        $workOrders = WorkOrder::find($assayForm->work_order_id);
-        $workOrders->assay_forms_status = 0;
-        $workOrders->save();
-        $assayForm->delete();
-
-        Flash::success(__('messages.deleted', ['model' => __('models/assayForms.singular')]));
-
-        return redirect(route('assayForms.index'));
     }
 
-    public function approval($id)
+   public function approval($id)
     {
-        $assayForm = AssayForm::find($id);
+        try {
+            $this->assayFormService->approveAssayForm((int)$id);
 
-        if (empty($assayForm)) {
+            Flash::success(__('messages.updated', ['model' => __('models/assayForms.singular')]));
+
+            return redirect(route('assayForms.index'));
+
+        } catch (Exception $e) {
             Flash::error(__('messages.not_found', ['model' => __('models/assayForms.singular')]));
 
             return redirect(route('assayForms.index'));
-        }
-        if ($assayForm->status != 1) {
-            Flash::error(__('The assay status should be new'));
+
+        } catch (Exception $e) {
+            Flash::error($e->getMessage());
 
             return redirect()->back();
         }
-        // TODO: THis condition must be reviewed
-
-        if ($assayForm->workOrder->status != 4 && $assayForm->workOrder->status != 5) {
-            Flash::error(__('The workOrder should be finished before approved the assay'));
-
-            return redirect()->back();
-        }
-        if ($assayForm->workOrder->project_id != null) {
-            $workOrdersProject = WorkOrdersProject::find($assayForm->workOrder->project_id);
-            if ($workOrdersProject->status != 2) {
-                Flash::error(__('You are not able to approve this assay because it is related to project'));
-
-                return redirect()->back();
-            }
-        }
-        $assayForm->status = self::APPROVED_ASSAY;
-        $assayForm->save();
-        $workOrders = WorkOrder::find($assayForm->work_order_id);
-        $workOrders->assay_forms_status = 2;
-        $workOrders->save();
-        Flash::success(__('messages.updated', ['model' => __('models/assayForms.singular')]));
-
-        return redirect(route('assayForms.index'));
     }
 }

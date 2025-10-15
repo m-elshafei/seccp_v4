@@ -3,8 +3,12 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
+use Telegram\Bot\Exceptions\TelegramResponseException;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Throwable;
+use Exception;
+
 
 class Handler extends ExceptionHandler
 {
@@ -50,10 +54,10 @@ class Handler extends ExceptionHandler
             ]);
         } catch (TelegramResponseException $e) {
             // Log the error message for debugging
-            \Log::error('Telegram Error: '.$e->getMessage());
-        } catch (\Exception $e) {
+            Log::error('Telegram Error: '.$e->getMessage());
+        } catch (Exception $e) {
             // Handle any other exceptions
-            \Log::error('General Error: '.$e->getMessage());
+            Log::error('General Error: '.$e->getMessage());
         }
     }
 }
