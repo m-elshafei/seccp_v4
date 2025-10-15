@@ -2,46 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attachment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Exception;
+use App\Services\AttachmentService;
 
 class AttachmentController extends Controller
 {
+    protected $attachmentService;
+
+    public function __construct(AttachmentService $attachmentService)
+    {
+        $this->attachmentService = $attachmentService;
+    }
+
     public function download($uuid, Request $request)
     {
+        try {
 
-        if ($file = Attachment::where('uuid', $uuid)->first()) {
-            if (Storage::exists($file->path.DIRECTORY_SEPARATOR.$file->name)) {
-                return Storage::download($file->path.$file->name, $file->filename);
-            }
+            return $this->attachmentService->downloadFile($uuid);
+        } catch (Exception $e) {
+            return abort(404, $e->getMessage());
         }
-
-        return abort(404, __('messages.errors.file_not_found'));
     }
 
     public function view($uuid, Request $request)
     {
-        if ($file = Attachment::where('uuid', $uuid)->first()) {
-            if (Storage::exists($file->path.DIRECTORY_SEPARATOR.$file->name)) {
-                return redirect(Storage::url($file->path.$file->name, $file->filename));
-            }
+        try {
+            return $this->attachmentService->getFileViewUrl($uuid);
+        } catch (Exception $e) {
+            return abort(404, $e->getMessage());
         }
-
-        return abort(404, __('messages.errors.file_not_found'));
     }
 
     public function delete($uuid, Request $request)
     {
-        if ($file = Attachment::where('uuid', $uuid)->first()) {
-            if (Storage::exists($file->path.DIRECTORY_SEPARATOR.$file->name)) {
-                Storage::delete($file->path.$file->name, $file->filename);
-                $file->delete();
+        try {
+            $this->attachmentService->deleteFile($uuid);
 
-                return redirect()->back()->withSuccess(__('messages.file_deleted'));
-            }
+            return redirect()->back()->withSuccess(__('messages.file_deleted'));
+        } catch (Exception $e) {
+            return abort(404, $e->getMessage());
         }
-
-        return abort(404, __('messages.errors.file_not_found'));
     }
 }
