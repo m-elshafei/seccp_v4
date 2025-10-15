@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\AssayFormEnum;
 use App\Models\WorkOrder;
+use Illuminate\Database\Eloquent\Collection;
 
 class WorkOrderRepository
 {
@@ -33,4 +34,32 @@ class WorkOrderRepository
             $query->where('status', AssayFormEnum::APPROVED_ASSAY);
         })->get()->pluck('work_dispaly_number_permit', 'id');
     }
+
+
+     public function getWorkOrdersForAssignment()
+    {
+        return WorkOrder::whereIn('status', [2, 3, 4, 5])
+                        ->whereNull('mission_number')
+                        ->get()
+                        ->pluck('work_dispaly_number_permit', 'id');
+    }
+
+
+     public function getMissionWorkOrders()
+    {
+        return WorkOrder::whereNotNull('mission_number')
+                        ->get()
+                        ->pluck('work_dispaly_number_permit', 'id');
+    }
+
+      public function updateAssayFormsStatus(WorkOrder $workOrder, int $status)
+    {
+        $workOrder->assay_forms_status = $status;
+        $workOrder->save();
+        return $workOrder;
+    }
+
+
+    
+    
 }
