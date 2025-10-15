@@ -103,4 +103,12 @@ class AssayFormRepository
         
         return $assayForm;
     }
+
+
+    public function updateAmount(AssayForm $assayForm, float $amount): AssayForm
+    {
+        $assayForm->amount = $amount;
+        $assayForm->save();
+        return $assayForm;
+    }
 }
