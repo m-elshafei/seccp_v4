@@ -3,128 +3,80 @@
 namespace App\Http\Controllers;
 
 use App\Models\AssayItem;
+use App\Services\AssayItemService;
+use Exception;
 use Illuminate\Http\Request;
 use laracasts\Flash\Flash;
 
 class AssayItemController extends AppBaseController
 {
+    protected $assayItemService;
+
+    public function __construct(AssayItemService $assayItemService)
+    {
+        $this->assayItemService = $assayItemService;
+    }
+
     public function store(Request $request)
     {
-        // dd($request->all());
+
         request()->validate(AssayItem::$rules);
 
         $input = $request->all();
 
-        $_returned = $input['spend'] - $input['used'];
 
-        // $returned = $_returned >= 0? $_returned : 0;
-        if ($_returned < 0) {
-            $returned_spend = $input['used'] - $input['spend'];
-            $returned = 0;
-        } else {
-            $returned_spend = 0;
-            $returned = $_returned;
-        }
+        $result = $this->assayItemService->storeOrUpdateAssayItem($input);
 
-        $fillable = [
-            'assay_form_id' => $input['assay_form_id'],
-            'item_id' => $input['item_id'],
-            'spend' => $input['spend'],
-            'used' => $input['used'],
-            'returned' => $returned,
-            'returned_spend' => $returned_spend,
-        ];
 
-        $result = AssayItem::where([
-            'item_id' => $input['item_id'],
-            'assay_form_id' => $input['assay_form_id'],
-        ])->first();
-
-        if ($result) {
-            $result->fill($fillable);
-            $result->save();
-        } else {
-            $result = AssayItem::create($fillable);
-        }
-        // $result = AssayItem::create($fillable);
-
-        return [$result];
+        return response()->json([$result]);
     }
 
     public function show($id)
     {
-        $assayItem = AssayItem::with('item')->find($id);
-        if (empty($assayItem)) {
-            Flash::error('Assay item not found');
-
+        try {
+            $assayItem = $this->assayItemService->getAssayItemWithItem((int)$id);
+            return $assayItem;
+        } catch (Exception $e) {
+            Flash::error($e->getMessage());
             return redirect(route('assayForms.index'));
         }
-
-        return $assayItem;
-
     }
 
     public function edit($id)
     {
-        $assayItem = AssayItem::find($id);
+        try {
 
-        if (empty($assayItem)) {
-            Flash::error('Assay item not found');
-
+            $assayItem = $this->assayItemService->getAssayItem((int)$id);
+            return $assayItem;
+        } catch (Exception $e) {
+            Flash::error($e->getMessage());
             return redirect(route('assayForms.index'));
         }
-
-        return $assayItem;
     }
 
     public function update(Request $request, $id)
     {
-        $assayItem = AssayItem::find($id);
 
-        if (empty($assayItem)) {
-            Flash::error('Assay item is not found');
-
+        try {
+            $input = $request->all();
+            $assayItem = $this->assayItemService->updateAssayItem((int)$id, $input);
+            return $assayItem;
+        } catch (Exception $e) {
+            Flash::error($e->getMessage());
             return redirect(route('assayForms.index'));
         }
-
-        $input = $request->all();
-
-        $_returned = $input['spend'] - $input['used'];
-
-        // $returned = $_returned >= 0? $_returned : 0;
-        if ($_returned < 0) {
-            $returned_spend = $input['used'] - $input['spend'];
-            $returned = 0;
-        } else {
-            $returned_spend = 0;
-            $returned = $_returned;
-        }
-
-        $fillable = [
-            // 'assay_form_id' => $input['assay_form_id'],
-            'item_id' => $input['item_id'],
-            'spend' => $input['spend'],
-            'used' => $input['used'],
-            'returned' => $returned,
-            'returned_spend' => $returned_spend,
-        ];
-
-        $assayItem->fill($fillable);
-        $assayItem->save();
-
-        return $assayItem;
     }
 
     public function destroy($id)
     {
-        $assayItem = AssayItem::find($id);
-
-        if (empty($assayItem)) {
-            Flash::error('workOrdersPermitsExtension is not found');
-
+        try {
+            $this->assayItemService->deleteAssayItem((int)$id);
+            
+            return response()->json(['message' => 'Assay item deleted successfully'], 200);
+            
+        } catch (Exception $e) {
+            Flash::error($e->getMessage()); 
             return redirect(route('assayForms.index'));
         }
-
-        $assayItemDel = $assayItem->delete();
     }
 }
