@@ -8,24 +8,22 @@ use App\Http\Requests\UpdateContractorRequest;
 use App\Models\Contractor;
 use Flash;
 use Response;
+use App\Services\ContractorService;
 
 class ContractorController extends AppBaseController
 {
-    /**
-     * Display a listing of the Contractor.
-     *
-     * @return Response
-     */
+    public ContractorService $contractorService;
+
+    public function __construct(ContractorService $contractorService)
+    {
+        $this->contractorService = $contractorService;
+    }
+
     public function index(ContractorDataTable $contractorDataTable)
     {
         return $contractorDataTable->render('contractors.index');
     }
 
-    /**
-     * Show the form for creating a new Contractor.
-     *
-     * @return Response
-     */
     public function create()
     {
         return view('contractors.create');
@@ -37,12 +35,11 @@ class ContractorController extends AppBaseController
      *
      * @return Response
      */
-    public function store(CreateContractorRequest $request)
+   public function store(CreateContractorRequest $request)
     {
-        $input = $request->all();
+        $input = $request->validated(); 
 
-        /** @var Contractor $contractor */
-        $contractor = Contractor::create($input);
+        $this->contractorService->createContractor($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/contractors.singular')]));
 
@@ -55,17 +52,17 @@ class ContractorController extends AppBaseController
      * @param  int  $id
      * @return Response
      */
+
+
     public function show($id)
     {
-        /** @var Contractor $contractor */
-        $contractor = Contractor::find($id);
+        $contractor = $this->contractorService->getContractor($id);
 
         if (empty($contractor)) {
             Flash::error(__('models/contractors.singular').' '.__('messages.not_found'));
 
             return redirect(route('contractors.index'));
         }
-
         return view('contractors.show')->with('contractor', $contractor);
     }
 
@@ -77,8 +74,7 @@ class ContractorController extends AppBaseController
      */
     public function edit($id)
     {
-        /** @var Contractor $contractor */
-        $contractor = Contractor::find($id);
+        $contractor = $this->contractorService->getContractor($id);
 
         if (empty($contractor)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contractors.singular')]));
@@ -95,19 +91,17 @@ class ContractorController extends AppBaseController
      * @param  int  $id
      * @return Response
      */
+
     public function update($id, UpdateContractorRequest $request)
     {
-        /** @var Contractor $contractor */
-        $contractor = Contractor::find($id);
+        $input = $request->validated(); 
+        $contractor = $this->contractorService->updateContractor($id, $input);
 
         if (empty($contractor)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contractors.singular')]));
 
             return redirect(route('contractors.index'));
         }
-
-        $contractor->fill($request->all());
-        $contractor->save();
 
         Flash::success(__('messages.updated', ['model' => __('models/contractors.singular')]));
 
@@ -122,18 +116,16 @@ class ContractorController extends AppBaseController
      *
      * @throws \Exception
      */
+    
     public function destroy($id)
     {
-        /** @var Contractor $contractor */
-        $contractor = Contractor::find($id);
+        $isDeleted = $this->contractorService->deleteContractor($id);
 
-        if (empty($contractor)) {
+        if (!$isDeleted) {
             Flash::error(__('messages.not_found', ['model' => __('models/contractors.singular')]));
 
             return redirect(route('contractors.index'));
         }
-
-        $contractor->delete();
 
         Flash::success(__('messages.deleted', ['model' => __('models/contractors.singular')]));
 

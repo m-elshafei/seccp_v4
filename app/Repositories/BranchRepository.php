@@ -41,4 +41,9 @@ class BranchRepository
     {
         return Branch::all();
     }
+
+    public function getList()
+    {
+        return Branch::pluck('name', 'id');
+    }
 }
