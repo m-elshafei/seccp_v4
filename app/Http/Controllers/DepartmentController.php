@@ -7,7 +7,8 @@ use App\Http\Requests\CreateDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
 use App\Models\Branch;
 use App\Models\Department;
-use Flash;
+use App\Services\DepartmentService;
+use Laracasts\Flash\Flash;
 use Response;
 
 class DepartmentController extends AppBaseController
@@ -17,6 +18,13 @@ class DepartmentController extends AppBaseController
      *
      * @return Response
      */
+    public $departmentService;
+
+    public function __construct(DepartmentService $departmentService)
+    {
+        $this->departmentService = $departmentService;
+    }
+
     public function index(DepartmentDataTable $departmentDataTable)
     {
         return $departmentDataTable->render('departments.index');
@@ -29,9 +37,9 @@ class DepartmentController extends AppBaseController
      */
     public function create()
     {
-        $branches = Branch::pluck('name', 'id');
+        $formData = $this->departmentService->getCreateFormData();
 
-        return view('departments.create', compact('branches'));
+        return view('departments.create', compact('formData'));
     }
 
     /**
@@ -45,7 +53,7 @@ class DepartmentController extends AppBaseController
         $input = $request->all();
 
         /** @var Department $department */
-        $department = Department::create($input);
+        $this->departmentService->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/departments.singular')]));
 
@@ -60,11 +68,10 @@ class DepartmentController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var Department $department */
-        $department = Department::with('branch')->find($id);
+        $department = $this->departmentService->getDepartment($id);
 
         if (empty($department)) {
-            Flash::error(__('models/departments.singular').' '.__('messages.not_found'));
+            Flash::error(__('models/departments.singular') . ' ' . __('messages.not_found'));
 
             return redirect(route('departments.index'));
         }
@@ -80,8 +87,7 @@ class DepartmentController extends AppBaseController
      */
     public function edit($id)
     {
-        /** @var Department $department */
-        $department = Department::find($id);
+        $department = $this->departmentService->getDepartment($id);
         $branches = Branch::pluck('name', 'id');
 
         if (empty($department)) {
@@ -101,8 +107,7 @@ class DepartmentController extends AppBaseController
      */
     public function update($id, UpdateDepartmentRequest $request)
     {
-        /** @var Department $department */
-        $department = Department::find($id);
+        $department = $this->departmentService->getDepartment($id);
 
         if (empty($department)) {
             Flash::error(__('messages.not_found', ['model' => __('models/departments.singular')]));
@@ -110,8 +115,7 @@ class DepartmentController extends AppBaseController
             return redirect(route('departments.index'));
         }
 
-        $department->fill($request->all());
-        $department->save();
+        $this->departmentService->update($id, $request->all());
 
         Flash::success(__('messages.updated', ['model' => __('models/departments.singular')]));
 
@@ -128,8 +132,7 @@ class DepartmentController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var Department $department */
-        $department = Department::find($id);
+        $department = $this->departmentService->getDepartment($id);
 
         if (empty($department)) {
             Flash::error(__('messages.not_found', ['model' => __('models/departments.singular')]));
@@ -137,7 +140,7 @@ class DepartmentController extends AppBaseController
             return redirect(route('departments.index'));
         }
 
-        $department->delete();
+        $this->departmentService->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/departments.singular')]));
 
