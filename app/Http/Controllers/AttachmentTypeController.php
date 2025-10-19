@@ -6,16 +6,19 @@ use App\DataTables\AttachmentTypeDataTable;
 use App\Http\Requests\CreateAttachmentTypeRequest;
 use App\Http\Requests\UpdateAttachmentTypeRequest;
 use App\Models\AttachmentType;
-use Flash;
+use App\Services\AttachmentTypeService;
+use laracasts\flash\Flash;
 use Response;
 
 class AttachmentTypeController extends AppBaseController
 {
-    /**
-     * Display a listing of the AttachmentType.
-     *
-     * @return Response
-     */
+    public $attachmentTypeService;
+
+    public function __construct(AttachmentTypeService $attachmentTypeService)
+    {
+        $this->attachmentTypeService = $attachmentTypeService;
+    }
+
     public function index(AttachmentTypeDataTable $attachmentTypeDataTable)
     {
         return $attachmentTypeDataTable->render('attachment_types.index');
@@ -39,10 +42,9 @@ class AttachmentTypeController extends AppBaseController
      */
     public function store(CreateAttachmentTypeRequest $request)
     {
-        $input = $request->all();
+        $input = $request->validated(); 
 
-        /** @var AttachmentType $attachmentType */
-        $attachmentType = AttachmentType::create($input);
+        $this->attachmentTypeService->createAttachmentType($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/attachmentTypes.singular')]));
 
@@ -57,8 +59,7 @@ class AttachmentTypeController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var AttachmentType $attachmentType */
-        $attachmentType = AttachmentType::find($id);
+        $attachmentType = $this->attachmentTypeService->find($id);
 
         if (empty($attachmentType)) {
             Flash::error(__('models/attachmentTypes.singular').' '.__('messages.not_found'));
@@ -77,8 +78,7 @@ class AttachmentTypeController extends AppBaseController
      */
     public function edit($id)
     {
-        /** @var AttachmentType $attachmentType */
-        $attachmentType = AttachmentType::find($id);
+        $attachmentType = $this->attachmentTypeService->find($id);
 
         if (empty($attachmentType)) {
             Flash::error(__('messages.not_found', ['model' => __('models/attachmentTypes.singular')]));
@@ -95,10 +95,13 @@ class AttachmentTypeController extends AppBaseController
      * @param  int  $id
      * @return Response
      */
+
+
     public function update($id, UpdateAttachmentTypeRequest $request)
     {
-        /** @var AttachmentType $attachmentType */
-        $attachmentType = AttachmentType::find($id);
+        $input = $request->validated();
+
+        $attachmentType = $this->attachmentTypeService->updateAttachmentType($id, $input);
 
         if (empty($attachmentType)) {
             Flash::error(__('messages.not_found', ['model' => __('models/attachmentTypes.singular')]));
@@ -106,14 +109,12 @@ class AttachmentTypeController extends AppBaseController
             return redirect(route('attachmentTypes.index'));
         }
 
-        $attachmentType->fill($request->all());
-        $attachmentType->save();
-
         Flash::success(__('messages.updated', ['model' => __('models/attachmentTypes.singular')]));
 
         return redirect(route('attachmentTypes.index'));
     }
 
+    
     /**
      * Remove the specified AttachmentType from storage.
      *
@@ -122,21 +123,21 @@ class AttachmentTypeController extends AppBaseController
      *
      * @throws \Exception
      */
+
+
     public function destroy($id)
     {
-        /** @var AttachmentType $attachmentType */
-        $attachmentType = AttachmentType::find($id);
+        $isDeleted = $this->attachmentTypeService->deleteAttachmentType($id);
 
-        if (empty($attachmentType)) {
+        if (!$isDeleted) {
             Flash::error(__('messages.not_found', ['model' => __('models/attachmentTypes.singular')]));
 
             return redirect(route('attachmentTypes.index'));
         }
 
-        $attachmentType->delete();
-
         Flash::success(__('messages.deleted', ['model' => __('models/attachmentTypes.singular')]));
 
         return redirect(route('attachmentTypes.index'));
     }
+    
 }
