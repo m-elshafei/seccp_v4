@@ -8,14 +8,18 @@ use App\Http\Requests\UpdateConsultantRequest;
 use App\Models\Consultant;
 use Flash;
 use Response;
+use App\Services\ConsultantService;
 
 class ConsultantController extends AppBaseController
 {
-    /**
-     * Display a listing of the Consultant.
-     *
-     * @return Response
-     */
+
+    protected ConsultantService $consultantService;
+
+    public function __construct(ConsultantService $consultantService)
+    {
+        $this->consultantService = $consultantService;
+    }
+
     public function index(ConsultantDataTable $consultantDataTable)
     {
         return $consultantDataTable->render('consultants.index');
@@ -39,10 +43,9 @@ class ConsultantController extends AppBaseController
      */
     public function store(CreateConsultantRequest $request)
     {
-        $input = $request->all();
+        $input = $request->validated(); 
 
-        /** @var Consultant $consultant */
-        $consultant = Consultant::create($input);
+        $this->consultantService->createConsultant($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/consultants.singular')]));
 
@@ -57,8 +60,7 @@ class ConsultantController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var Consultant $consultant */
-        $consultant = Consultant::find($id);
+        $consultant = $this->consultantService->getConsultant($id);
 
         if (empty($consultant)) {
             Flash::error(__('models/consultants.singular').' '.__('messages.not_found'));
@@ -77,8 +79,8 @@ class ConsultantController extends AppBaseController
      */
     public function edit($id)
     {
-        /** @var Consultant $consultant */
-        $consultant = Consultant::find($id);
+
+        $consultant = $this->consultantService->getConsultant($id);
 
         if (empty($consultant)) {
             Flash::error(__('messages.not_found', ['model' => __('models/consultants.singular')]));
@@ -95,19 +97,17 @@ class ConsultantController extends AppBaseController
      * @param  int  $id
      * @return Response
      */
-    public function update($id, UpdateConsultantRequest $request)
+public function update($id, UpdateConsultantRequest $request)
     {
-        /** @var Consultant $consultant */
-        $consultant = Consultant::find($id);
+        $input = $request->validated();
+
+        $consultant = $this->consultantService->updateConsultant($id, $input);
 
         if (empty($consultant)) {
             Flash::error(__('messages.not_found', ['model' => __('models/consultants.singular')]));
 
             return redirect(route('consultants.index'));
         }
-
-        $consultant->fill($request->all());
-        $consultant->save();
 
         Flash::success(__('messages.updated', ['model' => __('models/consultants.singular')]));
 
@@ -124,16 +124,13 @@ class ConsultantController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var Consultant $consultant */
-        $consultant = Consultant::find($id);
+        $isDeleted = $this->consultantService->deleteConsultant($id);
 
-        if (empty($consultant)) {
+        if (!$isDeleted) {
             Flash::error(__('messages.not_found', ['model' => __('models/consultants.singular')]));
 
             return redirect(route('consultants.index'));
         }
-
-        $consultant->delete();
 
         Flash::success(__('messages.deleted', ['model' => __('models/consultants.singular')]));
 
